@@ -26,6 +26,6 @@ compileTestKotlin {
 }
 
 dokka {
-    outputFormat = 'html'
+    outputFormat = 'javadoc'
     outputDirectory = "$buildDir/javadoc"
 }
