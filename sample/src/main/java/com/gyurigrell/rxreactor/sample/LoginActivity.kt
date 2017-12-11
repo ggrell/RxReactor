@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import com.gyurigrell.rxreactor.Reactor
 import com.gyurigrell.rxreactor.ReactorView
 import com.jakewharton.rxbinding2.support.design.widget.RxTextInputLayout
@@ -71,11 +70,25 @@ class LoginActivity : AppCompatActivity(), ReactorView<LoginReactor.Action, Logi
                 .distinctUntilChanged()
                 .subscribe(RxView.enabled(email_sign_in_button))
 
-        reactor.state.flatMapMaybe { if (it.loginError == null) Maybe.empty() else Maybe.just(it.loginError) }
-                .subscribe { message -> Snackbar.make(login_form, message, Toast.LENGTH_LONG).show() }
+        reactor.state.flatMapMaybe { if (it.trigger == null) Maybe.empty() else Maybe.just(it.trigger) }
+                .subscribe { trigger ->
+                    when(trigger) {
+                        is LoginReactor.Trigger.ShowError -> {
+                            Snackbar.make(login_form, trigger.message, Snackbar.LENGTH_LONG).show()
+                        }
+                    }
+                }
 
         reactor.state.flatMapMaybe { if (it.account == null) Maybe.empty() else Maybe.just(it.account) }
-                .subscribe { message -> Snackbar.make(login_form, "Login succeeded", Snackbar.LENGTH_SHORT).show() }
+                .subscribe { account ->
+                    Snackbar.make(login_form, "Login succeeded", Snackbar.LENGTH_SHORT)
+                            .addCallback(object : Snackbar.Callback() {
+                                override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                                    finish()
+                                }
+                            })
+                            .show()
+                }
     }
 
     /**

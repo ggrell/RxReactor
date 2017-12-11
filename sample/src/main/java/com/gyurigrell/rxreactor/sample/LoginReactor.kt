@@ -33,16 +33,20 @@ class LoginReactor(val contactService: ContactService) :
         data class SetAutoCompleteEmails(val emails: List<String>) : Mutation()
     }
 
+    sealed class Trigger {
+        data class ShowError(val message: String) : Trigger()
+    }
+
     data class State(
             val username: String = "",
             val password: String = "",
             val environment: String = "",
             val isUsernameValid: Boolean = true,
             val isPasswordValid: Boolean = true,
-            val loginError: String? = null,
             val isBusy: Boolean = false,
             val account: Account? = null,
-            val autoCompleteEmails: List<String>? = null
+            val autoCompleteEmails: List<String>? = null,
+            val trigger: Trigger? = null
     ) {
         val loginEnabled: Boolean
             get() = (isUsernameValid && username.isNotEmpty()) && (isPasswordValid && password.isNotEmpty())
@@ -78,35 +82,36 @@ class LoginReactor(val contactService: ContactService) :
         when (mutation) {
             is Mutation.SetUsername -> {
                 return state.copy(
-                        loginError = null,
+                        trigger = null,
                         username = mutation.username,
                         isUsernameValid = isTextValid(mutation.username))
             }
             is Mutation.SetPassword -> {
                 return state.copy(
-                        loginError = null,
+                        trigger = null,
                         password = mutation.password,
                         isPasswordValid = isTextValid(mutation.password))
             }
             is Mutation.SetBusy -> {
                 return state.copy(
+                        trigger = null,
                         isBusy = mutation.busy,
-                        account = null,
-                        loginError = null)
+                        account = null)
             }
             is Mutation.SetError -> {
                 return state.copy(
-                        isBusy = false,
-                        loginError = mutation.message)
+                        trigger = Trigger.ShowError(mutation.message),
+                        isBusy = false)
             }
             is Mutation.LoggedIn -> {
                 return state.copy(
+                        trigger = null,
                         isBusy = false,
-                        loginError = null,
                         account = mutation.account)
             }
             is Mutation.SetAutoCompleteEmails -> {
                 return state.copy(
+                        trigger = null,
                         autoCompleteEmails = mutation.emails)
             }
             else -> return state
@@ -122,7 +127,7 @@ class LoginReactor(val contactService: ContactService) :
     }
 
     private fun login(): Observable<Mutation> {
-        return Observable.just(Math.random() > 0.5)
+        return Observable.just(Math.random() > 0.8)
                 .delay(1, TimeUnit.SECONDS) //
                 .flatMap { success ->
                     val mutations = arrayListOf<Mutation>(Mutation.SetBusy(false))
