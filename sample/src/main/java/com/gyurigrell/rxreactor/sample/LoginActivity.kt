@@ -31,6 +31,11 @@ class LoginActivity : AppCompatActivity(), ReactorView<LoginReactor.Action, Logi
         }
 
     override fun bind(reactor: Reactor<LoginReactor.Action, LoginReactor.Mutation, LoginReactor.State>) {
+        bindActions(reactor)
+        bindViewState(reactor)
+    }
+
+    private fun bindActions(reactor: Reactor<LoginReactor.Action, LoginReactor.Mutation, LoginReactor.State>) {
         // Subscribe to UI changes, convert to actions and push to reactor
         RxTextView.textChanges(email)
                 .skipInitialValue()
@@ -45,7 +50,9 @@ class LoginActivity : AppCompatActivity(), ReactorView<LoginReactor.Action, Logi
         RxView.clicks(email_sign_in_button)
                 .map { LoginReactor.Action.Login }
                 .subscribe(reactor.action)
+    }
 
+    private fun bindViewState(reactor: Reactor<LoginReactor.Action, LoginReactor.Mutation, LoginReactor.State>) {
         // Subscribe to state changes from the reactor and bind to UI
         reactor.state.flatMapMaybe { if (it.autoCompleteEmails == null) Maybe.empty() else Maybe.just(it.autoCompleteEmails) }
                 .subscribe(this::addEmailsToAutoComplete)
@@ -72,7 +79,7 @@ class LoginActivity : AppCompatActivity(), ReactorView<LoginReactor.Action, Logi
 
         reactor.state.flatMapMaybe { if (it.trigger == null) Maybe.empty() else Maybe.just(it.trigger) }
                 .subscribe { trigger ->
-                    when(trigger) {
+                    when (trigger) {
                         is LoginReactor.Trigger.ShowError -> {
                             Snackbar.make(login_form, trigger.message, Snackbar.LENGTH_LONG).show()
                         }
