@@ -1,8 +1,8 @@
-package com.gyurigrell.rxreactor.sample
+package com.gyurigrell.rxreactor2.sample
 
 import android.accounts.Account
 import android.util.Log
-import com.gyurigrell.rxreactor.Reactor
+import com.gyurigrell.rxreactor2.Reactor
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import java.util.concurrent.TimeUnit

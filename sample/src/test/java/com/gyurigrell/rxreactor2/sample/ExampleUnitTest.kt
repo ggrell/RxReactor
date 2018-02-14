@@ -1,4 +1,4 @@
-package com.gyurigrell.rxreactor.sample
+package com.gyurigrell.rxreactor2.sample
 
 import org.junit.Test
 

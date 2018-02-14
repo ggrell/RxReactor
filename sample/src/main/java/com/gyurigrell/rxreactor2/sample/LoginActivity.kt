@@ -1,4 +1,4 @@
-package com.gyurigrell.rxreactor.sample
+package com.gyurigrell.rxreactor2.sample
 
 import android.Manifest.permission.READ_CONTACTS
 import android.content.pm.PackageManager
@@ -7,8 +7,8 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.widget.ArrayAdapter
-import com.gyurigrell.rxreactor.Reactor
-import com.gyurigrell.rxreactor.ReactorView
+import com.gyurigrell.rxreactor2.Reactor
+import com.gyurigrell.rxreactor2.ReactorView
 import com.jakewharton.rxbinding2.support.design.widget.RxTextInputLayout
 import com.jakewharton.rxbinding2.view.RxView
 import com.jakewharton.rxbinding2.widget.RxTextView
