@@ -29,20 +29,15 @@ abstract class Reactor<Action, Mutation, State>(val initialState: State, val deb
     /**
      * The current state of the view to which the reactor is bound.
      */
-    var currentState: State
+    var currentState: State = initialState
         private set
 
     /**
      * The state stream output from the reactor, emitting every time the state is modified via a mutation.
      */
-    val state: Observable<State>
+    val state: Observable<State> by lazy { createStateStream() }
 
     private var disposeBag = CompositeSubscription()
-
-    init {
-        state = createStateStream()
-        currentState = initialState
-    }
 
     /**
      * Commits mutation from the action. This is the best place to perform side-effects such as async tasks.
