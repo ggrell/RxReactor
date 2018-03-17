@@ -12,3 +12,8 @@ interface ReactorView<Action, Mutation, State> {
 
     fun bind(reactor: Reactor<Action, Mutation, State>)
 }
+
+fun <Action, Mutation, State> ReactorView<Action, Mutation, State>.attachReactor(reactor: Reactor<Action, Mutation, State>) {
+    this.reactor = reactor
+    this.bind(reactor)
+}
