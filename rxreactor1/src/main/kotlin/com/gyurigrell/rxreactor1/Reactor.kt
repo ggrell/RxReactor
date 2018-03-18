@@ -122,7 +122,6 @@ abstract class Reactor<Action, Mutation, State>(val initialState: State, val deb
         val state = transformedMutation
                 .scan(initialState) { state, mutate -> reduce(state, mutate) }
                 .onErrorResumeNext { _: Throwable -> Observable.empty() }
-                .startWith(initialState)
         val transformedState = transformState(state)
                 .doOnNext { currentState = it }
                 .replay(1)
