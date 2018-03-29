@@ -28,7 +28,7 @@ compileTestKotlin {
 
 dokka {
     outputFormat = 'javadoc'
-    outputDirectory = "$buildDir/javadoc"
+    outputDirectory = "$buildDir/docs/javadoc"
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
@@ -36,7 +36,7 @@ task sourcesJar(type: Jar, dependsOn: classes) {
     from sourceSets.main.allSource
 }
 
-task javadocJar(type: Jar, dependsOn: javadoc) {
+task javadocJar(type: Jar, dependsOn: dokka) {
     classifier = 'javadoc'
     from javadoc.destinationDir
 }
