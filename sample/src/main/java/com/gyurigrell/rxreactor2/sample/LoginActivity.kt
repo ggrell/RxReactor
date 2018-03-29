@@ -2,7 +2,6 @@ package com.gyurigrell.rxreactor2.sample
 
 import android.Manifest.permission.READ_CONTACTS
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
@@ -23,14 +22,14 @@ import kotlinx.android.synthetic.main.act_login.*
 class LoginActivity : AppCompatActivity() {
     private var disposeBag = CompositeDisposable()
 
-    private lateinit var reactor: Reactor<LoginReactor.Action, LoginReactor.Mutation, LoginReactor.State>
+    private lateinit var viewModel: Reactor<LoginViewModel.Action, LoginViewModel.Mutation, LoginViewModel.State>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.act_login)
 
-        reactor = LoginReactor(ContactServiceImpl(this, Schedulers.io()))
-        bind(reactor)
+        viewModel = LoginViewModel(ContactServiceImpl(this, Schedulers.io()))
+        bind(viewModel)
 
         populateAutoComplete()
     }
@@ -40,13 +39,10 @@ class LoginActivity : AppCompatActivity() {
             return
         }
 
-        reactor.action.accept(LoginReactor.Action.PopulateAutoComplete)
+        viewModel.action.accept(LoginViewModel.Action.PopulateAutoComplete)
     }
 
     private fun mayRequestContacts(): Boolean {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return true
-        }
         if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
             return true
         }
@@ -264,74 +260,74 @@ class LoginActivity : AppCompatActivity() {
 //        }
 //    }
 
-    private fun bind(reactor: Reactor<LoginReactor.Action, LoginReactor.Mutation, LoginReactor.State>) {
-        this.reactor = reactor
-        bindActions(reactor)
-        bindViewState(reactor)
+    private fun bind(viewModel: Reactor<LoginViewModel.Action, LoginViewModel.Mutation, LoginViewModel.State>) {
+        this.viewModel = viewModel
+        bindActions(viewModel)
+        bindViewState(viewModel)
     }
 
-    private fun bindActions(reactor: Reactor<LoginReactor.Action, LoginReactor.Mutation, LoginReactor.State>) {
-        // Subscribe to UI changes, convert to actions and push to reactor
+    private fun bindActions(viewModel: Reactor<LoginViewModel.Action, LoginViewModel.Mutation, LoginViewModel.State>) {
+        // Subscribe to UI changes, convert to actions and push to viewModel
         RxTextView.textChanges(email)
             .skipInitialValue()
-            .map { LoginReactor.Action.UsernameChanged(it.toString()) }
-            .subscribe(reactor.action)
+            .map { LoginViewModel.Action.UsernameChanged(it.toString()) }
+            .subscribe(viewModel.action)
             .disposedBy(disposeBag)
 
         RxTextView.textChanges(password)
             .skipInitialValue()
-            .map { LoginReactor.Action.PasswordChanged(it.toString()) }
-            .subscribe(reactor.action)
+            .map { LoginViewModel.Action.PasswordChanged(it.toString()) }
+            .subscribe(viewModel.action)
             .disposedBy(disposeBag)
 
         RxView.clicks(email_sign_in_button)
-            .map { LoginReactor.Action.Login }
-            .subscribe(reactor.action)
+            .map { LoginViewModel.Action.Login }
+            .subscribe(viewModel.action)
             .disposedBy(disposeBag)
     }
 
-    private fun bindViewState(reactor: Reactor<LoginReactor.Action, LoginReactor.Mutation, LoginReactor.State>) {
-        // Subscribe to state changes from the reactor and bind to UI
-        reactor.state.flatMapMaybe { if (it.autoCompleteEmails == null) Maybe.empty() else Maybe.just(it.autoCompleteEmails) }
+    private fun bindViewState(viewModel: Reactor<LoginViewModel.Action, LoginViewModel.Mutation, LoginViewModel.State>) {
+        // Subscribe to state changes from the viewModel and bind to UI
+        viewModel.state.flatMapMaybe { if (it.autoCompleteEmails == null) Maybe.empty() else Maybe.just(it.autoCompleteEmails) }
             .subscribe(this::addEmailsToAutoComplete)
             .disposedBy(disposeBag)
 
-        reactor.state.map { it.isBusy }
+        viewModel.state.map { it.isBusy }
             .distinctUntilChanged()
             .subscribe(RxView.visibility(login_progress))
             .disposedBy(disposeBag)
 
-        reactor.state.map { !it.isBusy }
+        viewModel.state.map { !it.isBusy }
             .distinctUntilChanged()
             .subscribe(RxView.visibility(login_form))
             .disposedBy(disposeBag)
 
-        reactor.state.map { if (it.isUsernameValid) "" else "Invalid username" }
+        viewModel.state.map { if (it.isUsernameValid) "" else "Invalid username" }
             .distinctUntilChanged()
             .subscribe(RxTextInputLayout.error(email_input_layout))
             .disposedBy(disposeBag)
 
-        reactor.state.map { if (it.isPasswordValid) "" else "Invalid password" }
+        viewModel.state.map { if (it.isPasswordValid) "" else "Invalid password" }
             .distinctUntilChanged()
             .subscribe(RxTextInputLayout.error(password_input_layout))
             .disposedBy(disposeBag)
 
-        reactor.state.map { it.loginEnabled }
+        viewModel.state.map { it.loginEnabled }
             .distinctUntilChanged()
             .subscribe(RxView.enabled(email_sign_in_button))
             .disposedBy(disposeBag)
 
-        reactor.state.flatMapMaybe { if (it.trigger == null) Maybe.empty() else Maybe.just(it.trigger) }
+        viewModel.state.flatMapMaybe { if (it.trigger == null) Maybe.empty() else Maybe.just(it.trigger) }
             .subscribe { trigger ->
                 when (trigger) {
-                    is LoginReactor.Trigger.ShowError -> {
+                    is LoginViewModel.Trigger.ShowError -> {
                         Snackbar.make(login_form, trigger.message, Snackbar.LENGTH_LONG).show()
                     }
                 }
             }
             .disposedBy(disposeBag)
 
-        reactor.state.flatMapMaybe { if (it.account == null) Maybe.empty() else Maybe.just(it.account) }
+        viewModel.state.flatMapMaybe { if (it.account == null) Maybe.empty() else Maybe.just(it.account) }
             .subscribe { account ->
                 Snackbar.make(login_form, "Login succeeded", Snackbar.LENGTH_SHORT)
                     .addCallback(object : Snackbar.Callback() {
@@ -349,12 +345,6 @@ class LoginActivity : AppCompatActivity() {
         /**
          * Id to identity READ_CONTACTS permission request.
          */
-        private val REQUEST_READ_CONTACTS = 0
-
-        /**
-         * A dummy authentication store containing known user names and passwords.
-         * TODO: remove after connecting to a real authentication system.
-         */
-        private val DUMMY_CREDENTIALS = arrayOf("foo@example.com:hello", "bar@example.com:world")
+        private const val REQUEST_READ_CONTACTS = 0
     }
 }

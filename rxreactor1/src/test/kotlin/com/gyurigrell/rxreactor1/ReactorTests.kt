@@ -9,7 +9,7 @@ import rx.observers.TestSubscriber
  */
 class ReactorTests {
     @Test
-    fun eachMethodIsInvoked() {
+    fun `each method is invoked`() {
         // Arrange
         val reactor = TestReactor()
         val output = TestSubscriber.create<List<String>>()
@@ -30,7 +30,7 @@ class ReactorTests {
     }
 
     @Test
-    fun stateReplayCurrentState() {
+    fun `state replay current state`() {
         // Arrange
         val reactor = CounterReactor()
         val output = TestSubscriber.create<Int>()
@@ -45,7 +45,7 @@ class ReactorTests {
     }
 
     @Test
-    fun testStreamIgnoresErrorFromMutate() {
+    fun `stream ignores error from mutate`() {
         // Arrange
         val reactor = CounterReactor()
         val output = TestSubscriber.create<Int>()

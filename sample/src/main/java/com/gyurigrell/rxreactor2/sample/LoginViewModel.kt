@@ -10,10 +10,10 @@ import java.util.concurrent.TimeUnit
 /**
  * Do not let me check this in without adding a comment about the class.
  */
-class LoginReactor(val contactService: ContactService) :
-        Reactor<LoginReactor.Action, LoginReactor.Mutation, LoginReactor.State>(
-                initialState = LoginReactor.State(),
-                debug = true) {
+class LoginViewModel(private val contactService: ContactService) :
+    Reactor<LoginViewModel.Action, LoginViewModel.Mutation, LoginViewModel.State>(
+        initialState = LoginViewModel.State(),
+        debug = true) {
 
     sealed class Action {
         object EnterScreen : Action()
@@ -24,7 +24,6 @@ class LoginReactor(val contactService: ContactService) :
     }
 
     sealed class Mutation {
-        object ResetState : Mutation()
         data class SetUsername(val username: String) : Mutation()
         data class SetPassword(val password: String) : Mutation()
         data class SetBusy(val busy: Boolean) : Mutation()
@@ -38,15 +37,15 @@ class LoginReactor(val contactService: ContactService) :
     }
 
     data class State(
-            val username: String = "",
-            val password: String = "",
-            val environment: String = "",
-            val isUsernameValid: Boolean = true,
-            val isPasswordValid: Boolean = true,
-            val isBusy: Boolean = false,
-            val account: Account? = null,
-            val autoCompleteEmails: List<String>? = null,
-            val trigger: Trigger? = null
+        val username: String = "",
+        val password: String = "",
+        val environment: String = "",
+        val isUsernameValid: Boolean = true,
+        val isPasswordValid: Boolean = true,
+        val isBusy: Boolean = false,
+        val account: Account? = null,
+        val autoCompleteEmails: List<String>? = null,
+        val trigger: Trigger? = null
     ) {
         val loginEnabled: Boolean
             get() = (isUsernameValid && username.isNotEmpty()) && (isPasswordValid && password.isNotEmpty())
@@ -60,18 +59,21 @@ class LoginReactor(val contactService: ContactService) :
         when (action) {
             is Action.EnterScreen -> {
 //                analytics.enterScreen(screenName: AnalyticsConstants.Login.loginScreen, properties: nil)
-                return Observable.just(Mutation.ResetState)
+                return Observable.empty()
             }
+
             is Action.UsernameChanged -> {
                 return Observable.just(Mutation.SetUsername(action.username))
             }
+
             is Action.PasswordChanged -> {
                 return Observable.just(Mutation.SetPassword(action.password))
             }
+
             is Action.Login -> {
-                val observables = arrayListOf(Observable.just(Mutation.SetBusy(true)), login())
-                return Observable.concat(observables)
+                return login()
             }
+
             is Action.PopulateAutoComplete -> {
                 return loadEmails()
             }
@@ -82,67 +84,80 @@ class LoginReactor(val contactService: ContactService) :
         when (mutation) {
             is Mutation.SetUsername -> {
                 return state.copy(
-                        trigger = null,
-                        username = mutation.username,
-                        isUsernameValid = isTextValid(mutation.username))
+                    trigger = null,
+                    username = mutation.username,
+                    isUsernameValid = isTextValid(mutation.username))
             }
+
             is Mutation.SetPassword -> {
                 return state.copy(
-                        trigger = null,
-                        password = mutation.password,
-                        isPasswordValid = isTextValid(mutation.password))
+                    trigger = null,
+                    password = mutation.password,
+                    isPasswordValid = isTextValid(mutation.password))
             }
+
             is Mutation.SetBusy -> {
                 return state.copy(
-                        trigger = null,
-                        isBusy = mutation.busy,
-                        account = null)
+                    trigger = null,
+                    isBusy = mutation.busy,
+                    account = null)
             }
+
             is Mutation.SetError -> {
                 return state.copy(
-                        trigger = Trigger.ShowError(mutation.message),
-                        isBusy = false)
+                    trigger = Trigger.ShowError(mutation.message),
+                    isBusy = false)
             }
+
             is Mutation.LoggedIn -> {
                 return state.copy(
-                        trigger = null,
-                        isBusy = false,
-                        account = mutation.account)
+                    trigger = null,
+                    isBusy = false,
+                    account = mutation.account)
             }
+
             is Mutation.SetAutoCompleteEmails -> {
                 return state.copy(
-                        trigger = null,
-                        autoCompleteEmails = mutation.emails)
+                    trigger = null,
+                    autoCompleteEmails = mutation.emails)
             }
+
             else -> return state
         }
     }
 
     override fun logDebug(message: String) {
-        Log.d("LoginReactor", message)
+        Log.d("LoginViewModel", message)
     }
 
     private fun loadEmails(): Observable<Mutation> {
         return contactService.loadEmails().map { Mutation.SetAutoCompleteEmails(it) }
     }
 
+    /**
+     * Fake login that accepts two values in [LoginViewModel.DUMMY_CREDENTIALS] as valid logins.
+     */
     private fun login(): Observable<Mutation> {
-        return Observable.just(Math.random() > 0.8)
-                .delay(1, TimeUnit.SECONDS) //
-                .flatMap { success ->
-                    val mutations = arrayListOf<Mutation>(Mutation.SetBusy(false))
-                    if (success) {
-                        mutations.add(Mutation.LoggedIn(Account("test", "test")))
-                    } else {
-                        mutations.add(Mutation.SetError("Some error message"))
-                    }
-                    Observable.fromIterable(mutations.asIterable())
+        return Observable.just(DUMMY_CREDENTIALS.contains("${currentState.username}:${currentState.password}"))
+            .delay(1, TimeUnit.SECONDS)
+            .flatMap { success ->
+                val mutation = if (success) {
+                    Mutation.LoggedIn(Account("test", "test"))
+                } else {
+                    Mutation.SetError("Some error message")
                 }
+                Observable.just(mutation, Mutation.SetBusy(false))
+            }
+            .startWith(Mutation.SetBusy(true))
     }
 
     private fun isTextValid(text: String): Boolean {
         if (text.isEmpty()) return false
         return true
+    }
+
+    companion object {
+        private val DUMMY_CREDENTIALS = arrayOf("foo@example.com:hello", "bar@example.com:world")
     }
 }
 

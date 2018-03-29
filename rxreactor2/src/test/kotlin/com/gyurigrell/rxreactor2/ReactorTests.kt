@@ -5,11 +5,11 @@ import io.reactivex.observers.TestObserver
 import org.junit.Test
 
 /**
- * Do not let me check this in without adding a comment about the class.
+ * Unit tests for [Reactor]
  */
 class ReactorTests {
     @Test
-    fun eachMethodIsInvoked() {
+    fun `each method is invoked`() {
         // Arrange
         val reactor = TestReactor()
         val output = TestObserver.create<List<String>>()
@@ -26,7 +26,7 @@ class ReactorTests {
     }
 
     @Test
-    fun stateReplayCurrentState() {
+    fun `state replay current state`() {
         // Arrange
         val reactor = CounterReactor()
         val output = TestObserver.create<Int>()
@@ -41,7 +41,7 @@ class ReactorTests {
     }
 
     @Test
-    fun testStreamIgnoresErrorFromMutate() {
+    fun `stream ignores error from mutate`() {
         // Arrange
         val reactor = CounterReactor()
         val output = TestObserver.create<Int>()
