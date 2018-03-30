@@ -1,5 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'com.github.dcendents.android-maven'
+apply from: "$rootDir/gradle/library-artifacts.gradle"
 
 android {
     compileSdkVersion 26
