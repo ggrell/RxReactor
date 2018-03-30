@@ -1,8 +1,8 @@
 language: android
 
-install: travis_wait ./gradlew clean assemble
+install: travis_wait 20 ./gradlew clean assemble
 
-script: ./gradlew lint test
+script: travis_wait 20 ./gradlew lint test
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
