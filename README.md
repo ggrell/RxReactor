@@ -1,8 +1,8 @@
-NOTE: This is \[WIP] pre-release code, use at your own risk. 
+NOTE: This is ![stability-WIP](https://img.shields.io/badge/stability-WIP-orange.svg) pre-release code, use at your own risk. 
  
 # RxReactor
-[![Build Status](https://travis-ci.org/constantcontact/java-sdk.svg?branch=master)](https://travis-ci.org/constantcontact/java-sdk) 
-[![Coverage Status](https://coveralls.io/repos/github/ggrell/RxReactor/badge.svg?branch=master)](https://coveralls.io/github/ggrell/RxReactor?branch=master) 
+[![Build Status](https://travis-ci.org/ggrell/RxReactor.svg?branch=master)](https://travis-ci.org/ggrell/RxReactor) 
+[![Coverage Status](https://coveralls.io/repos/github/ggrell/RxReactor/badge.svg?branch=master)](https://coveralls.io/github/ggrell/RxReactor?branch=master)  
 [![Release](https://jitpack.io/v/ggrell/RxReactor.svg)](https://jitpack.io/#ggrell/RxReactor) 
 [Javadocs](https://jitpack.io/com/github/ggrell/RxReactor/rxreactor1/master-SNAPSHOT/javadoc/)
 
