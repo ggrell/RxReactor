@@ -1,6 +1,6 @@
 language: android
 
-install: ./gradlew clean assemble
+install: travis_wait ./gradlew clean assemble
 
 script: ./gradlew lint test
 
