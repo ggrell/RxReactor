@@ -7,6 +7,7 @@ import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.widget.ArrayAdapter
 import com.gyurigrell.rxreactor2.Reactor
+import com.gyurigrell.rxreactor2.android.ReactorProvider
 import com.gyurigrell.rxreactor2.disposedBy
 import com.jakewharton.rxbinding2.support.design.widget.RxTextInputLayout
 import com.jakewharton.rxbinding2.view.RxView
@@ -22,16 +23,44 @@ import kotlinx.android.synthetic.main.act_login.*
 class LoginActivity : AppCompatActivity() {
     private var disposeBag = CompositeDisposable()
 
-    private lateinit var viewModel: Reactor<LoginViewModel.Action, LoginViewModel.Mutation, LoginViewModel.State>
+    // @Inject
+    private lateinit var factory: LoginViewModelFactory
+
+    inner class LoginViewModelFactory(private val contactService: ContactService) : ReactorProvider.Factory {
+
+        var initialState: LoginViewModel.State? = null
+
+        override fun <Action, Mutation, State, T : Reactor<Action, Mutation, State>> create(modelClass: Class<T>): T {
+            @Suppress("UNCHECKED_CAST")
+            return LoginViewModel(contactService, initialState ?: LoginViewModel.State()) as T
+        }
+    }
+
+    private lateinit var viewModel: LoginViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.act_login)
 
-        viewModel = LoginViewModel(ContactServiceImpl(this, Schedulers.io()))
+        val contactService = ContactServiceImpl(this, Schedulers.io())
+        factory = LoginViewModelFactory(contactService)
+
+        // Settings the initial state in the factory is optional and only needed if the state needs
+        // to survive the app getting killed in the background.
+        factory.initialState = savedInstanceState?.getSerializable(VIEW_STATE_KEY) as? LoginViewModel.State
+
+        viewModel = ReactorProvider.of(this, factory).get(LoginViewModel::class.java)
         bind(viewModel)
 
         populateAutoComplete()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        // The following is optional and only needed if something in your state needs to survive
+        // the app getting killed in the background. Be aware that there are strict limits on the
+        // size of what can go into the view state
+        outState?.putSerializable(VIEW_STATE_KEY, viewModel.currentState)
     }
 
     private fun populateAutoComplete() {
@@ -49,7 +78,7 @@ class LoginActivity : AppCompatActivity() {
         if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
             Snackbar.make(email, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
                 .setAction(android.R.string.ok,
-                    { requestPermissions(arrayOf(READ_CONTACTS), REQUEST_READ_CONTACTS) })
+                           { requestPermissions(arrayOf(READ_CONTACTS), REQUEST_READ_CONTACTS) })
         } else {
             requestPermissions(arrayOf(READ_CONTACTS), REQUEST_READ_CONTACTS)
         }
@@ -68,205 +97,21 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-
-    /**
-     * Attempts to sign in or register the account specified by the login form.
-     * If there are form errors (invalid email, missing fields, etc.), the
-     * errors are presented and no actual login attempt is made.
-     */
-//    private fun attemptLogin() {
-//        if (mAuthTask != null) {
-//            return
-//        }
-//
-//        // Reset errors.
-//        email.error = null
-//        password.error = null
-//
-//        // Store values at the time of the login attempt.
-//        val emailStr = email.text.toString()
-//        val passwordStr = password.text.toString()
-//
-//        var cancel = false
-//        var focusView: View? = null
-//
-//        // Check for a valid password, if the user entered one.
-//        if (!TextUtils.isEmpty(passwordStr) && !isPasswordValid(passwordStr)) {
-//            password.error = getString(R.string.error_invalid_password)
-//            focusView = password
-//            cancel = true
-//        }
-//
-//        // Check for a valid email address.
-//        if (TextUtils.isEmpty(emailStr)) {
-//            email.error = getString(R.string.error_field_required)
-//            focusView = email
-//            cancel = true
-//        } else if (!isEmailValid(emailStr)) {
-//            email.error = getString(R.string.error_invalid_email)
-//            focusView = email
-//            cancel = true
-//        }
-//
-//        if (cancel) {
-//            // There was an error; don't attempt login and focus the first
-//            // form field with an error.
-//            focusView?.requestFocus()
-//        } else {
-//            // Show a progress spinner, and kick off a background task to
-//            // perform the user login attempt.
-//            showProgress(true)
-//            mAuthTask = UserLoginTask(emailStr, passwordStr)
-//            mAuthTask!!.execute(null as Void?)
-//        }
-//    }
-
-//    private fun isEmailValid(email: String): Boolean {
-//        //TODO: Replace this with your own logic
-//        return email.contains("@")
-//    }
-
-//    private fun isPasswordValid(password: String): Boolean {
-//        //TODO: Replace this with your own logic
-//        return password.length > 4
-//    }
-
-    /**
-     * Shows the progress UI and hides the login form.
-     */
-//    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-//    private fun showProgress(show: Boolean) {
-//        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-//        // for very easy animations. If available, use these APIs to fade-in
-//        // the progress spinner.
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-//            val shortAnimTime = resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
-//
-//            login_form.visibility = if (show) View.GONE else View.VISIBLE
-//            login_form.animate()
-//                    .setDuration(shortAnimTime)
-//                    .alpha((if (show) 0 else 1).toFloat())
-//                    .setListener(object : AnimatorListenerAdapter() {
-//                        override fun onAnimationEnd(animation: Animator) {
-//                            login_form.visibility = if (show) View.GONE else View.VISIBLE
-//                        }
-//                    })
-//
-//            login_progress.visibility = if (show) View.VISIBLE else View.GONE
-//            login_progress.animate()
-//                    .setDuration(shortAnimTime)
-//                    .alpha((if (show) 1 else 0).toFloat())
-//                    .setListener(object : AnimatorListenerAdapter() {
-//                        override fun onAnimationEnd(animation: Animator) {
-//                            login_progress.visibility = if (show) View.VISIBLE else View.GONE
-//                        }
-//                    })
-//        } else {
-//            // The ViewPropertyAnimator APIs are not available, so simply show
-//            // and hide the relevant UI components.
-//            login_progress.visibility = if (show) View.VISIBLE else View.GONE
-//            login_form.visibility = if (show) View.GONE else View.VISIBLE
-//        }
-//    }
-
-//    override fun onCreateLoader(i: Int, bundle: Bundle?): Loader<Cursor> {
-//        return CursorLoader(this,
-//                // Retrieve data rows for the device user's 'profile' contact.
-//                Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI,
-//                        ContactsContract.Contacts.Data.CONTENT_DIRECTORY),
-//                ProfileQuery.PROJECTION,
-//
-//                // Select only email addresses.
-//                ContactsContract.Contacts.Data.MIMETYPE + " = ?",
-//                arrayOf(ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE),
-//
-//                // Show primary email addresses first. Note that there won't be
-//                // a primary email address if the user hasn't specified one.
-//                ContactsContract.Contacts.Data.IS_PRIMARY + " DESC")
-//    }
-
-//    override fun onLoadFinished(cursorLoader: Loader<Cursor>, cursor: Cursor) {
-//        val emails = ArrayList<String>()
-//        cursor.moveToFirst()
-//        while (!cursor.isAfterLast) {
-//            emails.add(cursor.getString(ProfileQuery.ADDRESS))
-//            cursor.moveToNext()
-//        }
-//
-//        addEmailsToAutoComplete(emails)
-//    }
-
-//    override fun onLoaderReset(cursorLoader: Loader<Cursor>) {
-//
-//    }
-
     private fun addEmailsToAutoComplete(emailAddressCollection: List<String>) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         val adapter = ArrayAdapter(this@LoginActivity,
-            android.R.layout.simple_dropdown_item_1line, emailAddressCollection)
+                                   android.R.layout.simple_dropdown_item_1line,
+                                   emailAddressCollection)
 
         email.setAdapter(adapter)
     }
 
-//    object ProfileQuery {
-//        val PROJECTION = arrayOf(
-//                ContactsContract.CommonDataKinds.Email.ADDRESS,
-//                ContactsContract.CommonDataKinds.Email.IS_PRIMARY)
-//        val ADDRESS = 0
-//        val IS_PRIMARY = 1
-//    }
-
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-//    inner class UserLoginTask internal constructor(private val mEmail: String, private val mPassword: String) : AsyncTask<Void, Void, Boolean>() {
-//
-//        override fun doInBackground(vararg params: Void): Boolean? {
-//            // TODO: attempt authentication against a network service.
-//
-//            try {
-//                // Simulate network access.
-//                Thread.sleep(2000)
-//            } catch (e: InterruptedException) {
-//                return false
-//            }
-//
-//            return DUMMY_CREDENTIALS
-//                    .map { it.split(":") }
-//                    .firstOrNull { it[0] == mEmail }
-//                    ?.let {
-//                        // Account exists, return true if the password matches.
-//                        it[1] == mPassword
-//                    }
-//                    ?: true
-//        }
-//
-//        override fun onPostExecute(success: Boolean?) {
-//            mAuthTask = null
-//            showProgress(false)
-//
-//            if (success!!) {
-//                finish()
-//            } else {
-//                password.error = getString(R.string.error_incorrect_password)
-//                password.requestFocus()
-//            }
-//        }
-//
-//        override fun onCancelled() {
-//            mAuthTask = null
-//            showProgress(false)
-//        }
-//    }
-
-    private fun bind(viewModel: Reactor<LoginViewModel.Action, LoginViewModel.Mutation, LoginViewModel.State>) {
-        this.viewModel = viewModel
+    private fun bind(viewModel: LoginViewModel) {
         bindActions(viewModel)
         bindViewState(viewModel)
     }
 
-    private fun bindActions(viewModel: Reactor<LoginViewModel.Action, LoginViewModel.Mutation, LoginViewModel.State>) {
+    private fun bindActions(viewModel: LoginViewModel) {
         // Subscribe to UI changes, convert to actions and push to viewModel
         RxTextView.textChanges(email)
             .skipInitialValue()
@@ -286,9 +131,11 @@ class LoginActivity : AppCompatActivity() {
             .disposedBy(disposeBag)
     }
 
-    private fun bindViewState(viewModel: Reactor<LoginViewModel.Action, LoginViewModel.Mutation, LoginViewModel.State>) {
+    private fun bindViewState(viewModel: LoginViewModel) {
         // Subscribe to state changes from the viewModel and bind to UI
-        viewModel.state.flatMapMaybe { if (it.autoCompleteEmails == null) Maybe.empty() else Maybe.just(it.autoCompleteEmails) }
+        viewModel.state.flatMapMaybe {
+            if (it.autoCompleteEmails == null) Maybe.empty() else Maybe.just(it.autoCompleteEmails)
+        }
             .subscribe(this::addEmailsToAutoComplete)
             .disposedBy(disposeBag)
 
@@ -341,6 +188,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     companion object {
+        private const val VIEW_STATE_KEY = "view_state"
 
         /**
          * Id to identity READ_CONTACTS permission request.

@@ -1,19 +1,25 @@
 package com.gyurigrell.rxreactor2.sample
 
 import android.accounts.Account
+import android.os.Parcelable
 import android.util.Log
 import com.gyurigrell.rxreactor2.Reactor
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import kotlinx.android.parcel.IgnoredOnParcel
+import kotlinx.android.parcel.Parcelize
+import java.io.Serializable
 import java.util.concurrent.TimeUnit
 
 /**
  * Do not let me check this in without adding a comment about the class.
  */
-class LoginViewModel(private val contactService: ContactService) :
+class LoginViewModel(private val contactService: ContactService,
+                     initialState: State = State(),
+                     debug: Boolean = false) :
     Reactor<LoginViewModel.Action, LoginViewModel.Mutation, LoginViewModel.State>(
-        initialState = LoginViewModel.State(),
-        debug = true) {
+        initialState,
+        debug) {
 
     sealed class Action {
         object EnterScreen : Action()
@@ -45,8 +51,8 @@ class LoginViewModel(private val contactService: ContactService) :
         val isBusy: Boolean = false,
         val account: Account? = null,
         val autoCompleteEmails: List<String>? = null,
-        val trigger: Trigger? = null
-    ) {
+        @IgnoredOnParcel val trigger: Trigger? = null
+    ) : Serializable {
         val loginEnabled: Boolean
             get() = (isUsernameValid && username.isNotEmpty()) && (isPasswordValid && password.isNotEmpty())
     }
@@ -139,7 +145,7 @@ class LoginViewModel(private val contactService: ContactService) :
      */
     private fun login(): Observable<Mutation> {
         return Observable.just(DUMMY_CREDENTIALS.contains("${currentState.username}:${currentState.password}"))
-            .delay(1, TimeUnit.SECONDS)
+            .delay(20, TimeUnit.SECONDS)
             .flatMap { success ->
                 val mutation = if (success) {
                     Mutation.LoggedIn(Account("test", "test"))
