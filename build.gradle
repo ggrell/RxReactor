@@ -1,7 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext.kotlin_version = '1.2.41'
+    ext.kotlin_version = '1.2.60'
     ext.dokka_version = '0.9.16'
 
     repositories {
@@ -9,7 +9,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.2'
+        classpath 'com.android.tools.build:gradle:3.1.4'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.dokka:dokka-gradle-plugin:$dokka_version"
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.4.0'
@@ -31,5 +31,5 @@ task clean(type: Delete) {
 subprojects {
     group = "com.gyurigrell"
     def isRelease = Boolean.valueOf(project.hasProperty("release") ? project.property("release") as String : "false")
-    version = "0.1.0" + (isRelease ? "" : "-SNAPSHOT")
+    version = "0.2.0" + (isRelease ? "" : "-SNAPSHOT")
 }
