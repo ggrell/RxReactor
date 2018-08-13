@@ -1,13 +1,9 @@
 package com.gyurigrell.rxreactor2.sample
 
 import android.accounts.Account
-import android.os.Parcelable
-import android.util.Log
 import com.gyurigrell.rxreactor2.Reactor
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import kotlinx.android.parcel.IgnoredOnParcel
-import kotlinx.android.parcel.Parcelize
 import java.io.Serializable
 import java.util.concurrent.TimeUnit
 
@@ -15,11 +11,9 @@ import java.util.concurrent.TimeUnit
  * Do not let me check this in without adding a comment about the class.
  */
 class LoginViewModel(private val contactService: ContactService,
-                     initialState: State = State(),
-                     debug: Boolean = false) :
+                     initialState: State = State()) :
     Reactor<LoginViewModel.Action, LoginViewModel.Mutation, LoginViewModel.State>(
-        initialState,
-        debug) {
+        initialState) {
 
     sealed class Action {
         object EnterScreen : Action()
@@ -51,7 +45,7 @@ class LoginViewModel(private val contactService: ContactService,
         val isBusy: Boolean = false,
         val account: Account? = null,
         val autoCompleteEmails: List<String>? = null,
-        @IgnoredOnParcel val trigger: Trigger? = null
+        val trigger: Trigger? = null
     ) : Serializable {
         val loginEnabled: Boolean
             get() = (isUsernameValid && username.isNotEmpty()) && (isPasswordValid && password.isNotEmpty())
@@ -130,10 +124,6 @@ class LoginViewModel(private val contactService: ContactService,
 
             else -> return state
         }
-    }
-
-    override fun logDebug(message: String) {
-        Log.d("LoginViewModel", message)
     }
 
     private fun loadEmails(): Observable<Mutation> {

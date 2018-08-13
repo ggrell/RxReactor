@@ -11,8 +11,8 @@ import rx.Observable
  * @property debug default is false. When set to true, each action, mutation and state change is logged
  * via {@link logDebug}
  */
-abstract class SimpleReactor<Action, State>(initialState: State, debug: Boolean = false) :
-        Reactor<Action, Action, State>(initialState, debug) {
+abstract class SimpleReactor<Action, State>(initialState: State) :
+        Reactor<Action, Action, State>(initialState) {
     override fun mutate(action: Action): Observable<Action> {
         return Observable.just(action)
     }

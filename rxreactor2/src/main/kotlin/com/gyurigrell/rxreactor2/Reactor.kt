@@ -1,9 +1,9 @@
 package com.gyurigrell.rxreactor2
 
 import com.jakewharton.rxrelay2.PublishRelay
-import io.reactivex.Notification
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
 
 /**
  * A Reactor is an UI-independent layer which manages the state of a view. The foremost role of a
@@ -20,7 +20,7 @@ import io.reactivex.disposables.CompositeDisposable
  * @property debug default is false. When set to true, each action, mutation and state change is logged
  * via {@link logDebug}
  */
-abstract class Reactor<Action, Mutation, State>(val initialState: State, val debug: Boolean = false) {
+abstract class Reactor<Action, Mutation, State>(val initialState: State) {
     /**
      * Accepts the actions from the view, which then potentially cause mutations of the current state.
      */
@@ -37,7 +37,7 @@ abstract class Reactor<Action, Mutation, State>(val initialState: State, val deb
      */
     val state: Observable<State> by lazy { createStateStream() }
 
-    private var disposeBag = CompositeDisposable()
+    private var disposables = CompositeDisposable()
 
     /**
      * Commits mutation from the action. This is the best place to perform side-effects such as async tasks.
@@ -62,9 +62,6 @@ abstract class Reactor<Action, Mutation, State>(val initialState: State, val deb
      *
      */
     open fun transformAction(action: Observable<Action>): Observable<Action> {
-        if (debug) {
-            return action.doOnEach { logNotification("action", it) }
-        }
         return action
     }
 
@@ -72,9 +69,6 @@ abstract class Reactor<Action, Mutation, State>(val initialState: State, val deb
      *
      */
     open fun transformMutation(mutation: Observable<Mutation>): Observable<Mutation> {
-        if (debug) {
-            return mutation.doOnEach { logNotification("mutation", it) }
-        }
         return mutation
     }
 
@@ -82,35 +76,7 @@ abstract class Reactor<Action, Mutation, State>(val initialState: State, val deb
      *
      */
     open fun transformState(state: Observable<State>): Observable<State> {
-        if (debug) {
-            return state.doOnEach { logNotification("state", it) }
-        }
         return state
-    }
-
-    /**
-     *
-     */
-    open fun logDebug(message: String) {
-        println(message)
-    }
-
-    private fun <T> logNotification(label: String, notification: Notification<T>) {
-        val note: String = when {
-            notification.isOnNext -> {
-                "onNext: ${notification.value}"
-            }
-            notification.isOnComplete -> {
-                "onComplete"
-            }
-            notification.isOnError -> {
-                "onError: ${notification.error}"
-            }
-            else -> {
-                "unknown"
-            }
-        }
-        logDebug("$label $note")
     }
 
     private fun createStateStream(): Observable<State> {
@@ -126,8 +92,6 @@ abstract class Reactor<Action, Mutation, State>(val initialState: State, val deb
         val transformedState = transformState(state)
                 .doOnNext { currentState = it }
                 .replay(1)
-        val disposable = transformedState.connect()
-        disposeBag.add(disposable)
-        return transformedState
+        return transformedState.apply { connect().addTo(disposables) }
     }
 }
