@@ -32,5 +32,5 @@ task clean(type: Delete) {
 subprojects {
     group = "com.gyurigrell"
     def isRelease = Boolean.valueOf(project.hasProperty("release") ? project.property("release") as String : "false")
-    version = "0.2.0" + (isRelease ? "" : "-SNAPSHOT")
+    version = "0.2.1" + (isRelease ? "" : "-SNAPSHOT")
 }
