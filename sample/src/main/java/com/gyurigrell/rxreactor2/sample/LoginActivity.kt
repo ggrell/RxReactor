@@ -8,12 +8,12 @@ import android.support.v7.app.AppCompatActivity
 import android.widget.ArrayAdapter
 import com.gyurigrell.rxreactor2.Reactor
 import com.gyurigrell.rxreactor2.android.ReactorProvider
-import com.gyurigrell.rxreactor2.disposedBy
 import com.jakewharton.rxbinding2.support.design.widget.RxTextInputLayout
 import com.jakewharton.rxbinding2.view.RxView
 import com.jakewharton.rxbinding2.widget.RxTextView
 import io.reactivex.Maybe
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.act_login.*
 
@@ -117,18 +117,18 @@ class LoginActivity : AppCompatActivity() {
             .skipInitialValue()
             .map { LoginViewModel.Action.UsernameChanged(it.toString()) }
             .subscribe(viewModel.action)
-            .disposedBy(disposeBag)
+            .addTo(disposeBag)
 
         RxTextView.textChanges(password)
             .skipInitialValue()
             .map { LoginViewModel.Action.PasswordChanged(it.toString()) }
             .subscribe(viewModel.action)
-            .disposedBy(disposeBag)
+            .addTo(disposeBag)
 
         RxView.clicks(email_sign_in_button)
             .map { LoginViewModel.Action.Login }
             .subscribe(viewModel.action)
-            .disposedBy(disposeBag)
+            .addTo(disposeBag)
     }
 
     private fun bindViewState(viewModel: LoginViewModel) {
@@ -137,32 +137,32 @@ class LoginActivity : AppCompatActivity() {
             if (it.autoCompleteEmails == null) Maybe.empty() else Maybe.just(it.autoCompleteEmails)
         }
             .subscribe(this::addEmailsToAutoComplete)
-            .disposedBy(disposeBag)
+            .addTo(disposeBag)
 
         viewModel.state.map { it.isBusy }
             .distinctUntilChanged()
             .subscribe(RxView.visibility(login_progress))
-            .disposedBy(disposeBag)
+            .addTo(disposeBag)
 
         viewModel.state.map { !it.isBusy }
             .distinctUntilChanged()
             .subscribe(RxView.visibility(login_form))
-            .disposedBy(disposeBag)
+            .addTo(disposeBag)
 
         viewModel.state.map { if (it.isUsernameValid) "" else "Invalid username" }
             .distinctUntilChanged()
             .subscribe(RxTextInputLayout.error(email_input_layout))
-            .disposedBy(disposeBag)
+            .addTo(disposeBag)
 
         viewModel.state.map { if (it.isPasswordValid) "" else "Invalid password" }
             .distinctUntilChanged()
             .subscribe(RxTextInputLayout.error(password_input_layout))
-            .disposedBy(disposeBag)
+            .addTo(disposeBag)
 
         viewModel.state.map { it.loginEnabled }
             .distinctUntilChanged()
             .subscribe(RxView.enabled(email_sign_in_button))
-            .disposedBy(disposeBag)
+            .addTo(disposeBag)
 
         viewModel.state.flatMapMaybe { if (it.trigger == null) Maybe.empty() else Maybe.just(it.trigger) }
             .subscribe { trigger ->
@@ -172,7 +172,7 @@ class LoginActivity : AppCompatActivity() {
                     }
                 }
             }
-            .disposedBy(disposeBag)
+            .addTo(disposeBag)
 
         viewModel.state.flatMapMaybe { if (it.account == null) Maybe.empty() else Maybe.just(it.account) }
             .subscribe { account ->
@@ -184,7 +184,7 @@ class LoginActivity : AppCompatActivity() {
                     })
                     .show()
             }
-            .disposedBy(disposeBag)
+            .addTo(disposeBag)
     }
 
     companion object {
