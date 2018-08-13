@@ -1,78 +1,71 @@
-/*
- * Copyright (c) 2017 Constant Contact, Inc. All Rights Reserved.
- *
- * Boston, MA 02451, USA
- * Phone: (781) 472-8100
- * Fax: (781) 472-8101
- *
- * This software is the confidential and proprietary information
- * of Constant Contact, Inc. created for Constant Contact, Inc.
- * You shall not disclose such Confidential Information and shall use
- * it only in accordance with the terms of the license agreement
- * you entered into with Constant Contact, Inc.
- */
-
 if (project.plugins.hasPlugin('com.android.library')) {
     android.libraryVariants.all { variant ->
         variant.outputs.all {
             outputFileName = "${archivesBaseName}-${version}.aar"
         }
-
-        def javadocTask = task("generate${variant.name.capitalize()}Javadoc", type: Javadoc) {
-            description "Generates Javadoc for $variant.name variant."
-            group = 'artifact'
-            source = variant.javaCompiler.source
-            ext.androidJar = "${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar"
-//            classpath = files(variant.javaCompiler.classpath.files) + files(ext.androidJar)
-//            classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-            options {
-                links "http://docs.oracle.com/javase/7/docs/api/", "http://d.android.com/reference/"
-                linksOffline "http://d.android.com/reference", "$android.sdkDirectory/docs/reference"
-            }
-            exclude '**/BuildConfig.java'
-            exclude '**/R.java'
-
-            if (JavaVersion.current().isJava8Compatible()) {
-                options.addStringOption('Xdoclint:none', '-quiet')
-            }
-        }
-
-        def javadocJarTask = task("generate${variant.name.capitalize()}JavadocJar", type: Jar, dependsOn: javadocTask) {
-            description "Generates Javadoc archive for $variant.name variant."
-            group = 'artifact'
-            classifier = 'javadoc'
-            from javadocTask.destinationDir
-        }
-
-        def sourcesJarTask = task("generate${variant.name.capitalize()}SourcesJar", type: Jar) {
-            description "Generates source archive for $variant.name variant."
-            group = 'artifact'
-            classifier = 'sources'
-            from variant.sourceSets.java.sourceFiles
-        }
     }
+
+    def siteUrl = "https://github.com/ggrell/RxReactor"
+    def gitUrl = "https://github.com/ggrell/RxReactor.git"
 
     install {
-        repositories.mavenInstaller {
-            pom {
-                project {
-                    packaging 'aar'
-                    groupId project.group
-                    artifactId archivesBaseName
+        repositories {
+            mavenInstaller {
+                pom {
+                    project {
+                        packaging 'aar'
+
+                        groupId project.group
+                        artifactId archivesBaseName
+
+                        url siteUrl
+
+                        licenses {
+                            license {
+                                name 'BSD 3-Clause License'
+                                url 'https://github.com/ggrell/RxReactor/blob/master/LICENSE'
+                            }
+                        }
+
+                        developers {
+                            developer {
+                                id 'ggrell'
+                                name 'Gyuri Grell'
+                                email 'ggrell@pobox.com'
+                            }
+                        }
+
+                        scm {
+                            connection gitUrl
+                            developerConnection gitUrl
+                            url siteUrl
+                        }
+                    }
                 }
             }
         }
     }
 
-    task createPom {
-        doLast {
-            pom {
-                project {
-                    packaging 'aar'
-                    groupId project.group
-                    artifactId archivesBaseName
-                }
-            }.writeTo("$buildDir/outputs/aar/pom.xml")
+    afterEvaluate {
+        dokka {
+            outputFormat = 'javadoc'
+            includeNonPublic = false
+            outputDirectory = "$buildDir/javadoc"
+        }
+
+        task sourcesJar(type: Jar) {
+            classifier = 'sources'
+            from android.sourceSets.main.java.srcDirs
+        }
+
+        task javadocJar(type: Jar, dependsOn: dokka) {
+            classifier = 'javadoc'
+            from dokka.outputDirectory
+        }
+
+        artifacts {
+            archives javadocJar
+            archives sourcesJar
         }
     }
 }
