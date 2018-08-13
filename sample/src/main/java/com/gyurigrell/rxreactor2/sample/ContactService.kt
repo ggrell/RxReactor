@@ -3,7 +3,7 @@ package com.gyurigrell.rxreactor2.sample
 import io.reactivex.Observable
 
 /**
- * Do not let me check this in without adding a comment about the class.
+ * Handle access to a list of contacts that will be used in the email text view
  */
 interface ContactService {
     fun loadEmails(): Observable<List<String>>
