@@ -41,7 +41,7 @@ dependencies {
 
     implementation 'com.jakewharton.rxbinding2:rxbinding-kotlin:2.0.0'
     implementation 'com.jakewharton.rxbinding2:rxbinding-appcompat-v7-kotlin:2.0.0'
-    implementation 'com.jakewharton.rxbinding2:rxbinding-design-kotlin:2.0.0'
+    implementation 'com.jakewharton.rxbinding2:rxbinding-design-kotlin:2.2.0'
 
     implementation 'com.jakewharton.rxrelay2:rxrelay:2.0.0'
 
