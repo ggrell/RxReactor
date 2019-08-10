@@ -6,7 +6,6 @@ apply from: "$rootDir/gradle/library-artifacts.gradle"
 
 android {
     compileSdkVersion 27
-    buildToolsVersion "27.0.3"
 
     defaultConfig {
         minSdkVersion 15
@@ -33,9 +32,9 @@ android {
 
 dependencies {
     implementation project(path: ':rxreactor1')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support:support-fragment:27.1.1'
+    implementation kotlinlib.stdlib
+    implementation support.appcompat
+    implementation support.supportFragment
 
     testImplementation 'junit:junit:4.12'
 
