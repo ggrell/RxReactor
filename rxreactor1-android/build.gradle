@@ -5,12 +5,11 @@ apply plugin: 'com.github.dcendents.android-maven'
 apply from: "$rootDir/gradle/library-artifacts.gradle"
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion "27.0.3"
+    compileSdkVersion COMPILE_SDK_VERSION
 
     defaultConfig {
-        minSdkVersion 15
-        targetSdkVersion 27
+        minSdkVersion MIN_SDK_VERSION
+        targetSdkVersion TARGET_SDK_VERSION
         versionCode 1
         versionName "1.0"
 
@@ -25,6 +24,11 @@ android {
         }
     }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
     lintOptions {
         abortOnError false
         baseline file("lint-baseline.xml")
@@ -33,9 +37,9 @@ android {
 
 dependencies {
     implementation project(path: ':rxreactor1')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support:support-fragment:27.1.1'
+    implementation kotlinlib.stdlib
+    implementation support.appcompat
+    implementation support.supportFragment
 
     testImplementation 'junit:junit:4.12'
 

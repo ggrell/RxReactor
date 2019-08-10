@@ -16,8 +16,13 @@ class ContactServiceImpl(
                                                        ProfileQuery.SELECTION,
                                                        ProfileQuery.SELECTION_ARGS,
                                                        ProfileQuery.SORT_ORDER)
+            if (cursor == null) {
+                emitter.onNext(listOf())
+                emitter.onComplete()
+                return@create
+            }
             try {
-                val emails = ArrayList<String>(cursor.count)
+                val emails = mutableListOf<String>()
                 while (cursor.moveToNext() && !emitter.isDisposed) {
                     emails.add(cursor.getString(ProfileQuery.ADDRESS))
                 }

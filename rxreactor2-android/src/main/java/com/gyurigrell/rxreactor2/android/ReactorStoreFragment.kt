@@ -73,7 +73,7 @@ class ReactorStoreFragment @SuppressLint("ValidFragment") constructor(
         private var activityCallbacksIsAdded = false
 
         private val parentDestroyedCallback = object : FragmentManager.FragmentLifecycleCallbacks() {
-            override fun onFragmentDestroyed(fm: FragmentManager?, parentFragment: Fragment?) {
+            override fun onFragmentDestroyed(fm: FragmentManager, parentFragment: Fragment) {
                 super.onFragmentDestroyed(fm, parentFragment)
                 val fragment = notCommittedFragmentHolders.remove(parentFragment)
                 if (fragment != null) {

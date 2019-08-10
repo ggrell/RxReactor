@@ -94,8 +94,7 @@ class ReactorProvider(private val reactorStore: ReactorStore, private val factor
         @JvmStatic
         @JvmOverloads
         fun of(fragment: Fragment, factory: Factory = defaultFactory): ReactorProvider {
-            return ReactorProvider(ReactorStore.of(
-                fragment), factory)
+            return ReactorProvider(ReactorStore.of(fragment), factory)
         }
 
         /**
