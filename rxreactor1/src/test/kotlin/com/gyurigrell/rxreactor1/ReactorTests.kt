@@ -65,7 +65,7 @@ class ReactorTests {
     }
 }
 
-class TestReactor : Reactor<List<String>, List<String>, List<String>>(initialState = ArrayList(), debug = true) {
+class TestReactor : Reactor<List<String>, List<String>, List<String>>(initialState = ArrayList()) {
     // 1. ["action"] + ["transformedAction"]
     override fun transformAction(action: Observable<List<String>>): Observable<List<String>> {
         return action.map { it + "transformedAction" }
@@ -92,7 +92,7 @@ class TestReactor : Reactor<List<String>, List<String>, List<String>>(initialSta
     }
 }
 
-class CounterReactor : Reactor<Irrelevant, Irrelevant, Int>(initialState = 0, debug = true) {
+class CounterReactor : Reactor<Irrelevant, Irrelevant, Int>(initialState = 0) {
     var stateForTriggerError: Int? = null
     var stateForTriggerCompleted: Int? = null
 
