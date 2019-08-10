@@ -151,17 +151,17 @@ class LoginActivity : AppCompatActivity() {
 
         viewModel.state.map { if (it.isUsernameValid) "" else "Invalid username" }
             .distinctUntilChanged()
-            .subscribe(RxTextInputLayout.error(email_input_layout))
+            .subscribe(email_input_layout::setError)
             .addTo(disposeBag)
 
         viewModel.state.map { if (it.isPasswordValid) "" else "Invalid password" }
             .distinctUntilChanged()
-            .subscribe(RxTextInputLayout.error(password_input_layout))
+            .subscribe(password_input_layout::setError)
             .addTo(disposeBag)
 
         viewModel.state.map { it.loginEnabled }
             .distinctUntilChanged()
-            .subscribe(RxView.enabled(email_sign_in_button))
+            .subscribe(email_sign_in_button::setEnabled)
             .addTo(disposeBag)
 
         viewModel.state.flatMapMaybe { if (it.trigger == null) Maybe.empty() else Maybe.just(it.trigger) }
