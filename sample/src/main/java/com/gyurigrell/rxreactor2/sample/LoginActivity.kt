@@ -164,25 +164,21 @@ class LoginActivity : AppCompatActivity() {
             .subscribe(email_sign_in_button::setEnabled)
             .addTo(disposeBag)
 
-        viewModel.state.flatMapMaybe { if (it.trigger == null) Maybe.empty() else Maybe.just(it.trigger) }
-            .subscribe { trigger ->
-                when (trigger) {
-                    is LoginViewModel.Trigger.ShowError -> {
-                        Snackbar.make(login_form, trigger.message, Snackbar.LENGTH_LONG).show()
-                    }
-                }
-            }
-            .addTo(disposeBag)
+        viewModel.effect
+            .subscribe { effect ->
+                when (effect) {
+                    is LoginViewModel.Effect.ShowError ->
+                        Snackbar.make(login_form, effect.message, Snackbar.LENGTH_LONG).show()
 
-        viewModel.state.flatMapMaybe { if (it.account == null) Maybe.empty() else Maybe.just(it.account) }
-            .subscribe { account ->
-                Snackbar.make(login_form, "Login succeeded", Snackbar.LENGTH_SHORT)
-                    .addCallback(object : Snackbar.Callback() {
-                        override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-                            finish()
-                        }
-                    })
-                    .show()
+                    is LoginViewModel.Effect.LoggedIn ->
+                        Snackbar.make(login_form, "Login succeeded", Snackbar.LENGTH_SHORT)
+                                .addCallback(object : Snackbar.Callback() {
+                                    override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                                        finish()
+                                    }
+                                })
+                                .show()
+                }
             }
             .addTo(disposeBag)
     }

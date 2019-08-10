@@ -37,7 +37,7 @@ abstract class Reactor<Action, Mutation, State>(val initialState: State) {
      */
     val state: Observable<State> by lazy { createStateStream() }
 
-    private var disposables = CompositeDisposable()
+    protected var disposables = CompositeDisposable()
 
     /**
      * Commits mutation from the action. This is the best place to perform side-effects such as async tasks.

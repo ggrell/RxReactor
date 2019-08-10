@@ -1,7 +1,7 @@
 package com.gyurigrell.rxreactor2.sample
 
 import android.accounts.Account
-import com.gyurigrell.rxreactor2.Reactor
+import com.gyurigrell.rxreactor2.ReactorWithEffects
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import java.io.Serializable
@@ -10,9 +10,10 @@ import java.util.concurrent.TimeUnit
 /**
  * Do not let me check this in without adding a comment about the class.
  */
-class LoginViewModel(private val contactService: ContactService,
-                     initialState: State = State()) :
-    Reactor<LoginViewModel.Action, LoginViewModel.Mutation, LoginViewModel.State>(
+class LoginViewModel(
+        private val contactService: ContactService,
+        initialState: State = State()
+) : ReactorWithEffects<LoginViewModel.Action, LoginViewModel.Mutation, LoginViewModel.State, LoginViewModel.Effect>(
         initialState) {
 
     sealed class Action {
@@ -27,25 +28,26 @@ class LoginViewModel(private val contactService: ContactService,
         data class SetUsername(val username: String) : Mutation()
         data class SetPassword(val password: String) : Mutation()
         data class SetBusy(val busy: Boolean) : Mutation()
-        data class LoggedIn(val account: Account) : Mutation()
-        data class SetError(val message: String) : Mutation()
+//        data class LoggedIn(val account: Account) : Mutation()
+//        data class SetError(val message: String) : Mutation()
         data class SetAutoCompleteEmails(val emails: List<String>) : Mutation()
+        data class TriggerEffect(val effect: Effect) : Mutation()
     }
 
-    sealed class Trigger {
-        data class ShowError(val message: String) : Trigger()
+    sealed class Effect {
+        data class ShowError(val message: String) : Effect()
+        data class LoggedIn(val account: Account) : Effect()
     }
 
     data class State(
-        val username: String = "",
-        val password: String = "",
-        val environment: String = "",
-        val isUsernameValid: Boolean = true,
-        val isPasswordValid: Boolean = true,
-        val isBusy: Boolean = false,
-        val account: Account? = null,
-        val autoCompleteEmails: List<String>? = null,
-        val trigger: Trigger? = null
+            val username: String = "",
+            val password: String = "",
+            val environment: String = "",
+            val isUsernameValid: Boolean = true,
+            val isPasswordValid: Boolean = true,
+            val isBusy: Boolean = false,
+//            val account: Account? = null,
+            val autoCompleteEmails: List<String>? = null
     ) : Serializable {
         val loginEnabled: Boolean
             get() = (isUsernameValid && username.isNotEmpty()) && (isPasswordValid && password.isNotEmpty())
@@ -80,46 +82,35 @@ class LoginViewModel(private val contactService: ContactService,
         }
     }
 
+    override fun transformMutation(mutation: Observable<Mutation>): Observable<Mutation> = mutation.flatMap { m ->
+        // If its a TriggerEffect mutation, emit it as an Effect and prevent State emission
+        if (m is Mutation.TriggerEffect) {
+            effects.accept(m.effect)
+            return@flatMap Observable.empty<Mutation>()
+        }
+        Observable.just(m)
+    }
+
     override fun reduce(state: State, mutation: Mutation): State {
         when (mutation) {
             is Mutation.SetUsername -> {
                 return state.copy(
-                    trigger = null,
-                    username = mutation.username,
-                    isUsernameValid = isTextValid(mutation.username))
+                        username = mutation.username,
+                        isUsernameValid = isTextValid(mutation.username))
             }
 
             is Mutation.SetPassword -> {
                 return state.copy(
-                    trigger = null,
-                    password = mutation.password,
-                    isPasswordValid = isTextValid(mutation.password))
+                        password = mutation.password,
+                        isPasswordValid = isTextValid(mutation.password))
             }
 
             is Mutation.SetBusy -> {
-                return state.copy(
-                    trigger = null,
-                    isBusy = mutation.busy,
-                    account = null)
-            }
-
-            is Mutation.SetError -> {
-                return state.copy(
-                    trigger = Trigger.ShowError(mutation.message),
-                    isBusy = false)
-            }
-
-            is Mutation.LoggedIn -> {
-                return state.copy(
-                    trigger = null,
-                    isBusy = false,
-                    account = mutation.account)
+                return state.copy(isBusy = mutation.busy)
             }
 
             is Mutation.SetAutoCompleteEmails -> {
-                return state.copy(
-                    trigger = null,
-                    autoCompleteEmails = mutation.emails)
+                return state.copy(autoCompleteEmails = mutation.emails)
             }
 
             else -> return state
@@ -135,16 +126,16 @@ class LoginViewModel(private val contactService: ContactService,
      */
     private fun login(): Observable<Mutation> {
         return Observable.just(DUMMY_CREDENTIALS.contains("${currentState.username}:${currentState.password}"))
-            .delay(20, TimeUnit.SECONDS)
-            .flatMap { success ->
-                val mutation = if (success) {
-                    Mutation.LoggedIn(Account("test", "test"))
-                } else {
-                    Mutation.SetError("Some error message")
+                .delay(3, TimeUnit.SECONDS)
+                .flatMap { success ->
+                    val triggerEffect = if (success) {
+                        Mutation.TriggerEffect(Effect.LoggedIn(Account("test", "test")))
+                    } else {
+                        Mutation.TriggerEffect(Effect.ShowError("Some error message"))
+                    }
+                    Observable.just(Mutation.SetBusy(false), triggerEffect)
                 }
-                Observable.just(mutation, Mutation.SetBusy(false))
-            }
-            .startWith(Mutation.SetBusy(true))
+                .startWith(Mutation.SetBusy(true))
     }
 
     private fun isTextValid(text: String): Boolean {
