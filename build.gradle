@@ -44,7 +44,7 @@ ext {
             relay : 'com.jakewharton.rxrelay:rxrelay:1.2.0'
     ]
     rx2 = [
-            java            : 'io.reactivex.rxjava2:rxjava:2.2.10',
+            java            : 'io.reactivex.rxjava2:rxjava:2.2.13',
             kotlin          : 'io.reactivex.rxjava2:rxkotlin:2.4.0',
             relay           : 'com.jakewharton.rxrelay2:rxrelay:2.0.0',
             android         : 'io.reactivex.rxjava2:rxandroid:2.0.2',
