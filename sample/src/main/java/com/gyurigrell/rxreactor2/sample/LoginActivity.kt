@@ -3,14 +3,14 @@ package com.gyurigrell.rxreactor2.sample
 import android.Manifest.permission.READ_CONTACTS
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.v7.app.AppCompatActivity
 import android.widget.ArrayAdapter
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.snackbar.Snackbar
 import com.gyurigrell.rxreactor2.Reactor
 import com.gyurigrell.rxreactor2.android.ReactorProvider
-import com.jakewharton.rxbinding2.support.design.widget.RxTextInputLayout
-import com.jakewharton.rxbinding2.view.RxView
-import com.jakewharton.rxbinding2.widget.RxTextView
+import com.jakewharton.rxbinding3.view.clicks
+import com.jakewharton.rxbinding3.view.visibility
+import com.jakewharton.rxbinding3.widget.textChanges
 import io.reactivex.Maybe
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -55,12 +55,12 @@ class LoginActivity : AppCompatActivity() {
         populateAutoComplete()
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
+    override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         // The following is optional and only needed if something in your state needs to survive
         // the app getting killed in the background. Be aware that there are strict limits on the
         // size of what can go into the view state
-        outState?.putSerializable(VIEW_STATE_KEY, viewModel.currentState)
+        outState.putSerializable(VIEW_STATE_KEY, viewModel.currentState)
     }
 
     private fun populateAutoComplete() {
@@ -77,8 +77,8 @@ class LoginActivity : AppCompatActivity() {
         }
         if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
             Snackbar.make(email, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-                .setAction(android.R.string.ok,
-                           { requestPermissions(arrayOf(READ_CONTACTS), REQUEST_READ_CONTACTS) })
+                    .setAction(android.R.string.ok,
+                            { requestPermissions(arrayOf(READ_CONTACTS), REQUEST_READ_CONTACTS) })
         } else {
             requestPermissions(arrayOf(READ_CONTACTS), REQUEST_READ_CONTACTS)
         }
@@ -100,8 +100,8 @@ class LoginActivity : AppCompatActivity() {
     private fun addEmailsToAutoComplete(emailAddressCollection: List<String>) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         val adapter = ArrayAdapter(this@LoginActivity,
-                                   android.R.layout.simple_dropdown_item_1line,
-                                   emailAddressCollection)
+                android.R.layout.simple_dropdown_item_1line,
+                emailAddressCollection)
 
         email.setAdapter(adapter)
     }
@@ -113,22 +113,22 @@ class LoginActivity : AppCompatActivity() {
 
     private fun bindActions(viewModel: LoginViewModel) {
         // Subscribe to UI changes, convert to actions and push to viewModel
-        RxTextView.textChanges(email)
-            .skipInitialValue()
-            .map { LoginViewModel.Action.UsernameChanged(it.toString()) }
-            .subscribe(viewModel.action)
-            .addTo(disposeBag)
+        email.textChanges()
+                .skipInitialValue()
+                .map { LoginViewModel.Action.UsernameChanged(it.toString()) }
+                .subscribe(viewModel.action)
+                .addTo(disposeBag)
 
-        RxTextView.textChanges(password)
-            .skipInitialValue()
-            .map { LoginViewModel.Action.PasswordChanged(it.toString()) }
-            .subscribe(viewModel.action)
-            .addTo(disposeBag)
+        password.textChanges()
+                .skipInitialValue()
+                .map { LoginViewModel.Action.PasswordChanged(it.toString()) }
+                .subscribe(viewModel.action)
+                .addTo(disposeBag)
 
-        RxView.clicks(email_sign_in_button)
-            .map { LoginViewModel.Action.Login }
-            .subscribe(viewModel.action)
-            .addTo(disposeBag)
+        email_sign_in_button.clicks()
+                .map { LoginViewModel.Action.Login }
+                .subscribe(viewModel.action)
+                .addTo(disposeBag)
     }
 
     private fun bindViewState(viewModel: LoginViewModel) {
@@ -136,52 +136,53 @@ class LoginActivity : AppCompatActivity() {
         viewModel.state.flatMapMaybe {
             if (it.autoCompleteEmails == null) Maybe.empty() else Maybe.just(it.autoCompleteEmails)
         }
-            .subscribe(this::addEmailsToAutoComplete)
-            .addTo(disposeBag)
+                .subscribe(this::addEmailsToAutoComplete)
+                .addTo(disposeBag)
 
         viewModel.state.map { it.isBusy }
-            .distinctUntilChanged()
-            .subscribe(RxView.visibility(login_progress))
-            .addTo(disposeBag)
+                .distinctUntilChanged()
+                .subscribe(login_progress.visibility())
+                .addTo(disposeBag)
 
         viewModel.state.map { !it.isBusy }
-            .distinctUntilChanged()
-            .subscribe(RxView.visibility(login_form))
-            .addTo(disposeBag)
+                .distinctUntilChanged()
+                .subscribe(login_form.visibility())
+                .addTo(disposeBag)
 
         viewModel.state.map { if (it.isUsernameValid) "" else "Invalid username" }
-            .distinctUntilChanged()
-            .subscribe(email_input_layout::setError)
-            .addTo(disposeBag)
+                .distinctUntilChanged()
+                .subscribe(email_input_layout::setError)
+                .addTo(disposeBag)
 
         viewModel.state.map { if (it.isPasswordValid) "" else "Invalid password" }
-            .distinctUntilChanged()
-            .subscribe(password_input_layout::setError)
-            .addTo(disposeBag)
+                .distinctUntilChanged()
+                .subscribe(password_input_layout::setError)
+                .addTo(disposeBag)
 
         viewModel.state.map { it.loginEnabled }
-            .distinctUntilChanged()
-            .subscribe(email_sign_in_button::setEnabled)
-            .addTo(disposeBag)
+                .distinctUntilChanged()
+                .subscribe(email_sign_in_button::setEnabled)
+                .addTo(disposeBag)
 
         viewModel.effect
-            .subscribe { effect ->
-                when (effect) {
-                    is LoginViewModel.Effect.ShowError ->
-                        Snackbar.make(login_form, effect.message, Snackbar.LENGTH_LONG).show()
-
-                    is LoginViewModel.Effect.LoggedIn ->
-                        Snackbar.make(login_form, "Login succeeded", Snackbar.LENGTH_SHORT)
-                                .addCallback(object : Snackbar.Callback() {
-                                    override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-                                        finish()
-                                    }
-                                })
-                                .show()
-                }
-            }
-            .addTo(disposeBag)
+                .subscribe(this::handleEffect)
+                .addTo(disposeBag)
     }
+
+    private fun handleEffect(effect: LoginViewModel.Effect) = when (effect) {
+        is LoginViewModel.Effect.ShowError ->
+            Snackbar.make(login_form, effect.message, Snackbar.LENGTH_LONG).show()
+
+        is LoginViewModel.Effect.LoggedIn ->
+            Snackbar.make(login_form, "Login succeeded", Snackbar.LENGTH_SHORT)
+                    .addCallback(object : Snackbar.Callback() {
+                        override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                            finish()
+                        }
+                    })
+                    .show()
+    }
+
 
     companion object {
         private const val VIEW_STATE_KEY = "view_state"

@@ -1,7 +1,7 @@
 package com.gyurigrell.rxreactor2.android
 
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import com.gyurigrell.rxreactor2.Reactor
 
 /**
@@ -87,7 +87,7 @@ class ReactorProvider(private val reactorStore: ReactorStore, private val factor
          * <p>
          * It uses the given [Factory] to instantiate new `Reactors`.
          *
-         * @param activity an activity, in whose scope `Reactors` should be retained
+         * @param fragment a fragment, in whose scope `Reactors` should be retained
          * @param factory  a [Factory] to instantiate new `Reactors`
          * @return a `ReactorProvider` instance
          */

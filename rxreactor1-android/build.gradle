@@ -39,7 +39,7 @@ dependencies {
     implementation project(path: ':rxreactor1')
     implementation kotlinlib.stdlib
     implementation support.appcompat
-    implementation support.supportFragment
+    implementation support.fragment
 
     testImplementation 'junit:junit:4.12'
 

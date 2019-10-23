@@ -16,10 +16,10 @@ import io.reactivex.Observable
  * mutations. It must implement [MutationWithEffect], and a single mutation should override `effect` and provide a
  * non-null value.
  * @param State the type of the state that the reactor holds and modifies.
- * @param Effect the type of the effect that is emitted for side-effectRelay that don't modify state
+ * @param Effect the type of the effect that is emitted for side-effects that don't modify state
  * @property initialState the initial state of the reactor, from which the {@see currentState} will be initialized.
  */
-abstract class ReactorWithEffects<Action, Mutation: ReactorWithEffects.MutationWithEffect<Effect>, State, Effect>(
+abstract class ReactorWithEffects<Action, Mutation: MutationWithEffect<Effect>, State, Effect>(
         initialState: State
 ) : Reactor<Action, Mutation, State>(initialState) {
     /**
