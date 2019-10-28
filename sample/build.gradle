@@ -51,7 +51,7 @@ dependencies {
     implementation rx2.bindingAppcompat
     implementation rx2.bindingDesign
 
-    implementation 'com.jakewharton.rxrelay2:rxrelay:2.0.0'
+    implementation 'com.jakewharton.rxrelay2:rxrelay:2.1.1'
 
     testImplementation 'junit:junit:4.12'
 
