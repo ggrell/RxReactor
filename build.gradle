@@ -26,7 +26,7 @@ ext {
     kotlinlib = [
             stdlib    : "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion",
             reflect   : "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion",
-            coroutines: "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.2"
+            coroutines: "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.2-native-mt-1"
     ]
 
     supportLibraryVersion = '28.0.0'
