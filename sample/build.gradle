@@ -3,12 +3,12 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion COMPILE_SDK_VERSION
+    compileSdkVersion buildConfig.compileSdk
 
     defaultConfig {
         applicationId "com.gyurigrell.rxreactor.sample"
         minSdkVersion 23
-        targetSdkVersion TARGET_SDK_VERSION
+        targetSdkVersion buildConfig.targetSdk
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -39,21 +39,21 @@ android {
 dependencies {
     implementation project(path: ':rxreactor2')
     implementation project(path: ':rxreactor2-android')
-    implementation kotlinlib.stdlib
-    implementation support.appcompat
-    implementation support.design
+    implementation deps.kotlin.stdlib.jdk
+    implementation deps.support.appcompat
+    implementation deps.support.design
 
-    implementation rx2.java
-    implementation rx2.android
-    implementation rx2.kotlin
+    implementation deps.rx2.java
+    implementation deps.rx2.android
+    implementation deps.rx2.kotlin
 
-    implementation rx2.binding
-    implementation rx2.bindingAppcompat
-//    implementation rx2.bindingDesign
+    implementation deps.rx2.binding
+    implementation deps.rx2.bindingAppcompat
+//    implementation deps.rx2.bindingDesign
 
-    implementation rx2.relay
+    implementation deps.rx2.relay
 
-    testImplementation 'junit:junit:4.12'
+    testImplementation deps.junit
 
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'

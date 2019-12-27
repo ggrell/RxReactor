@@ -6,12 +6,12 @@ apply plugin: 'com.github.kt3k.coveralls'
 apply plugin: 'com.github.dcendents.android-maven'
 
 dependencies {
-    implementation kotlinlib.stdlib
-    implementation rx1.java
-    implementation rx1.kotlin
-    implementation rx1.relay
+    implementation deps.kotlin.stdlib.jdk
+    implementation deps.rx1.java
+    implementation deps.rx1.kotlin
+    implementation deps.rx1.relay
 
-    compile 'junit:junit:4.12'
+    testImplementation deps.junit
 }
 
 compileKotlin {
