@@ -24,14 +24,14 @@ class LoginViewModel(
         object PopulateAutoComplete : Action()
     }
 
-    sealed class Mutation {
+    sealed class Mutation: MutationWithEffect<Effect> {
         data class SetUsername(val username: String) : Mutation()
         data class SetPassword(val password: String) : Mutation()
         data class SetBusy(val busy: Boolean) : Mutation()
 //        data class LoggedIn(val account: Account) : Mutation()
 //        data class SetError(val message: String) : Mutation()
         data class SetAutoCompleteEmails(val emails: List<String>) : Mutation()
-        data class TriggerEffect(val effect: Effect) : Mutation()
+        data class EmitEffect(override val effect: Effect) : Mutation()
     }
 
     sealed class Effect {
@@ -82,15 +82,6 @@ class LoginViewModel(
         }
     }
 
-    override fun transformMutation(mutation: Observable<Mutation>): Observable<Mutation> = mutation.flatMap { m ->
-        // If its a TriggerEffect mutation, emit it as an Effect and prevent State emission
-        if (m is Mutation.TriggerEffect) {
-            effects.accept(m.effect)
-            return@flatMap Observable.empty<Mutation>()
-        }
-        Observable.just(m)
-    }
-
     override fun reduce(state: State, mutation: Mutation): State {
         when (mutation) {
             is Mutation.SetUsername -> {
@@ -129,9 +120,9 @@ class LoginViewModel(
                 .delay(3, TimeUnit.SECONDS)
                 .flatMap { success ->
                     val triggerEffect = if (success) {
-                        Mutation.TriggerEffect(Effect.LoggedIn(Account("test", "test")))
+                        Mutation.EmitEffect(Effect.LoggedIn(Account("test", "test")))
                     } else {
-                        Mutation.TriggerEffect(Effect.ShowError("Some error message"))
+                        Mutation.EmitEffect(Effect.ShowError("Some error message"))
                     }
                     Observable.just(Mutation.SetBusy(false), triggerEffect)
                 }

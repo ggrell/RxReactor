@@ -1,7 +1,7 @@
 package com.gyurigrell.rxreactor1.android
 
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import com.gyurigrell.rxreactor1.Reactor
 import com.gyurigrell.rxreactor1.android.ReactorStoreFragment.Companion.reactorStoreFragmentFor
 

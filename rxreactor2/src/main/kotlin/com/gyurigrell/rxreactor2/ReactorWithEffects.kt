@@ -1,8 +1,8 @@
 package com.gyurigrell.rxreactor2
 
+import com.gyurigrell.rxreactor2.ReactorWithEffects.MutationWithEffect
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
-import kotlin.contracts.Effect
 
 /**
  * A Reactor is an UI-independent layer which manages the state of a view. The foremost role of a
@@ -13,18 +13,51 @@ import kotlin.contracts.Effect
  * @param Action the type of the action, which is generally either an enum or a Kotlin sealed class. Actions need to be
  * publicly available since actions are passed to the reactor via this type (using the {@see action} relay observer.
  * @param Mutation the type of the mutation. This type is only used internally in the reactor to map an action to  0..n
- * mutations.
+ * mutations. It must implement [MutationWithEffect], and a single mutation should override `effect` and provide a
+ * non-null value.
  * @param State the type of the state that the reactor holds and modifies.
  * @param Effect the type of the effect that is emitted for side-effects that don't modify state
  * @property initialState the initial state of the reactor, from which the {@see currentState} will be initialized.
  */
-abstract class ReactorWithEffects<Action, Mutation, State, Effect>(
+abstract class ReactorWithEffects<Action, Mutation: MutationWithEffect<Effect>, State, Effect>(
         initialState: State
 ) : Reactor<Action, Mutation, State>(initialState) {
     /**
      * The effect stream output from the reactor.
      */
-    val effect: Observable<Effect> by lazy { effects }
+    val effect: Observable<Effect> by lazy { effectRelay }
 
-    protected val effects: PublishRelay<Effect> = PublishRelay.create()
+    private val effectRelay: PublishRelay<Effect> = PublishRelay.create()
+
+    /**
+     * Checks to see if the mutation has an effect set. If it does, emits it via [ReactorWithEffects.effectRelay] and
+     * swallows the [Mutation], otherwise lets the [Mutation] pass through.
+     */
+    override fun transformMutation(mutation: Observable<Mutation>): Observable<Mutation> = mutation.flatMap { m ->
+        // If its a mutation for triggering an effect, emit it as an Effect and prevent State changes
+        val effect: Effect? = m.effect
+        if (effect != null) {
+            effectRelay.accept(effect)
+            return@flatMap Observable.empty<Mutation>()
+        }
+        Observable.just(m)
+    }
+
+    /**
+     * The interface that needs to be applied to the [Mutation] sealed class defined in this [ReactorWithEffects]. It
+     * applies a field named [effect] which defaults to `null`, meaning that mutation doesn't emit effects. Generally
+     * there should only be a single mutation that has an override where it provides an effect.
+     * @param Effect this is just the [Effect] type defined in the reactor.
+     * ```
+     *     sealed class Mutation: MutationWithEffect<Effect> {
+     *         object Mutation1 : Mutation()
+     *         data class Mutation2(val someValue): Mutation()
+     *         data class EmitEffect(override val effect: Effect): Mutation()
+     *     }
+     *  ```
+     */
+    interface MutationWithEffect<Effect> {
+        val effect: Effect?
+            get() = null
+    }
 }
