@@ -34,9 +34,10 @@ abstract class ReactorWithEffects<Action, Mutation: MutationWithEffect<Effect>, 
      * swallows the [Mutation], otherwise lets the [Mutation] pass through.
      */
     override fun transformMutation(mutation: Observable<Mutation>): Observable<Mutation> = mutation.flatMap { m ->
-        // If its a TriggerEffect mutation, emit it as an Effect and prevent State emission
-        if (m.effect != null) {
-            effectRelay.accept(m.effect)
+        // If its a mutation for triggering an effect, emit it as an Effect and prevent State changes
+        val effect: Effect? = m.effect
+        if (effect != null) {
+            effectRelay.accept(effect)
             return@flatMap Observable.empty<Mutation>()
         }
         Observable.just(m)
