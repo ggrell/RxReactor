@@ -14,7 +14,7 @@ buildscript {
     ]
 
     ext.deps = [
-            'junit'        : 'junit:junit:4.12',
+            'junit'        : 'junit:junit:4.13',
 
             'kotlin' : [
                     'stdlib'    : [
