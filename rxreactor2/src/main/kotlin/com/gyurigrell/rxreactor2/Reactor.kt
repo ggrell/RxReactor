@@ -17,8 +17,6 @@ import io.reactivex.rxkotlin.addTo
  * mutations.
  * @param State the type of the state that the reactor holds and modifies.
  * @property initialState the initial state of the reactor, from which the {@see currentState} will be initialized.
- * @property debug default is false. When set to true, each action, mutation and state change is logged
- * via {@link logDebug}
  */
 abstract class Reactor<Action, Mutation, State>(
     val initialState: State
