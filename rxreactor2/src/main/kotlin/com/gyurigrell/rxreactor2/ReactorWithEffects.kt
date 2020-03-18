@@ -19,13 +19,13 @@ import io.reactivex.Observable
  * @param Effect the type of the effect that is emitted for side-effects that don't modify state
  * @property initialState the initial state of the reactor, from which the {@see currentState} will be initialized.
  */
-abstract class ReactorWithEffects<Action, Mutation: MutationWithEffect<Effect>, State, Effect>(
-        initialState: State
+abstract class ReactorWithEffects<Action, Mutation : MutationWithEffect<Effect>, State, Effect>(
+    initialState: State
 ) : Reactor<Action, Mutation, State>(initialState) {
     /**
      * The effect stream output from the reactor.
      */
-    val effect: Observable<Effect> by lazy { effectRelay }
+    val effect: Observable<Effect> by lazy { transformEffect(effectRelay) }
 
     private val effectRelay: PublishRelay<Effect> = PublishRelay.create()
 
@@ -42,6 +42,11 @@ abstract class ReactorWithEffects<Action, Mutation: MutationWithEffect<Effect>, 
         }
         Observable.just(m)
     }
+
+    /**
+     * Override to modify the effect observable
+     */
+    open fun transformEffect(effect: Observable<Effect>): Observable<Effect> = effect
 
     /**
      * The interface that needs to be applied to the [Mutation] sealed class defined in this [ReactorWithEffects]. It

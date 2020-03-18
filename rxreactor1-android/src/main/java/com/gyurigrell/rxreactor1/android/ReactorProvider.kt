@@ -6,7 +6,7 @@ import com.gyurigrell.rxreactor1.Reactor
 
 /**
  * An utility class that provides ``Reactor`s` for a scope.
- * 
+ *
  * Default `ReactorProvider` for an `Activity` or a `Fragment` can be obtained
  * from [ReactorProvider.of].
  */
@@ -83,7 +83,7 @@ class ReactorProvider(private val reactorStore: ReactorStore, private val factor
 
         /**
          * Creates a [`Reactor`Provider], which retains `Reactors` while a scope of given `Activity`
-         * is alive. 
+         * is alive.
          * <p>
          * It uses the given [Factory] to instantiate new `Reactors`.
          *

@@ -21,9 +21,9 @@ class ReactorWithEffectsTests {
 
         // Assert
         output.assertNoErrors()
-                .assertValueCount(2)
-                .assertValueAt(0, State(false))
-                .assertValueAt(1, State(true))
+            .assertValueCount(2)
+            .assertValueAt(0, State(false))
+            .assertValueAt(1, State(true))
     }
 
     @Test
@@ -39,9 +39,9 @@ class ReactorWithEffectsTests {
 
         // Assert
         output.assertNoErrors()
-                .assertValueCount(2)
-                .assertValueAt(0, State())
-                .assertValueAt(1, State(false, theValue))
+            .assertValueCount(2)
+            .assertValueAt(0, State())
+            .assertValueAt(1, State(false, theValue))
     }
 
     @Test
@@ -58,11 +58,11 @@ class ReactorWithEffectsTests {
 
         // Assert
         output.assertNoErrors()
-                .assertValueCount(1)
-                .assertValueAt(0, State())
+            .assertValueCount(1)
+            .assertValueAt(0, State())
         effects.assertNoErrors()
-                .assertValueCount(1)
-                .assertValueAt(0, Effect.EffectOne)
+            .assertValueCount(1)
+            .assertValueAt(0, Effect.EffectOne)
     }
 
     @Test
@@ -80,15 +80,15 @@ class ReactorWithEffectsTests {
 
         // Assert
         output.assertNoErrors()
-                .assertValueCount(1)
-                .assertValueAt(0, State())
+            .assertValueCount(1)
+            .assertValueAt(0, State())
         effects.assertNoErrors()
-                .assertValueCount(1)
-                .assertValueAt(0, Effect.EffectWithValue(theValue))
+            .assertValueCount(1)
+            .assertValueAt(0, Effect.EffectWithValue(theValue))
     }
 
     class TestReactor(
-            initialState: State = State()
+        initialState: State = State()
     ) : ReactorWithEffects<Action, Mutation, State, Effect>(initialState) {
         sealed class Action {
             object SimpleAction : Action()
@@ -100,20 +100,20 @@ class ReactorWithEffectsTests {
         sealed class Mutation : MutationWithEffect<Effect> {
             object SimpleActionMutation : Mutation()
             data class ActionWithValueMutation(val theValue: String) : Mutation()
-            data class FireEffect(override val effect: Effect): Mutation()
+            data class FireEffect(override val effect: Effect) : Mutation()
         }
 
         data class State(
-                val simpleAction: Boolean = false,
-                val actionWithValue: String = ""
+            val simpleAction: Boolean = false,
+            val actionWithValue: String = ""
         )
 
         sealed class Effect {
             object EffectOne : Effect()
-            data class EffectWithValue(val theValue: String): Effect()
+            data class EffectWithValue(val theValue: String) : Effect()
         }
 
-        override fun mutate(action: Action): Observable<Mutation> = when(action) {
+        override fun mutate(action: Action): Observable<Mutation> = when (action) {
             is Action.SimpleAction -> Observable.just(Mutation.SimpleActionMutation)
 
             is Action.ActionWithValue -> Observable.just(Mutation.ActionWithValueMutation(action.theValue))
@@ -124,7 +124,7 @@ class ReactorWithEffectsTests {
                 Observable.just(Mutation.FireEffect(Effect.EffectWithValue(action.theValue)))
         }
 
-        override fun reduce(state: State, mutation: Mutation): State = when(mutation) {
+        override fun reduce(state: State, mutation: Mutation): State = when (mutation) {
             is Mutation.SimpleActionMutation -> state.copy(simpleAction = true)
 
             is Mutation.ActionWithValueMutation -> state.copy(actionWithValue = mutation.theValue)

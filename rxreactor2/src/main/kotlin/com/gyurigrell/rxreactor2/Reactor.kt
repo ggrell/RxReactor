@@ -20,7 +20,9 @@ import io.reactivex.rxkotlin.addTo
  * @property debug default is false. When set to true, each action, mutation and state change is logged
  * via {@link logDebug}
  */
-abstract class Reactor<Action, Mutation, State>(val initialState: State) {
+abstract class Reactor<Action, Mutation, State>(
+    val initialState: State
+) {
     /**
      * Accepts the actions from the view, which then potentially cause mutations of the current state.
      */
@@ -44,9 +46,7 @@ abstract class Reactor<Action, Mutation, State>(val initialState: State) {
      * @param action the action initiated by the user on the view
      * @return an observable which emits 0..n mutations
      */
-    open fun mutate(action: Action): Observable<Mutation> {
-        return Observable.empty()
-    }
+    open fun mutate(action: Action): Observable<Mutation> = Observable.empty()
 
     /**
      * Given the current state and a mutation, returns the mutated state.
@@ -54,30 +54,23 @@ abstract class Reactor<Action, Mutation, State>(val initialState: State) {
      * @param mutation the mutation to apply to the state
      * @return the mutated state
      */
-    open fun reduce(state: State, mutation: Mutation): State {
-        return state
-    }
+    open fun reduce(state: State, mutation: Mutation): State = state
 
     /**
-     *
+     * Override to apply transformation to action observable
      */
-    open fun transformAction(action: Observable<Action>): Observable<Action> {
-        return action
-    }
+    open fun transformAction(action: Observable<Action>): Observable<Action> = action
 
     /**
-     *
+     * Override to apply transformation to mutation observable
      */
-    open fun transformMutation(mutation: Observable<Mutation>): Observable<Mutation> {
-        return mutation
-    }
+    open fun transformMutation(mutation: Observable<Mutation>): Observable<Mutation> = mutation
 
     /**
-     *
+     * Override to apply transformation to state observable. This is a good place to apply an observeOn to switch to main
+     * scheduler
      */
-    open fun transformState(state: Observable<State>): Observable<State> {
-        return state
-    }
+    open fun transformState(state: Observable<State>): Observable<State> = state
 
     private fun createStateStream(): Observable<State> {
         val transformedAction = transformAction(action)
@@ -86,12 +79,12 @@ abstract class Reactor<Action, Mutation, State>(val initialState: State) {
         }
         val transformedMutation = transformMutation(mutation)
         val state = transformedMutation
-                .scan(initialState) { state, mutate -> reduce(state, mutate) }
-                .onErrorResumeNext { _: Throwable -> Observable.empty() }
-                .startWith(initialState)
+            .scan(initialState) { state, mutate -> reduce(state, mutate) }
+            .onErrorResumeNext { _: Throwable -> Observable.empty() }
+            .startWith(initialState)
         val transformedState = transformState(state)
-                .doOnNext { currentState = it }
-                .replay(1)
+            .doOnNext { currentState = it }
+            .replay(1)
         return transformedState.apply { connect().addTo(disposables) }
     }
 }

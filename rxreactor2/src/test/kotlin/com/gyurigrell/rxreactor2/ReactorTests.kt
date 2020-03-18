@@ -20,9 +20,9 @@ class ReactorTests {
 
         // Assert
         output.assertNoErrors()
-                .assertValueCount(2)
-                .assertValueAt(0, arrayListOf("transformedState"))
-                .assertValueAt(1, arrayListOf("action", "transformedAction", "mutation", "transformedMutation", "transformedState"))
+            .assertValueCount(2)
+            .assertValueAt(0, arrayListOf("transformedState"))
+            .assertValueAt(1, arrayListOf("action", "transformedAction", "mutation", "transformedMutation", "transformedState"))
     }
 
     @Test
@@ -57,7 +57,7 @@ class ReactorTests {
 
         // Assert
         output.assertValueCount(6)
-                .assertValues(0, 1, 2, 3, 4, 5)
+            .assertValues(0, 1, 2, 3, 4, 5)
     }
 
     class TestReactor : Reactor<List<String>, List<String>, List<String>>(initialState = ArrayList()) {

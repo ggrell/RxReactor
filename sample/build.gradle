@@ -30,7 +30,7 @@ android {
         abortOnError false
         baseline file("lint-baseline.xml")
     }
-    
+
     androidExtensions {
         experimental = true
     }

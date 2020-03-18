@@ -86,7 +86,7 @@ class ReactorWithEffectsTests {
     }
 
     class TestReactor(
-            initialState: State = State()
+        initialState: State = State()
     ) : ReactorWithEffects<Action, Mutation, State, Effect>(initialState) {
         sealed class Action {
             object SimpleAction : Action()
@@ -102,8 +102,8 @@ class ReactorWithEffectsTests {
         }
 
         data class State(
-                val simpleAction: Boolean = false,
-                val actionWithValue: String = ""
+            val simpleAction: Boolean = false,
+            val actionWithValue: String = ""
         )
 
         sealed class Effect {

@@ -35,11 +35,11 @@ class ReactorStoreFragment @SuppressLint("ValidFragment") constructor(
     companion object {
         private val reactorStoreFragmentManager = ReactorStoreFragmentManager()
 
-        fun reactorStoreFragmentFor(fragment: Fragment) : ReactorStoreFragment {
+        fun reactorStoreFragmentFor(fragment: Fragment): ReactorStoreFragment {
             return reactorStoreFragmentManager.reactorStoreFragmentFor(fragment)
         }
 
-        fun reactorStoreFragmentFor(activity: FragmentActivity) : ReactorStoreFragment {
+        fun reactorStoreFragmentFor(activity: FragmentActivity): ReactorStoreFragment {
             return reactorStoreFragmentManager.reactorStoreFragmentFor(activity)
         }
     }
