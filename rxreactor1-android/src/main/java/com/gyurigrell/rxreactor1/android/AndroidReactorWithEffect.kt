@@ -13,5 +13,5 @@ class AndroidReactorWithEffect<Action, Mutation : ReactorWithEffects.MutationWit
 ) : ReactorWithEffects<Action, Mutation, State, Effect>(initialState) {
     override fun transformEffect(effect: Observable<Effect>): Observable<Effect> = effect.observeOn(AndroidSchedulers.mainThread())
 
-    override fun transformAction(action: Observable<Action>): Observable<Action> = action.observeOn(AndroidSchedulers.mainThread())
+    override fun transformState(state: Observable<State>): Observable<State> = state.observeOn(AndroidSchedulers.mainThread())
 }
