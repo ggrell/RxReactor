@@ -40,6 +40,7 @@ dependencies {
     implementation deps.kotlin.stdlib.jdk
     implementation deps.support.appcompat
     implementation deps.support.fragment
+    implementation deps.rx2.android
 
     testImplementation deps.junit
 
