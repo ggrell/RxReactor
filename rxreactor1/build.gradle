@@ -26,6 +26,16 @@ compileTestKotlin {
     }
 }
 
+jacoco {
+    toolVersion = versions.jacoco
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled = true
+    }
+}
+
 dokka {
     outputFormat = 'javadoc'
     outputDirectory = "$buildDir/docs/javadoc"
