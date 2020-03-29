@@ -2,7 +2,7 @@ language: android
 
 install: travis_wait 20 ./gradlew clean assemble
 
-script: travis_wait 20 ./gradlew lint test
+script: travis_wait 20 ./gradlew lint test jacocoTestReport coveralls
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
