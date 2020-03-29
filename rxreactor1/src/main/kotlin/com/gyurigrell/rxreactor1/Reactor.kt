@@ -1,8 +1,14 @@
+/*
+ * Copyright (c) 2020, Gyuri Grell and RxReactor contributors. All rights reserved
+ *
+ * Licensed under BSD 3-Clause License.
+ * https://opensource.org/licenses/BSD-3-Clause
+ */
+
 package com.gyurigrell.rxreactor1
 
 import com.jakewharton.rxrelay.PublishRelay
 import rx.Observable
-import rx.lang.kotlin.addTo
 import rx.subscriptions.CompositeSubscription
 
 /**
@@ -82,6 +88,6 @@ abstract class Reactor<Action, Mutation, State>(
         val transformedState = transformState(state)
             .doOnNext { currentState = it }
             .replay(1)
-        return transformedState.apply { connect().addTo(disposables) }
+        return transformedState.apply { disposables.add(connect()) }
     }
 }

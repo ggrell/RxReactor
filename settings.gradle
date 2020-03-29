@@ -1,1 +1,2 @@
-include ':sample', ':rxreactor2', ':rxreactor1', ':rxreactor1-android', ':rxreactor2-android'
+include ':sample', ':rxreactor2', ':rxreactor1', ':rxreactor1-android', ':rxreactor2-android', ':rxreactor3',
+    ':rxreactor3-android'

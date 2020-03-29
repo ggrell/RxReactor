@@ -1,9 +1,15 @@
+/*
+ * Copyright (c) 2020, Gyuri Grell and RxReactor contributors. All rights reserved
+ *
+ * Licensed under BSD 3-Clause License.
+ * https://opensource.org/licenses/BSD-3-Clause
+ */
+
 package com.gyurigrell.rxreactor2
 
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
 
 /**
  * A Reactor is an UI-independent layer which manages the state of a view. The foremost role of a
@@ -83,6 +89,6 @@ abstract class Reactor<Action, Mutation, State>(
         val transformedState = transformState(state)
             .doOnNext { currentState = it }
             .replay(1)
-        return transformedState.apply { connect().addTo(disposables) }
+        return transformedState.apply { disposables.add(connect()) }
     }
 }

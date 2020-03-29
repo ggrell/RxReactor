@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2020, Gyuri Grell and RxReactor contributors. All rights reserved
+ *
+ * Licensed under BSD 3-Clause License.
+ * https://opensource.org/licenses/BSD-3-Clause
+ */
+
 package com.gyurigrell.rxreactor2.android
 
 import android.annotation.SuppressLint
@@ -86,9 +93,9 @@ class ReactorStoreFragment @SuppressLint("ValidFragment") constructor(
             val parentFragment = holderFragment.parentFragment
             if (parentFragment != null) {
                 notCommittedFragmentHolders.remove(parentFragment)
-                parentFragment.fragmentManager?.unregisterFragmentLifecycleCallbacks(parentDestroyedCallback)
+                parentFragment.parentFragmentManager.unregisterFragmentLifecycleCallbacks(parentDestroyedCallback)
             } else {
-                notCommittedActivityHolders.remove(holderFragment.activity!!)
+                notCommittedActivityHolders.remove(holderFragment.requireActivity())
             }
         }
 
@@ -123,7 +130,7 @@ class ReactorStoreFragment @SuppressLint("ValidFragment") constructor(
                 return reactorStoreFragment
             }
 
-            parentFragment.fragmentManager?.registerFragmentLifecycleCallbacks(parentDestroyedCallback, false)
+            parentFragment.parentFragmentManager.registerFragmentLifecycleCallbacks(parentDestroyedCallback, false)
             reactorStoreFragment = createReactorStoreFragment(fm)
             notCommittedFragmentHolders[parentFragment] = reactorStoreFragment
             return reactorStoreFragment
