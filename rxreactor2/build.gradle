@@ -25,6 +25,10 @@ compileTestKotlin {
     }
 }
 
+jacoco {
+    toolVersion = versions.jacoco
+}
+
 jacocoTestReport {
     reports {
         xml.enabled = true
