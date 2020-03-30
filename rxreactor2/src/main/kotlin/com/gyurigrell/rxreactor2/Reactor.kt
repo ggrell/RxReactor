@@ -10,7 +10,6 @@ package com.gyurigrell.rxreactor2
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
 
 /**
  * A Reactor is an UI-independent layer which manages the state of a view. The foremost role of a
@@ -90,6 +89,6 @@ abstract class Reactor<Action, Mutation, State>(
         val transformedState = transformState(state)
             .doOnNext { currentState = it }
             .replay(1)
-        return transformedState.apply { connect().addTo(disposables) }
+        return transformedState.apply { disposables.add(connect()) }
     }
 }

@@ -8,7 +8,6 @@ apply plugin: 'com.github.dcendents.android-maven'
 dependencies {
     implementation deps.kotlin.stdlib.jdk
     implementation deps.rx2.java
-    implementation deps.rx2.kotlin
     implementation deps.rx2.relay
 
     testImplementation deps.junit
@@ -24,6 +23,10 @@ compileTestKotlin {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+}
+
+jacoco {
+    toolVersion = versions.jacoco
 }
 
 jacocoTestReport {
