@@ -1,33 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<issues format="4" by="lint 3.1.0">
-
-    <issue
-        id="InvalidPackage"
-        message="Invalid package reference in library; not included in Android: `java.lang.management`. Referenced from `org.junit.internal.runners.statements.FailOnTimeout`.">
-        <location
-            file="../../../.gradle/caches/modules-2/files-2.1/junit/junit/4.12/2973d150c0dc1fefe998f834810d68f278ea58ec/junit-4.12.jar"/>
-    </issue>
-
-    <issue
-        id="OldTargetApi"
-        message="Not targeting the latest versions of Android; compatibility &#xA;modes apply. Consider testing and updating this version. &#xA;Consult the android.os.Build.VERSION_CODES javadoc for details."
-        errorLine1="        targetSdkVersion 26"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="build.gradle"
-            line="10"
-            column="9"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.app_name` appears to be unused"
-        errorLine1="    &lt;string name=&quot;app_name&quot;>rxreactor1-android&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="2"
-            column="13"/>
-    </issue>
+<issues format="5" by="lint 3.6.2" client="gradle" variant="all" version="3.6.2">
 
 </issues>
