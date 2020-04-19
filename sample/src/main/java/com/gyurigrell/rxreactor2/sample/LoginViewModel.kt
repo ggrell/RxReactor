@@ -8,7 +8,7 @@
 package com.gyurigrell.rxreactor2.sample
 
 import android.accounts.Account
-import com.gyurigrell.rxreactor2.ReactorWithEffects
+import com.gyurigrell.rxreactor2.android.AndroidReactorWithEffects
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import java.io.Serializable
@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit
 class LoginViewModel(
         private val contactService: ContactService,
         initialState: State = State()
-) : ReactorWithEffects<LoginViewModel.Action, LoginViewModel.Mutation, LoginViewModel.State, LoginViewModel.Effect>(
+) : AndroidReactorWithEffects<LoginViewModel.Action, LoginViewModel.Mutation, LoginViewModel.State, LoginViewModel.Effect>(
         initialState) {
 
     sealed class Action {

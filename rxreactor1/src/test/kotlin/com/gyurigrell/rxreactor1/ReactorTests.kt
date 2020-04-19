@@ -103,15 +103,17 @@ class CounterReactor : Reactor<Irrelevant, Irrelevant, Int>(initialState = 0) {
     var stateForTriggerError: Int? = null
     var stateForTriggerCompleted: Int? = null
 
-    override fun mutate(action: Irrelevant): Observable<Irrelevant> {
-        if (currentState == stateForTriggerError) {
+    override fun mutate(action: Irrelevant): Observable<Irrelevant> = when (currentState) {
+        stateForTriggerError -> {
             val results = arrayOf(Observable.just(action), Observable.error(TestError()))
-            return Observable.concat(results.asIterable())
-        } else if (currentState == stateForTriggerCompleted) {
+            Observable.concat(results.asIterable())
+        }
+        stateForTriggerCompleted -> {
             val results = arrayOf(Observable.just(action), Observable.empty())
-            return Observable.concat(results.asIterable())
-        } else {
-            return Observable.just(action)
+            Observable.concat(results.asIterable())
+        }
+        else -> {
+            Observable.just(action)
         }
     }
 

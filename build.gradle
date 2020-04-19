@@ -11,7 +11,7 @@ buildscript {
     ]
 
     ext.versions = [
-        'kotlin'          : '1.3.60',
+        'kotlin'          : '1.3+',
         'kotlinCoroutines': '1.2.2',
         'dokka'           : '0.9.18',
         'jacoco'          : '0.8.5',
@@ -41,12 +41,13 @@ buildscript {
         ],
 
         'support': [
-            'core'       : "androidx.core:core:1.2.0",
+            'core'       : "androidx.core:core-ktx:1.2.0",
             'annotations': "androidx.annotation:annotation:1.1.0",
-            'fragment'   : "androidx.fragment:fragment:1.2.3",
-            'fragmentktx': "androidx.fragment:fragment-ktx:1.2.3",
+            'fragment'   : "androidx.fragment:fragment-ktx:1.2.4",
             'appcompat'  : "androidx.appcompat:appcompat:1.1.0",
-            'design'     : "com.google.android.material:material:1.1.0"
+            'activity'   : "androidx.activity:activity-ktx:1.1.0",
+            'design'     : "com.google.android.material:material:1.1.0",
+            'viewModel'  : 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0',
         ],
 
         'rx1'    : [
@@ -80,7 +81,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.6.1'
+        classpath 'com.android.tools.build:gradle:3.6.3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
         classpath "org.jetbrains.dokka:dokka-gradle-plugin:$versions.dokka"
         classpath "org.jetbrains.dokka:dokka-android-gradle-plugin:$versions.dokka"
@@ -106,7 +107,7 @@ task clean(type: Delete) {
 subprojects {
     group = "com.gyurigrell"
     def isRelease = Boolean.valueOf(project.hasProperty("release") ? project.property("release") as String : "false")
-    version = "0.3.5" + (isRelease ? "" : "-SNAPSHOT")
+    version = "0.4.0" + (isRelease ? "" : "-SNAPSHOT")
 
     tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) {
         kotlinOptions {

@@ -15,7 +15,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
  * Specialized implementation of [ReactorWithEffects] that ensures [effect] and [state] Observables emit on
  * [AndroidSchedulers.mainThread]
  */
-class AndroidReactorWithEffect<Action, Mutation : ReactorWithEffects.MutationWithEffect<Effect>, State, Effect>(
+abstract class AndroidReactorWithEffects<Action, Mutation : ReactorWithEffects.MutationWithEffect<Effect>, State, Effect>(
     initialState: State
 ) : ReactorWithEffects<Action, Mutation, State, Effect>(initialState) {
     override fun transformEffect(effect: Observable<Effect>): Observable<Effect> = effect.observeOn(AndroidSchedulers.mainThread())
