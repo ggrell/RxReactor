@@ -42,6 +42,9 @@ dependencies {
     implementation deps.kotlin.stdlib.jdk
     implementation deps.support.appcompat
     implementation deps.support.design
+    implementation deps.support.viewModel
+    implementation deps.support.fragment
+    implementation deps.support.activity
 
     implementation deps.rx2.java
     implementation deps.rx2.android
