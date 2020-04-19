@@ -11,10 +11,9 @@ import android.Manifest.permission.READ_CONTACTS
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.ArrayAdapter
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
-import com.gyurigrell.rxreactor2.Reactor
-import com.gyurigrell.rxreactor2.android.ReactorProvider
 import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.view.visibility
 import com.jakewharton.rxbinding3.widget.textChanges
@@ -30,34 +29,20 @@ import kotlinx.android.synthetic.main.act_login.*
 class LoginActivity : AppCompatActivity() {
     private var disposeBag = CompositeDisposable()
 
-    // @Inject
-    private lateinit var factory: LoginViewModelFactory
+    private lateinit var reactor: LoginViewModel
 
-    inner class LoginViewModelFactory(private val contactService: ContactService) : ReactorProvider.Factory {
-
-        var initialState: LoginViewModel.State? = null
-
-        override fun <Action, Mutation, State, T : Reactor<Action, Mutation, State>> create(modelClass: Class<T>): T {
-            @Suppress("UNCHECKED_CAST")
-            return LoginViewModel(contactService, initialState ?: LoginViewModel.State()) as T
-        }
-    }
-
-    private lateinit var viewModel: LoginViewModel
+    private val contactService = ContactServiceImpl(this, Schedulers.io())
+    private val reactorProvider: LoginReactorProvider by viewModels { LoginReactorProvider.Factory(contactService) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.act_login)
 
-        val contactService = ContactServiceImpl(this, Schedulers.io())
-        factory = LoginViewModelFactory(contactService)
-
         // Settings the initial state in the factory is optional and only needed if the state needs
         // to survive the app getting killed in the background.
-        factory.initialState = savedInstanceState?.getSerializable(VIEW_STATE_KEY) as? LoginViewModel.State
-
-        viewModel = ReactorProvider.of(this, factory).get(LoginViewModel::class.java)
-        bind(viewModel)
+        reactorProvider.initialState = savedInstanceState?.getSerializable(VIEW_STATE_KEY) as? LoginViewModel.State
+        reactor = reactorProvider.reactor
+        bind(reactor)
 
         populateAutoComplete()
     }
@@ -67,7 +52,7 @@ class LoginActivity : AppCompatActivity() {
         // The following is optional and only needed if something in your state needs to survive
         // the app getting killed in the background. Be aware that there are strict limits on the
         // size of what can go into the view state
-        outState.putSerializable(VIEW_STATE_KEY, viewModel.currentState)
+        outState.putSerializable(VIEW_STATE_KEY, reactor.currentState)
     }
 
     private fun populateAutoComplete() {
@@ -75,7 +60,7 @@ class LoginActivity : AppCompatActivity() {
             return
         }
 
-        viewModel.action.accept(LoginViewModel.Action.PopulateAutoComplete)
+        reactor.action.accept(LoginViewModel.Action.PopulateAutoComplete)
     }
 
     private fun mayRequestContacts(): Boolean {
@@ -189,7 +174,6 @@ class LoginActivity : AppCompatActivity() {
                     .show()
     }
 
-
     companion object {
         private const val VIEW_STATE_KEY = "view_state"
 
@@ -199,3 +183,4 @@ class LoginActivity : AppCompatActivity() {
         private const val REQUEST_READ_CONTACTS = 0
     }
 }
+
