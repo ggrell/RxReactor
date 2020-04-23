@@ -23,13 +23,15 @@ class ReactorTests {
         reactor.state.subscribe(output)
 
         // Act
-        reactor.action.accept(arrayListOf("action"))
+        reactor.action.accept(mutableListOf("action"))
 
         // Assert
-        output.assertNoErrors()
-            .assertValueCount(2)
-            .assertValueAt(0, arrayListOf("transformedState"))
-            .assertValueAt(1, arrayListOf("action", "transformedAction", "mutation", "transformedMutation", "transformedState"))
+        output
+            .assertNoErrors()
+            .assertValues(
+                mutableListOf("transformedState"),
+                mutableListOf("action", "transformedAction", "mutation", "transformedMutation", "transformedState")
+            )
     }
 
     @Test
@@ -40,8 +42,8 @@ class ReactorTests {
         reactor.state.subscribe(output) // state: 0
 
         // Act
-        reactor.action.accept(Irrelevant.INSTANCE) // state: 1
-        reactor.action.accept(Irrelevant.INSTANCE) // state: 2
+        reactor.action.accept(Unit) // state: 1
+        reactor.action.accept(Unit) // state: 2
 
         // Assert
         output.assertValues(0, 1, 2)
@@ -56,15 +58,14 @@ class ReactorTests {
         reactor.stateForTriggerError = 2
 
         // Act
-        reactor.action.accept(Irrelevant.INSTANCE)
-        reactor.action.accept(Irrelevant.INSTANCE)
-        reactor.action.accept(Irrelevant.INSTANCE)
-        reactor.action.accept(Irrelevant.INSTANCE)
-        reactor.action.accept(Irrelevant.INSTANCE)
+        reactor.action.accept(Unit)
+        reactor.action.accept(Unit)
+        reactor.action.accept(Unit)
+        reactor.action.accept(Unit)
+        reactor.action.accept(Unit)
 
         // Assert
-        output.assertValueCount(6)
-            .assertValues(0, 1, 2, 3, 4, 5)
+        output.assertValues(0, 1, 2, 3, 4, 5)
     }
 
     class TestReactor : Reactor<List<String>, List<String>, List<String>>(initialState = ArrayList()) {
@@ -94,11 +95,11 @@ class ReactorTests {
         }
     }
 
-    class CounterReactor : Reactor<Irrelevant, Irrelevant, Int>(initialState = 0) {
+    class CounterReactor : Reactor<Unit, Unit, Int>(initialState = 0) {
         var stateForTriggerError: Int? = null
         var stateForTriggerCompleted: Int? = null
 
-        override fun mutate(action: Irrelevant): Observable<Irrelevant> = when (currentState) {
+        override fun mutate(action: Unit): Observable<Unit> = when (currentState) {
             stateForTriggerError -> {
                 val results = arrayOf(Observable.just(action), Observable.error(TestError()))
                 Observable.concat(results.asIterable())
@@ -112,14 +113,10 @@ class ReactorTests {
             }
         }
 
-        override fun reduce(state: Int, mutation: Irrelevant): Int {
+        override fun reduce(state: Int, mutation: Unit): Int {
             return state + 1
         }
     }
 
     class TestError : Error()
-
-    enum class Irrelevant {
-        INSTANCE
-    }
 }
