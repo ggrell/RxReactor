@@ -7,8 +7,8 @@ apply plugin: 'com.github.dcendents.android-maven'
 
 dependencies {
     implementation deps.kotlin.stdlib.jdk
-    implementation deps.rx2.java
-    implementation deps.rx2.relay
+    implementation deps.rx3.java
+    implementation deps.rx3.relay
 
     testImplementation deps.junit
 }

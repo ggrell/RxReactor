@@ -16,11 +16,11 @@ import java.util.concurrent.TimeUnit
 /**
  * Do not let me check this in without adding a comment about the class.
  */
-class LoginViewModel(
+class LoginReactor(
     private val contactService: ContactService,
     initialState: State = State()
-) : AndroidReactorWithEffects<LoginViewModel.Action, LoginViewModel.Mutation, LoginViewModel.State,
-    LoginViewModel.Effect>(initialState) {
+) : AndroidReactorWithEffects<LoginReactor.Action, LoginReactor.Mutation, LoginReactor.State,
+    LoginReactor.Effect>(initialState) {
 
     sealed class Action {
         object EnterScreen : Action()
@@ -102,7 +102,7 @@ class LoginViewModel(
         contactService.loadEmails().map { Mutation.SetAutoCompleteEmails(it) }
 
     /**
-     * Fake login that accepts two values in [LoginViewModel.DUMMY_CREDENTIALS] as valid logins.
+     * Fake login that accepts two values in [LoginReactor.DUMMY_CREDENTIALS] as valid logins.
      */
     private fun login(): Observable<Mutation> =
         Observable.just(DUMMY_CREDENTIALS.contains("${currentState.username}:${currentState.password}"))

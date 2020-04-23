@@ -5,12 +5,12 @@
  * https://opensource.org/licenses/BSD-3-Clause
  */
 
-package com.gyurigrell.rxreactor1
+package com.gyurigrell.rxreactor3
 
-import com.gyurigrell.rxreactor1.ReactorWithEffectsTests.TestReactor.*
+import com.gyurigrell.rxreactor3.ReactorWithEffectsTests.TestReactor.*
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.observers.TestObserver
 import org.junit.Test
-import rx.Observable
-import rx.observers.TestSubscriber
 
 /**
  * Unit tests for [ReactorWithEffects]
@@ -20,70 +20,76 @@ class ReactorWithEffectsTests {
     fun `SimpleAction updates State simpleAction to true`() {
         // Arrange
         val reactor = TestReactor()
-        val output = TestSubscriber.create<State>()
+        val output = TestObserver.create<State>()
         reactor.state.subscribe(output)
 
         // Act
-        reactor.action.call(Action.SimpleAction)
+        reactor.action.accept(Action.SimpleAction)
 
         // Assert
-        output.assertNoErrors()
-        output.assertValues(State(false), State(true))
+        output
+            .assertNoErrors()
+            .assertValues(State(false), State(true))
     }
 
     @Test
     fun `ActionWithValue updates State actionWithValue to correct string`() {
         // Arrange
         val reactor = TestReactor()
-        val output = TestSubscriber.create<State>()
+        val output = TestObserver.create<State>()
         reactor.state.subscribe(output)
         val theValue = "I love apple pie"
 
         // Act
-        reactor.action.call(Action.ActionWithValue(theValue))
+        reactor.action.accept(Action.ActionWithValue(theValue))
 
         // Assert
-        output.assertNoErrors()
-        output.assertValues(State(), State(false, theValue))
+        output
+            .assertNoErrors()
+            .assertValues(State(), State(false, theValue))
     }
 
     @Test
     fun `ActionFiresEffectOne emits the effect `() {
         // Arrange
         val reactor = TestReactor()
-        val output = TestSubscriber.create<State>()
-        val effects = TestSubscriber.create<Effect>()
+        val output = TestObserver.create<State>()
+        val effects = TestObserver.create<Effect>()
         reactor.state.subscribe(output)
         reactor.effect.subscribe(effects)
 
         // Act
-        reactor.action.call(Action.ActionFiresEffectOne)
+        reactor.action.accept(Action.ActionFiresEffectOne)
 
         // Assert
-        output.assertNoErrors()
-        output.assertValue(State())
-        effects.assertNoErrors()
-        effects.assertValue(Effect.EffectOne)
+        output
+            .assertNoErrors()
+            .assertValues(State())
+        effects
+            .assertNoErrors()
+            .assertValues(Effect.EffectOne)
     }
 
     @Test
     fun `ActionFiresEffectWithValue emits the effect with the correct value`() {
         // Arrange
         val reactor = TestReactor()
-        val output = TestSubscriber.create<State>()
-        val effects = TestSubscriber.create<Effect>()
+        val output = TestObserver.create<State>()
+        val effects = TestObserver.create<Effect>()
         reactor.state.subscribe(output)
         reactor.effect.subscribe(effects)
         val theValue = "Millions of peaches, peaches for me"
 
         // Act
-        reactor.action.call(Action.ActionFiresEffectWithValue(theValue))
+        reactor.action.accept(Action.ActionFiresEffectWithValue(theValue))
 
         // Assert
-        output.assertNoErrors()
-        output.assertValue(State())
-        effects.assertNoErrors()
-        effects.assertValue(Effect.EffectWithValue(theValue))
+        output
+            .assertNoErrors()
+            .assertValues(State())
+        effects
+            .assertNoErrors()
+            .assertValues(Effect.EffectWithValue(theValue))
     }
 
     class TestReactor(
