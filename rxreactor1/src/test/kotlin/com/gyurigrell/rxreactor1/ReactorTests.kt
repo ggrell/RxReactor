@@ -12,7 +12,7 @@ import rx.Observable
 import rx.observers.TestSubscriber
 
 /**
- * Do not let me check this in without adding a comment about the class.
+ * Various unit tests for [Reactor]
  */
 class ReactorTests {
     @Test
@@ -27,13 +27,10 @@ class ReactorTests {
 
         // Assert
         output.assertNoErrors()
-        output.assertValueCount(2)
-        output.assertValues(arrayListOf("transformedState"),
-                            arrayListOf("action",
-                                        "transformedAction",
-                                        "mutation",
-                                        "transformedMutation",
-                                        "transformedState"))
+        output.assertValues(
+            arrayListOf("transformedState"),
+            arrayListOf("action", "transformedAction", "mutation", "transformedMutation", "transformedState")
+        )
     }
 
     @Test
@@ -44,8 +41,8 @@ class ReactorTests {
         reactor.state.subscribe(output) // state: 0
 
         // Act
-        reactor.action.call(Irrelevant.INSTANCE) // state: 1
-        reactor.action.call(Irrelevant.INSTANCE) // state: 2
+        reactor.action.call(Unit) // state: 1
+        reactor.action.call(Unit) // state: 2
 
         // Assert
         output.assertValues(0, 1, 2)
@@ -60,14 +57,13 @@ class ReactorTests {
         reactor.stateForTriggerError = 2
 
         // Act
-        reactor.action.call(Irrelevant.INSTANCE)
-        reactor.action.call(Irrelevant.INSTANCE)
-        reactor.action.call(Irrelevant.INSTANCE)
-        reactor.action.call(Irrelevant.INSTANCE)
-        reactor.action.call(Irrelevant.INSTANCE)
+        reactor.action.call(Unit)
+        reactor.action.call(Unit)
+        reactor.action.call(Unit)
+        reactor.action.call(Unit)
+        reactor.action.call(Unit)
 
         // Assert
-        output.assertValueCount(6)
         output.assertValues(0, 1, 2, 3, 4, 5)
     }
 }
@@ -99,11 +95,11 @@ class TestReactor : Reactor<List<String>, List<String>, List<String>>(initialSta
     }
 }
 
-class CounterReactor : Reactor<Irrelevant, Irrelevant, Int>(initialState = 0) {
+class CounterReactor : Reactor<Unit, Unit, Int>(initialState = 0) {
     var stateForTriggerError: Int? = null
     var stateForTriggerCompleted: Int? = null
 
-    override fun mutate(action: Irrelevant): Observable<Irrelevant> = when (currentState) {
+    override fun mutate(action: Unit): Observable<Unit> = when (currentState) {
         stateForTriggerError -> {
             val results = arrayOf(Observable.just(action), Observable.error(TestError()))
             Observable.concat(results.asIterable())
@@ -117,13 +113,9 @@ class CounterReactor : Reactor<Irrelevant, Irrelevant, Int>(initialState = 0) {
         }
     }
 
-    override fun reduce(state: Int, mutation: Irrelevant): Int {
+    override fun reduce(state: Int, mutation: Unit): Int {
         return state + 1
     }
 }
 
 class TestError : Error()
-
-enum class Irrelevant {
-    INSTANCE
-}
