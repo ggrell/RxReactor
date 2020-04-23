@@ -13,21 +13,6 @@ dependencies {
     testImplementation deps.junit
 }
 
-sourceCompatibility = "8"
-targetCompatibility = "8"
-
-compileKotlin {
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
-}
-
-compileTestKotlin {
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
-}
-
 jacoco {
     toolVersion = versions.jacoco
 }

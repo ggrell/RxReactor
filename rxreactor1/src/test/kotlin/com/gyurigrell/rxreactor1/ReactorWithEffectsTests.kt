@@ -28,7 +28,6 @@ class ReactorWithEffectsTests {
 
         // Assert
         output.assertNoErrors()
-        output.assertValueCount(2)
         output.assertValues(State(false), State(true))
     }
 
@@ -45,7 +44,6 @@ class ReactorWithEffectsTests {
 
         // Assert
         output.assertNoErrors()
-        output.assertValueCount(2)
         output.assertValues(State(), State(false, theValue))
     }
 
@@ -63,10 +61,8 @@ class ReactorWithEffectsTests {
 
         // Assert
         output.assertNoErrors()
-        output.assertValueCount(1)
         output.assertValue(State())
         effects.assertNoErrors()
-        effects.assertValueCount(1)
         effects.assertValue(Effect.EffectOne)
     }
 
@@ -85,10 +81,8 @@ class ReactorWithEffectsTests {
 
         // Assert
         output.assertNoErrors()
-        output.assertValueCount(1)
         output.assertValue(State())
         effects.assertNoErrors()
-        effects.assertValueCount(1)
         effects.assertValue(Effect.EffectWithValue(theValue))
     }
 

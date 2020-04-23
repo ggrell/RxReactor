@@ -27,10 +27,9 @@ class ReactorWithEffectsTests {
         reactor.action.accept(Action.SimpleAction)
 
         // Assert
-        output.assertNoErrors()
-            .assertValueCount(2)
-            .assertValueAt(0, State(false))
-            .assertValueAt(1, State(true))
+        output
+            .assertNoErrors()
+            .assertValues(State(false), State(true))
     }
 
     @Test
@@ -45,10 +44,9 @@ class ReactorWithEffectsTests {
         reactor.action.accept(Action.ActionWithValue(theValue))
 
         // Assert
-        output.assertNoErrors()
-            .assertValueCount(2)
-            .assertValueAt(0, State())
-            .assertValueAt(1, State(false, theValue))
+        output
+            .assertNoErrors()
+            .assertValues(State(), State(false, theValue))
     }
 
     @Test
@@ -64,12 +62,12 @@ class ReactorWithEffectsTests {
         reactor.action.accept(Action.ActionFiresEffectOne)
 
         // Assert
-        output.assertNoErrors()
-            .assertValueCount(1)
-            .assertValueAt(0, State())
-        effects.assertNoErrors()
-            .assertValueCount(1)
-            .assertValueAt(0, Effect.EffectOne)
+        output
+            .assertNoErrors()
+            .assertValues(State())
+        effects
+            .assertNoErrors()
+            .assertValues(Effect.EffectOne)
     }
 
     @Test
@@ -86,12 +84,12 @@ class ReactorWithEffectsTests {
         reactor.action.accept(Action.ActionFiresEffectWithValue(theValue))
 
         // Assert
-        output.assertNoErrors()
-            .assertValueCount(1)
-            .assertValueAt(0, State())
-        effects.assertNoErrors()
-            .assertValueCount(1)
-            .assertValueAt(0, Effect.EffectWithValue(theValue))
+        output
+            .assertNoErrors()
+            .assertValues(State())
+        effects
+            .assertNoErrors()
+            .assertValues(Effect.EffectWithValue(theValue))
     }
 
     class TestReactor(
