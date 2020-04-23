@@ -19,6 +19,7 @@ TODO: Usage stuff
 Snapshots and releases available courtesy [JitPack.io](https://jitpack.io):
 
 **Snapshot**
+
 For RxJava 1:
 ```groovy
 compile 'com.github.ggrell.RxReactor:rxreactor1:master-SNAPSHOT'
@@ -33,6 +34,7 @@ compile 'com.github.ggrell.RxReactor:rxreactor3:master-SNAPSHOT'
 ```
 
 **Release**
+
 For RxJava 1:
 ```groovy
 compile 'com.github.ggrell.RxReactor:rxreactor1:master'
