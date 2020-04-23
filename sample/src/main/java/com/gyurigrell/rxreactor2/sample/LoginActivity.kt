@@ -29,7 +29,7 @@ import kotlinx.android.synthetic.main.act_login.*
 class LoginActivity : AppCompatActivity() {
     private var disposeBag = CompositeDisposable()
 
-    private lateinit var reactor: LoginViewModel
+    private lateinit var reactor: LoginReactor
 
     private val contactService = ContactServiceImpl(this, Schedulers.io())
     private val reactorProvider: LoginReactorProvider by viewModels { LoginReactorProvider.Factory(contactService) }
@@ -40,7 +40,7 @@ class LoginActivity : AppCompatActivity() {
 
         // Settings the initial state in the factory is optional and only needed if the state needs
         // to survive the app getting killed in the background.
-        reactorProvider.initialState = savedInstanceState?.getSerializable(VIEW_STATE_KEY) as? LoginViewModel.State
+        reactorProvider.initialState = savedInstanceState?.getSerializable(VIEW_STATE_KEY) as? LoginReactor.State
         reactor = reactorProvider.reactor
         bind(reactor)
 
@@ -60,7 +60,7 @@ class LoginActivity : AppCompatActivity() {
             return
         }
 
-        reactor.action.accept(LoginViewModel.Action.PopulateAutoComplete)
+        reactor.action.accept(LoginReactor.Action.PopulateAutoComplete)
     }
 
     private fun mayRequestContacts(): Boolean {
@@ -97,74 +97,74 @@ class LoginActivity : AppCompatActivity() {
         email.setAdapter(adapter)
     }
 
-    private fun bind(viewModel: LoginViewModel) {
-        bindActions(viewModel)
-        bindViewState(viewModel)
+    private fun bind(reactor: LoginReactor) {
+        bindActions(reactor)
+        bindViewState(reactor)
     }
 
-    private fun bindActions(viewModel: LoginViewModel) {
+    private fun bindActions(reactor: LoginReactor) {
         // Subscribe to UI changes, convert to actions and push to viewModel
         email.textChanges()
             .skipInitialValue()
-            .map { LoginViewModel.Action.UsernameChanged(it.toString()) }
-            .subscribe(viewModel.action)
+            .map { LoginReactor.Action.UsernameChanged(it.toString()) }
+            .subscribe(reactor.action)
             .addTo(disposeBag)
 
         password.textChanges()
             .skipInitialValue()
-            .map { LoginViewModel.Action.PasswordChanged(it.toString()) }
-            .subscribe(viewModel.action)
+            .map { LoginReactor.Action.PasswordChanged(it.toString()) }
+            .subscribe(reactor.action)
             .addTo(disposeBag)
 
         email_sign_in_button.clicks()
-            .map { LoginViewModel.Action.Login }
-            .subscribe(viewModel.action)
+            .map { LoginReactor.Action.Login }
+            .subscribe(reactor.action)
             .addTo(disposeBag)
     }
 
-    private fun bindViewState(viewModel: LoginViewModel) {
+    private fun bindViewState(reactor: LoginReactor) {
         // Subscribe to state changes from the viewModel and bind to UI
-        viewModel.state.flatMapMaybe {
+        reactor.state.flatMapMaybe {
             if (it.autoCompleteEmails == null) Maybe.empty() else Maybe.just(it.autoCompleteEmails)
         }
             .subscribe(this::addEmailsToAutoComplete)
             .addTo(disposeBag)
 
-        viewModel.state.map { it.isBusy }
+        reactor.state.map { it.isBusy }
             .distinctUntilChanged()
             .subscribe(login_progress.visibility())
             .addTo(disposeBag)
 
-        viewModel.state.map { !it.isBusy }
+        reactor.state.map { !it.isBusy }
             .distinctUntilChanged()
             .subscribe(login_form.visibility())
             .addTo(disposeBag)
 
-        viewModel.state.map { if (it.isUsernameValid) "" else "Invalid username" }
+        reactor.state.map { if (it.isUsernameValid) "" else "Invalid username" }
             .distinctUntilChanged()
             .subscribe(email_input_layout::setError)
             .addTo(disposeBag)
 
-        viewModel.state.map { if (it.isPasswordValid) "" else "Invalid password" }
+        reactor.state.map { if (it.isPasswordValid) "" else "Invalid password" }
             .distinctUntilChanged()
             .subscribe(password_input_layout::setError)
             .addTo(disposeBag)
 
-        viewModel.state.map { it.loginEnabled }
+        reactor.state.map { it.loginEnabled }
             .distinctUntilChanged()
             .subscribe(email_sign_in_button::setEnabled)
             .addTo(disposeBag)
 
-        viewModel.effect
+        reactor.effect
             .subscribe(this::handleEffect)
             .addTo(disposeBag)
     }
 
-    private fun handleEffect(effect: LoginViewModel.Effect) = when (effect) {
-        is LoginViewModel.Effect.ShowError ->
+    private fun handleEffect(effect: LoginReactor.Effect) = when (effect) {
+        is LoginReactor.Effect.ShowError ->
             Snackbar.make(login_form, effect.message, Snackbar.LENGTH_LONG).show()
 
-        is LoginViewModel.Effect.LoggedIn ->
+        is LoginReactor.Effect.LoggedIn ->
             Snackbar.make(login_form, "Login succeeded", Snackbar.LENGTH_SHORT)
                 .addCallback(object : Snackbar.Callback() {
                     override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
