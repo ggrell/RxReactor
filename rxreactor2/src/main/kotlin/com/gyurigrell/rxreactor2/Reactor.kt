@@ -43,7 +43,11 @@ abstract class Reactor<Action, Mutation, State>(
      */
     val state: Observable<State> by lazy { createStateStream() }
 
-    protected var disposables = CompositeDisposable()
+    /**
+     * Subscriptions in the reactor
+     */
+    @Suppress("MemberVisibilityCanBePrivate")
+    protected var subscriptions = CompositeDisposable()
 
     /**
      * Commits mutation from the action. This is the best place to perform side-effects such as async tasks.
@@ -76,6 +80,11 @@ abstract class Reactor<Action, Mutation, State>(
      */
     open fun transformState(state: Observable<State>): Observable<State> = state
 
+    /**
+     * Clear all subscriptions in the reactor. Only needs to be called if your reactor uses hot observables.
+     */
+    open fun clearSubscriptions() = subscriptions.clear()
+
     private fun createStateStream(): Observable<State> {
         val transformedAction = transformAction(action)
         val mutation = transformedAction.flatMap { action ->
@@ -89,6 +98,6 @@ abstract class Reactor<Action, Mutation, State>(
         val transformedState = transformState(state)
             .doOnNext { currentState = it }
             .replay(1)
-        return transformedState.apply { disposables.add(connect()) }
+        return transformedState.apply { subscriptions.add(connect()) }
     }
 }

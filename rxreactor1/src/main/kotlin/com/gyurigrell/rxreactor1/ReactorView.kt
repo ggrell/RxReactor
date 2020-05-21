@@ -7,20 +7,21 @@
 
 package com.gyurigrell.rxreactor1
 
-import rx.subscriptions.CompositeSubscription
-
 /**
- * Do not let me check this in without adding a comment about the class.
+ * An optional interface to apply to your view which provides some formality around how to set up the reactor and the
+ * bindings between controls and state.
  */
 interface ReactorView<Action, Mutation, State> {
-    var disposeBag: CompositeSubscription
+    var reactor: Reactor<Action, Mutation, State>
 
-    var reactor: Reactor<Action, Mutation, State>?
-
-    fun bind(reactor: Reactor<Action, Mutation, State>)
+    fun bindControls(reactor: Reactor<Action, Mutation, State>)
+    fun bindState(reactor: Reactor<Action, Mutation, State>)
+    fun bindEffects(reactor: Reactor<Action, Mutation, State>)
 }
 
-fun <Action, Mutation, State> ReactorView<Action, Mutation, State>.attachReactor(reactor: Reactor<Action, Mutation, State>) {
+fun <Action, Mutation, State> ReactorView<Action, Mutation, State>.bind(reactor: Reactor<Action, Mutation, State>) {
     this.reactor = reactor
-    this.bind(reactor)
+    bindControls(reactor)
+    bindState(reactor)
+    bindEffects(reactor)
 }

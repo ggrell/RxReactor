@@ -16,6 +16,10 @@ class LoginReactorProvider private constructor(private val contactService: Conta
         get() = LoginReactor(contactService, initialState
             ?: LoginReactor.State())
 
+    override fun onCleared() {
+        reactor.clearSubscriptions()
+    }
+
     class Factory(private val contactService: ContactService): ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T = LoginReactorProvider(contactService) as T
