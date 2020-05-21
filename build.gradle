@@ -68,11 +68,10 @@ buildscript {
         ],
 
         'rx3'    : [
-            'java'   : 'io.reactivex.rxjava3:rxjava:3.0.3',
+            'java'   : 'io.reactivex.rxjava3:rxjava:3.0.4',
             'kotlin' : 'io.reactivex.rxjava3:rxkotlin:3.0.0',
             'android': 'io.reactivex.rxjava3:rxandroid:3.0.0',
-//            'relay' : 'com.jakewharton.rxrelay3:rxrelay:3.0.0',
-            'relay'  : 'com.github.JakeWharton:RxRelay:PR56-SNAPSHOT',
+            'relay' : 'com.jakewharton.rxrelay3:rxrelay:3.0.0',
         ]
     ]
 
@@ -94,9 +93,6 @@ allprojects {
     repositories {
         google()
         jcenter()
-        maven { // TODO: Temporary until RxRelay releases version 3
-            url "https://jitpack.io"
-        }
     }
 }
 
