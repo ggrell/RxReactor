@@ -107,7 +107,7 @@ task clean(type: Delete) {
 subprojects {
     group = "com.gyurigrell"
     def isRelease = Boolean.valueOf(project.hasProperty("release") ? project.property("release") as String : "false")
-    version = "0.4.1" + (isRelease ? "" : "-SNAPSHOT")
+    version = "0.4.5" + (isRelease ? "" : "-SNAPSHOT")
 
     tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) {
         kotlinOptions {
