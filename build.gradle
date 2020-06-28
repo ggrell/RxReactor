@@ -43,7 +43,7 @@ buildscript {
         'support': [
             'core'       : "androidx.core:core-ktx:1.2.0",
             'annotations': "androidx.annotation:annotation:1.1.0",
-            'fragment'   : "androidx.fragment:fragment-ktx:1.2.4",
+            'fragment'   : "androidx.fragment:fragment-ktx:1.2.5",
             'appcompat'  : "androidx.appcompat:appcompat:1.1.0",
             'activity'   : "androidx.activity:activity-ktx:1.1.0",
             'design'     : "com.google.android.material:material:1.1.0",
