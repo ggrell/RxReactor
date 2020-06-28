@@ -2,7 +2,6 @@ NOTE: This is ![stability-WIP](https://img.shields.io/badge/stability-WIP-orange
  
 # RxReactor
 [![Build Status](https://travis-ci.org/ggrell/RxReactor.svg?branch=master)](https://travis-ci.org/ggrell/RxReactor) 
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fggrell%2FRxReactor.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fggrell%2FRxReactor?ref=badge_shield)
 [![Coverage Status](https://coveralls.io/repos/github/ggrell/RxReactor/badge.svg?branch=master)](https://coveralls.io/github/ggrell/RxReactor?branch=master) 
 [![Release](https://jitpack.io/v/ggrell/RxReactor.svg)](https://jitpack.io/#ggrell/RxReactor) [![Javadocs](https://img.shields.io/badge/documentation-Javadocs-brightgreen)](https://jitpack.io/com/github/ggrell/RxReactor/rxreactor1/master-SNAPSHOT/javadoc/)
 
@@ -60,8 +59,6 @@ TBD
 ## License
 
 [BSD 3-Clause License](https://github.com/ggrell/RxReactor/blob/master/LICENSE)
-
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fggrell%2FRxReactor.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fggrell%2FRxReactor?ref=badge_large)
 
 ## Credits
 
