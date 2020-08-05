@@ -46,7 +46,7 @@ buildscript {
             'fragment'   : "androidx.fragment:fragment-ktx:1.2.5",
             'appcompat'  : "androidx.appcompat:appcompat:1.1.0",
             'activity'   : "androidx.activity:activity-ktx:1.1.0",
-            'design'     : "com.google.android.material:material:1.1.0",
+            'design'     : "com.google.android.material:material:1.2.0",
             'viewModel'  : 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0',
         ],
 
