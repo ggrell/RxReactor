@@ -53,12 +53,12 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest']) {
     def execution = fileTree(dir: project.buildDir,
         includes: ['jacoco/testDebugUnitTest.exec'])
 
-    sourceDirectories = files([javaSrc, kotlinSrc])
-    classDirectories = files([javaClasses, kotlinClasses])
+    sourceDirectories.from = files([javaSrc, kotlinSrc])
+    classDirectories.from = files([javaClasses, kotlinClasses])
 
     print execution
 
-    executionData = files(execution)
+    executionData.from = files(execution)
 
     doLast() {
         print "file://${reports.html.destination}/index.html"
