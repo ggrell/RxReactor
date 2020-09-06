@@ -80,7 +80,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.6.3'
+        classpath 'com.android.tools.build:gradle:4.0.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
         classpath "org.jetbrains.dokka:dokka-gradle-plugin:$versions.dokka"
         classpath "org.jetbrains.dokka:dokka-android-gradle-plugin:$versions.dokka"
