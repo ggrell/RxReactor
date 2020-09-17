@@ -99,21 +99,18 @@ class ReactorTests {
         var stateForTriggerError: Int? = null
         var stateForTriggerCompleted: Int? = null
 
-        override fun mutate(action: Unit): Observable<Unit> {
-            if (currentState == stateForTriggerError) {
-                val results = arrayOf(Observable.just(action), Observable.error(TestError()))
-                return Observable.concat(results.asIterable())
-            } else if (currentState == stateForTriggerCompleted) {
-                val results = arrayOf(Observable.just(action), Observable.empty())
-                return Observable.concat(results.asIterable())
-            } else {
-                return Observable.just(action)
-            }
+        override fun mutate(action: Unit): Observable<Unit> = when (currentState) {
+            stateForTriggerError ->
+                Observable.concat(listOf(Observable.just(action), Observable.error(TestError())))
+
+            stateForTriggerCompleted ->
+                Observable.concat(listOf(Observable.just(action), Observable.empty()))
+
+            else ->
+                Observable.just(action)
         }
 
-        override fun reduce(state: Int, mutation: Unit): Int {
-            return state + 1
-        }
+        override fun reduce(state: Int, mutation: Unit): Int = state + 1
     }
 
     class TestError : Error()
