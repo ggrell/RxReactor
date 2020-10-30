@@ -20,48 +20,48 @@ class ReactorWithEffectsTests {
     fun `SimpleAction updates State simpleAction to true`() {
         // Arrange
         val reactor = TestReactor()
-        val output = TestSubscriber.create<State>()
-        reactor.state.subscribe(output)
+        val states = TestSubscriber.create<State>()
+        reactor.state.subscribe(states)
 
         // Act
         reactor.action.call(Action.SimpleAction)
 
         // Assert
-        output.assertNoErrors()
-        output.assertValues(State(false), State(true))
+        states.assertNoErrors()
+        states.assertValues(State(false), State(true))
     }
 
     @Test
     fun `ActionWithValue updates State actionWithValue to correct string`() {
         // Arrange
         val reactor = TestReactor()
-        val output = TestSubscriber.create<State>()
-        reactor.state.subscribe(output)
+        val states = TestSubscriber.create<State>()
+        reactor.state.subscribe(states)
         val theValue = "I love apple pie"
 
         // Act
         reactor.action.call(Action.ActionWithValue(theValue))
 
         // Assert
-        output.assertNoErrors()
-        output.assertValues(State(), State(false, theValue))
+        states.assertNoErrors()
+        states.assertValues(State(), State(false, theValue))
     }
 
     @Test
     fun `ActionFiresEffectOne emits the effect `() {
         // Arrange
         val reactor = TestReactor()
-        val output = TestSubscriber.create<State>()
+        val states = TestSubscriber.create<State>()
         val effects = TestSubscriber.create<Effect>()
-        reactor.state.subscribe(output)
+        reactor.state.subscribe(states)
         reactor.effect.subscribe(effects)
 
         // Act
         reactor.action.call(Action.ActionFiresEffectOne)
 
         // Assert
-        output.assertNoErrors()
-        output.assertValue(State())
+        states.assertNoErrors()
+        states.assertValue(State())
         effects.assertNoErrors()
         effects.assertValue(Effect.EffectOne)
     }
@@ -70,9 +70,9 @@ class ReactorWithEffectsTests {
     fun `ActionFiresEffectWithValue emits the effect with the correct value`() {
         // Arrange
         val reactor = TestReactor()
-        val output = TestSubscriber.create<State>()
+        val states = TestSubscriber.create<State>()
         val effects = TestSubscriber.create<Effect>()
-        reactor.state.subscribe(output)
+        reactor.state.subscribe(states)
         reactor.effect.subscribe(effects)
         val theValue = "Millions of peaches, peaches for me"
 
@@ -80,8 +80,8 @@ class ReactorWithEffectsTests {
         reactor.action.call(Action.ActionFiresEffectWithValue(theValue))
 
         // Assert
-        output.assertNoErrors()
-        output.assertValue(State())
+        states.assertNoErrors()
+        states.assertValue(State())
         effects.assertNoErrors()
         effects.assertValue(Effect.EffectWithValue(theValue))
     }

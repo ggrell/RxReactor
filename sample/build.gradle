@@ -7,7 +7,7 @@ android {
 
     defaultConfig {
         applicationId "com.gyurigrell.rxreactor.sample"
-        minSdkVersion 23
+        minSdkVersion buildConfig.minSdk
         targetSdkVersion buildConfig.targetSdk
         versionCode 1
         versionName "1.0"

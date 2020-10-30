@@ -70,18 +70,21 @@ abstract class Reactor<Action, Mutation, State>(
     /**
      * Override to apply transformation to action observable
      */
-    open fun transformAction(action: Observable<Action>): Observable<Action> = action
+    open fun transformAction(action: Observable<Action>): Observable<Action> = //action
+        action.doOnEach { println("transformAction: ${it.value}") }
 
     /**
      * Override to apply transformation to mutation observable
      */
-    open fun transformMutation(mutation: Observable<Mutation>): Observable<Mutation> = mutation
+    open fun transformMutation(mutation: Observable<Mutation>): Observable<Mutation> = //mutation
+        mutation.doOnEach { println("transformMutation: ${it.value}") }
 
     /**
      * Override to apply transformation to state observable. This is a good place to apply an observeOn to switch to main
      * scheduler
      */
-    open fun transformState(state: Observable<State>): Observable<State> = state
+    open fun transformState(state: Observable<State>): Observable<State> = //state
+        state.doOnEach { println("transformState: ${it.value}") }
 
     /**
      * Clear all subscriptions in the reactor. Only needs to be called if your reactor uses hot observables.
@@ -95,11 +98,19 @@ abstract class Reactor<Action, Mutation, State>(
         }
         val transformedMutation = transformMutation(mutation)
         val state = transformedMutation
-            .scan(initialState) { state, mutate -> reduce(state, mutate) }
+            .scan(initialState) { state, mutate ->
+                println("State before reduce: $state")
+                val newState = reduce(state, mutate)
+                println("State after reduce: $newState")
+                newState
+            }
             .onErrorResumeNext { Observable.empty() }
             .startWith(Single.just(initialState))
         val transformedState = transformState(state)
-            .doOnNext { currentState = it }
+            .doOnNext {
+                currentState = it
+                println("currentState changed to: $currentState")
+            }
             .replay(1)
         return transformedState.apply { subscriptions.add(connect()) }
     }
