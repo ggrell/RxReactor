@@ -9,9 +9,10 @@ buildscript {
 
     ext.versions = [
         kotlin          : '1.4.10',
-        dokka           : '0.9.18',
+        dokka           : '1.4.10.2',
         jacoco          : '0.8.5',
     ]
+
     ext.deps = [
         junit  : 'junit:junit:4.13.1',
 
@@ -67,18 +68,17 @@ buildscript {
         ]
     ]
 
-
     repositories {
         google()
         jcenter()
     }
+
     dependencies {
         classpath 'com.android.tools.build:gradle:4.1.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
-        classpath "org.jetbrains.dokka:dokka-gradle-plugin:$versions.dokka"
-        classpath "org.jetbrains.dokka:dokka-android-gradle-plugin:$versions.dokka"
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.3'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:$versions.dokka"
     }
 }
 
