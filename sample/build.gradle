@@ -7,7 +7,7 @@ android {
 
     defaultConfig {
         applicationId "com.gyurigrell.rxreactor.sample"
-        minSdkVersion buildConfig.minSdk
+        minSdkVersion buildConfig.targetSdk
         targetSdkVersion buildConfig.targetSdk
         versionCode 1
         versionName "1.0"
@@ -31,8 +31,12 @@ android {
         baseline file("lint-baseline.xml")
     }
 
+    buildFeatures {
+        viewBinding true
+    }
+
     androidExtensions {
-        experimental = true
+        features = ["parcelize"]
     }
 }
 

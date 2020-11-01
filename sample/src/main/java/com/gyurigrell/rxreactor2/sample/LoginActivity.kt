@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
+import com.gyurigrell.rxreactor2.sample.databinding.ActLoginBinding
 import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.view.visibility
 import com.jakewharton.rxbinding3.widget.textChanges
@@ -21,7 +22,6 @@ import io.reactivex.Maybe
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.act_login.*
 
 /**
  * A login screen that offers login via email/password.
@@ -34,9 +34,12 @@ class LoginActivity : AppCompatActivity() {
     private val contactService = ContactServiceImpl(this, Schedulers.io())
     private val reactorProvider: LoginReactorProvider by viewModels { LoginReactorProvider.Factory(contactService) }
 
+    private lateinit var binding: ActLoginBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.act_login)
+        binding = ActLoginBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         // Settings the initial state in the factory is optional and only needed if the state needs
         // to survive the app getting killed in the background.
@@ -68,7 +71,7 @@ class LoginActivity : AppCompatActivity() {
             return true
         }
         if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-            Snackbar.make(email, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
+            Snackbar.make(binding.email, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
                 .setAction(android.R.string.ok) { requestPermissions(arrayOf(READ_CONTACTS), REQUEST_READ_CONTACTS) }
         } else {
             requestPermissions(arrayOf(READ_CONTACTS), REQUEST_READ_CONTACTS)
@@ -94,7 +97,7 @@ class LoginActivity : AppCompatActivity() {
             android.R.layout.simple_dropdown_item_1line,
             emailAddressCollection)
 
-        email.setAdapter(adapter)
+        binding.email.setAdapter(adapter)
     }
 
     private fun bind(reactor: LoginReactor) {
@@ -104,19 +107,19 @@ class LoginActivity : AppCompatActivity() {
 
     private fun bindActions(reactor: LoginReactor) {
         // Subscribe to UI changes, convert to actions and push to viewModel
-        email.textChanges()
+        binding.email.textChanges()
             .skipInitialValue()
             .map { LoginReactor.Action.UsernameChanged(it.toString()) }
             .subscribe(reactor.action)
             .addTo(disposeBag)
 
-        password.textChanges()
+        binding.password.textChanges()
             .skipInitialValue()
             .map { LoginReactor.Action.PasswordChanged(it.toString()) }
             .subscribe(reactor.action)
             .addTo(disposeBag)
 
-        email_sign_in_button.clicks()
+        binding.signIn.clicks()
             .map { LoginReactor.Action.Login }
             .subscribe(reactor.action)
             .addTo(disposeBag)
@@ -124,35 +127,41 @@ class LoginActivity : AppCompatActivity() {
 
     private fun bindViewState(reactor: LoginReactor) {
         // Subscribe to state changes from the viewModel and bind to UI
-        reactor.state.flatMapMaybe {
-            if (it.autoCompleteEmails == null) Maybe.empty() else Maybe.just(it.autoCompleteEmails)
-        }
+        reactor.state
+            .flatMapMaybe {
+                if (it.autoCompleteEmails == null) Maybe.empty() else Maybe.just(it.autoCompleteEmails)
+            }
             .subscribe(this::addEmailsToAutoComplete)
             .addTo(disposeBag)
 
-        reactor.state.map { it.isBusy }
+        reactor.state
+            .map { it.isBusy }
             .distinctUntilChanged()
-            .subscribe(login_progress.visibility())
+            .subscribe(binding.loginProgress.visibility())
             .addTo(disposeBag)
 
-        reactor.state.map { !it.isBusy }
+        reactor.state
+            .map { !it.isBusy }
             .distinctUntilChanged()
-            .subscribe(login_form.visibility())
+            .subscribe(binding.loginForm.visibility())
             .addTo(disposeBag)
 
-        reactor.state.map { if (it.isUsernameValid) "" else "Invalid username" }
+        reactor.state
+            .map { if (it.isUsernameValid) "" else getString(R.string.error_invalid_email) }
             .distinctUntilChanged()
-            .subscribe(email_input_layout::setError)
+            .subscribe(binding.emailLayout::setError)
             .addTo(disposeBag)
 
-        reactor.state.map { if (it.isPasswordValid) "" else "Invalid password" }
+        reactor.state
+            .map { if (it.isPasswordValid) "" else getString(R.string.error_invalid_password) }
             .distinctUntilChanged()
-            .subscribe(password_input_layout::setError)
+            .subscribe(binding.passwordLayout::setError)
             .addTo(disposeBag)
 
-        reactor.state.map { it.loginEnabled }
+        reactor.state
+            .map { it.loginEnabled }
             .distinctUntilChanged()
-            .subscribe(email_sign_in_button::setEnabled)
+            .subscribe(binding.signIn::setEnabled)
             .addTo(disposeBag)
 
         reactor.effect
@@ -162,10 +171,10 @@ class LoginActivity : AppCompatActivity() {
 
     private fun handleEffect(effect: LoginReactor.Effect) = when (effect) {
         is LoginReactor.Effect.ShowError ->
-            Snackbar.make(login_form, effect.message, Snackbar.LENGTH_LONG).show()
+            Snackbar.make(binding.loginForm, effect.message, Snackbar.LENGTH_LONG).show()
 
         is LoginReactor.Effect.LoggedIn ->
-            Snackbar.make(login_form, "Login succeeded", Snackbar.LENGTH_SHORT)
+            Snackbar.make(binding.loginForm, "Login succeeded", Snackbar.LENGTH_SHORT)
                 .addCallback(object : Snackbar.Callback() {
                     override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
                         finish()
