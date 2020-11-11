@@ -97,7 +97,7 @@ class ReactorWithEffectsTests {
             data class ActionFiresEffectWithValue(val theValue: String) : Action()
         }
 
-        sealed class Mutation : MutationWithEffect<Effect> {
+        sealed class Mutation {
             object SimpleActionMutation : Mutation()
             data class ActionWithValueMutation(val theValue: String) : Mutation()
         }
