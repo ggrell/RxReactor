@@ -26,7 +26,7 @@ import rx.Observable
  * @param Effect the type of the effect that is emitted for side-effects that don't modify state
  * @property initialState the initial state of the reactor, from which the {@see currentState} will be initialized.
  */
-abstract class ReactorWithEffects<Action, Mutation : MutationWithEffect<Effect>, State, Effect>(
+abstract class ReactorWithEffects<Action, Mutation : ReactorWithEffects.MutationWithEffect<Effect>, State, Effect>(
     initialState: State
 ) : Reactor<Action, Mutation, State>(initialState) {
     /**
@@ -55,18 +55,28 @@ abstract class ReactorWithEffects<Action, Mutation : MutationWithEffect<Effect>,
     open fun transformEffect(effect: Observable<Effect>): Observable<Effect> = effect
 
     /**
+     * Emits all effects provided by the Observable
+     * @param effect tan Observable that emits effects
+     */
+    protected fun emitEffect(effect: Observable<Effect>) {
+        effect.subscribe(effectRelay).also { subscriptions.add(it) }
+    }
+
+    /**
+     * Simplified way to emits effects
+     * @param effect one or more Effects to be emitted
+     */
+    protected fun emitEffect(vararg effect: Effect) {
+        Observable.from(effect).subscribe(effectRelay).also { subscriptions.add(it) }
+    }
+
+    /**
      * The interface that needs to be applied to the [Mutation] sealed class defined in this [ReactorWithEffects]. It
      * applies a field named [effect] which defaults to `null`, meaning that mutation doesn't emit effects. Generally
      * there should only be a single mutation that has an override where it provides an effect.
      * @param Effect this is just the [Effect] type defined in the reactor.
-     * ```
-     *     sealed class Mutation: MutationWithEffect<Effect> {
-     *         object Mutation1 : Mutation()
-     *         data class Mutation2(val someValue): Mutation()
-     *         data class EmitEffect(override val effect: Effect): Mutation()
-     *     }
-     *  ```
      */
+    @Deprecated("Prefer calling `emitEffect()` function instead")
     interface MutationWithEffect<Effect> {
         val effect: Effect?
             get() = null

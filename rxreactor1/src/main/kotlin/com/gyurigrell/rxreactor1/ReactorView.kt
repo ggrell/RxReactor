@@ -11,17 +11,16 @@ package com.gyurigrell.rxreactor1
  * An optional interface to apply to your view which provides some formality around how to set up the reactor and the
  * bindings between controls and state.
  */
-interface ReactorView<Action, Mutation, State> {
-    var reactor: Reactor<Action, Mutation, State>
+@Deprecated("This will be removed in 1.0")
+interface ReactorView {
+    var reactor: Reactor<*, *, *>
 
-    fun bindControls(reactor: Reactor<Action, Mutation, State>)
-    fun bindState(reactor: Reactor<Action, Mutation, State>)
-    fun bindEffects(reactor: Reactor<Action, Mutation, State>)
+    fun <Action, Mutation, State> bindViews(reactor: Reactor<Action, Mutation, State>)
+    fun <Action, Mutation, State> bindState(reactor: Reactor<Action, Mutation, State>)
 }
 
-fun <Action, Mutation, State> ReactorView<Action, Mutation, State>.bind(reactor: Reactor<Action, Mutation, State>) {
+fun <Action, Mutation, State> ReactorView.bind(reactor: Reactor<Action, Mutation, State>) {
     this.reactor = reactor
-    bindControls(reactor)
+    bindViews(reactor)
     bindState(reactor)
-    bindEffects(reactor)
 }

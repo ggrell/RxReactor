@@ -11,6 +11,7 @@ package com.gyurigrell.rxreactor3
  * An optional interface to apply to your view which provides some formality around how to set up the reactor and the
  * bindings between controls and state.
  */
+@Deprecated("This will be removed in 1.0")
 interface ReactorView<Action, Mutation, State> {
     var reactor: Reactor<Action, Mutation, State>
 

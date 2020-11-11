@@ -3,7 +3,7 @@ apply plugin: 'kotlin'
 apply plugin: 'jacoco'
 apply plugin: 'org.jetbrains.dokka'
 apply plugin: 'com.github.kt3k.coveralls'
-apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'maven-publish'
 
 dependencies {
     implementation deps.kotlin.stdlib.jdk
@@ -33,7 +33,42 @@ task javadocJar(type: Jar, dependsOn: dokkaJavadoc) {
     from dokkaJavadoc.outputDirectory
 }
 
-artifacts {
-    archives sourcesJar
-    archives javadocJar
+publishing {
+    publications {
+        rxreactor1(MavenPublication) {
+            groupId = project.group
+            artifactId = archivesBaseName
+
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+
+            pom {
+                name = "RxReactor (RxJava 2)"
+                description = "A Kotlin framework for a reactive and unidirectional RxJava 2 application architecture"
+                url = siteUrl
+
+                licenses {
+                    license {
+                        name = 'BSD 3-Clause License'
+                        url = 'https://github.com/ggrell/RxReactor/blob/master/LICENSE'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = 'ggrell'
+                        name = 'Gyuri Grell'
+                        email = 'ggrell@pobox.com'
+                    }
+                }
+
+                scm {
+                    connection = gitUrl
+                    developerConnection = gitUrl
+                    url = siteUrl
+                }
+            }
+        }
+    }
 }

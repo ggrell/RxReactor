@@ -5,47 +5,6 @@ if (project.plugins.hasPlugin('com.android.library')) {
         }
     }
 
-    def siteUrl = "https://github.com/ggrell/RxReactor"
-    def gitUrl = "https://github.com/ggrell/RxReactor.git"
-
-    install {
-        repositories {
-            mavenInstaller {
-                pom {
-                    project {
-                        packaging 'aar'
-
-                        groupId project.group
-                        artifactId archivesBaseName
-
-                        url siteUrl
-
-                        licenses {
-                            license {
-                                name 'BSD 3-Clause License'
-                                url 'https://github.com/ggrell/RxReactor/blob/master/LICENSE'
-                            }
-                        }
-
-                        developers {
-                            developer {
-                                id 'ggrell'
-                                name 'Gyuri Grell'
-                                email 'ggrell@pobox.com'
-                            }
-                        }
-
-                        scm {
-                            connection gitUrl
-                            developerConnection gitUrl
-                            url siteUrl
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     afterEvaluate {
         task sourcesJar(type: Jar) {
             classifier 'sources'
@@ -55,11 +14,6 @@ if (project.plugins.hasPlugin('com.android.library')) {
         task javadocJar(type: Jar, dependsOn: dokkaJavadoc) {
             classifier 'javadoc'
             from dokkaJavadoc.outputDirectory
-        }
-
-        artifacts {
-            archives sourcesJar
-            archives javadocJar
         }
     }
 }
