@@ -5,89 +5,94 @@
  * https://opensource.org/licenses/BSD-3-Clause
  */
 
-package com.gyurigrell.rxreactor1
+package com.gyurigrell.rxreactor2
 
-import com.gyurigrell.rxreactor1.ReactorWithEffectsTests.TestReactor.*
-
+import com.gyurigrell.rxreactor2.ReactorWithMutationEffectsTests.TestReactor.*
+import io.reactivex.Observable
+import io.reactivex.observers.TestObserver
 import org.junit.Test
-import rx.Observable
-import rx.observers.TestSubscriber
 
 /**
  * Unit tests for [ReactorWithEffects]
  */
-class ReactorWithEffectsTests {
+class ReactorWithMutationEffectsTests {
     @Test
     fun `SimpleAction updates State simpleAction to true`() {
         // Arrange
         val reactor = TestReactor()
-        val states = TestSubscriber.create<State>()
+        val states = TestObserver.create<State>()
         reactor.state.subscribe(states)
 
         // Act
-        reactor.action.call(Action.SimpleAction)
+        reactor.action.accept(Action.SimpleAction)
 
         // Assert
-        states.assertNoErrors()
-        states.assertValues(State(false), State(true))
+        states
+            .assertNoErrors()
+            .assertValues(State(false), State(true))
     }
 
     @Test
     fun `ActionWithValue updates State actionWithValue to correct string`() {
         // Arrange
         val reactor = TestReactor()
-        val states = TestSubscriber.create<State>()
+        val states = TestObserver.create<State>()
         reactor.state.subscribe(states)
         val theValue = "I love apple pie"
 
         // Act
-        reactor.action.call(Action.ActionWithValue(theValue))
+        reactor.action.accept(Action.ActionWithValue(theValue))
 
         // Assert
-        states.assertNoErrors()
-        states.assertValues(State(), State(false, theValue))
+        states
+            .assertNoErrors()
+            .assertValues(State(), State(false, theValue))
     }
 
     @Test
     fun `ActionFiresEffectOne emits the effect `() {
         // Arrange
         val reactor = TestReactor()
-        val states = TestSubscriber.create<State>()
-        val effects = TestSubscriber.create<Effect>()
+        val states = TestObserver.create<State>()
+        val effects = TestObserver.create<Effect>()
         reactor.state.subscribe(states)
         reactor.effect.subscribe(effects)
 
         // Act
-        reactor.action.call(Action.ActionFiresEffectOne)
+        reactor.action.accept(Action.ActionFiresEffectOne)
 
         // Assert
-        states.assertNoErrors()
-        states.assertValue(State())
-        effects.assertNoErrors()
-        effects.assertValue(Effect.EffectOne)
+        states
+            .assertNoErrors()
+            .assertValues(State())
+        effects
+            .assertNoErrors()
+            .assertValues(Effect.EffectOne)
     }
 
     @Test
     fun `ActionFiresEffectWithValue emits the effect with the correct value`() {
         // Arrange
         val reactor = TestReactor()
-        val states = TestSubscriber.create<State>()
-        val effects = TestSubscriber.create<Effect>()
+        val states = TestObserver.create<State>()
+        val effects = TestObserver.create<Effect>()
         reactor.state.subscribe(states)
         reactor.effect.subscribe(effects)
         val theValue = "Millions of peaches, peaches for me"
 
         // Act
-        reactor.action.call(Action.ActionFiresEffectWithValue(theValue))
+        reactor.action.accept(Action.ActionFiresEffectWithValue(theValue))
 
         // Assert
-        states.assertNoErrors()
-        states.assertValue(State())
-        effects.assertNoErrors()
-        effects.assertValue(Effect.EffectWithValue(theValue))
+        states
+            .assertNoErrors()
+            .assertValues(State())
+        effects
+            .assertNoErrors()
+            .assertValues(Effect.EffectWithValue(theValue))
     }
 
-    private class TestReactor(
+    class TestReactor(
         initialState: State = State()
     ) : ReactorWithEffects<Action, Mutation, State, Effect>(initialState) {
         sealed class Action {
@@ -100,6 +105,7 @@ class ReactorWithEffectsTests {
         sealed class Mutation : MutationWithEffect<Effect> {
             object SimpleActionMutation : Mutation()
             data class ActionWithValueMutation(val theValue: String) : Mutation()
+            data class FireEffect(override val effect: Effect) : Mutation()
         }
 
         data class State(
@@ -113,27 +119,22 @@ class ReactorWithEffectsTests {
         }
 
         override fun mutate(action: Action): Observable<Mutation> = when (action) {
-            is Action.SimpleAction ->
-                Observable.just(Mutation.SimpleActionMutation)
+            is Action.SimpleAction -> Observable.just(Mutation.SimpleActionMutation)
 
-            is Action.ActionWithValue ->
-                Observable.just(Mutation.ActionWithValueMutation(action.theValue))
+            is Action.ActionWithValue -> Observable.just(Mutation.ActionWithValueMutation(action.theValue))
 
-            is Action.ActionFiresEffectOne -> {
-                emitEffect(Effect.EffectOne)
-                Observable.empty() // No mutations
-            }
+            is Action.ActionFiresEffectOne -> Observable.just(Mutation.FireEffect(Effect.EffectOne))
 
-            is Action.ActionFiresEffectWithValue -> {
-                emitEffect(Effect.EffectWithValue(action.theValue))
-                Observable.empty() // No mutations
-            }
+            is Action.ActionFiresEffectWithValue ->
+                Observable.just(Mutation.FireEffect(Effect.EffectWithValue(action.theValue)))
         }
 
         override fun reduce(state: State, mutation: Mutation): State = when (mutation) {
             is Mutation.SimpleActionMutation -> state.copy(simpleAction = true)
 
             is Mutation.ActionWithValueMutation -> state.copy(actionWithValue = mutation.theValue)
+
+            is Mutation.FireEffect -> state // This will never happen, but need to be exhaustive
         }
     }
 }

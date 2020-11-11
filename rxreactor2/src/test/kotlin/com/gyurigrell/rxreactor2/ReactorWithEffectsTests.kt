@@ -10,6 +10,7 @@ package com.gyurigrell.rxreactor2
 import com.gyurigrell.rxreactor2.ReactorWithEffectsTests.TestReactor.*
 import io.reactivex.Observable
 import io.reactivex.observers.TestObserver
+
 import org.junit.Test
 
 /**
@@ -27,9 +28,8 @@ class ReactorWithEffectsTests {
         reactor.action.accept(Action.SimpleAction)
 
         // Assert
-        states
-            .assertNoErrors()
-            .assertValues(State(false), State(true))
+        states.assertNoErrors()
+        states.assertValues(State(false), State(true))
     }
 
     @Test
@@ -44,9 +44,8 @@ class ReactorWithEffectsTests {
         reactor.action.accept(Action.ActionWithValue(theValue))
 
         // Assert
-        states
-            .assertNoErrors()
-            .assertValues(State(), State(false, theValue))
+        states.assertNoErrors()
+        states.assertValues(State(), State(false, theValue))
     }
 
     @Test
@@ -62,12 +61,10 @@ class ReactorWithEffectsTests {
         reactor.action.accept(Action.ActionFiresEffectOne)
 
         // Assert
-        states
-            .assertNoErrors()
-            .assertValues(State())
-        effects
-            .assertNoErrors()
-            .assertValues(Effect.EffectOne)
+        states.assertNoErrors()
+        states.assertValue(State())
+        effects.assertNoErrors()
+        effects.assertValue(Effect.EffectOne)
     }
 
     @Test
@@ -84,15 +81,13 @@ class ReactorWithEffectsTests {
         reactor.action.accept(Action.ActionFiresEffectWithValue(theValue))
 
         // Assert
-        states
-            .assertNoErrors()
-            .assertValues(State())
-        effects
-            .assertNoErrors()
-            .assertValues(Effect.EffectWithValue(theValue))
+        states.assertNoErrors()
+        states.assertValue(State())
+        effects.assertNoErrors()
+        effects.assertValue(Effect.EffectWithValue(theValue))
     }
 
-    class TestReactor(
+    private class TestReactor(
         initialState: State = State()
     ) : ReactorWithEffects<Action, Mutation, State, Effect>(initialState) {
         sealed class Action {
@@ -105,7 +100,6 @@ class ReactorWithEffectsTests {
         sealed class Mutation : MutationWithEffect<Effect> {
             object SimpleActionMutation : Mutation()
             data class ActionWithValueMutation(val theValue: String) : Mutation()
-            data class FireEffect(override val effect: Effect) : Mutation()
         }
 
         data class State(
@@ -119,22 +113,27 @@ class ReactorWithEffectsTests {
         }
 
         override fun mutate(action: Action): Observable<Mutation> = when (action) {
-            is Action.SimpleAction -> Observable.just(Mutation.SimpleActionMutation)
+            is Action.SimpleAction ->
+                Observable.just(Mutation.SimpleActionMutation)
 
-            is Action.ActionWithValue -> Observable.just(Mutation.ActionWithValueMutation(action.theValue))
+            is Action.ActionWithValue ->
+                Observable.just(Mutation.ActionWithValueMutation(action.theValue))
 
-            is Action.ActionFiresEffectOne -> Observable.just(Mutation.FireEffect(Effect.EffectOne))
+            is Action.ActionFiresEffectOne -> {
+                emitEffect(Effect.EffectOne)
+                Observable.empty() // No mutations
+            }
 
-            is Action.ActionFiresEffectWithValue ->
-                Observable.just(Mutation.FireEffect(Effect.EffectWithValue(action.theValue)))
+            is Action.ActionFiresEffectWithValue -> {
+                emitEffect(Effect.EffectWithValue(action.theValue))
+                Observable.empty() // No mutations
+            }
         }
 
         override fun reduce(state: State, mutation: Mutation): State = when (mutation) {
             is Mutation.SimpleActionMutation -> state.copy(simpleAction = true)
 
             is Mutation.ActionWithValueMutation -> state.copy(actionWithValue = mutation.theValue)
-
-            is Mutation.FireEffect -> state // This will never happen, but need to be exhaustive
         }
     }
 }

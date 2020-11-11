@@ -1,6 +1,9 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
+    ext.siteUrl = "https://github.com/ggrell/RxReactor"
+    ext.gitUrl = "https://github.com/ggrell/RxReactor.git"
+
     ext.buildConfig = [
         minSdk    : 15,
         compileSdk: 29,
@@ -74,10 +77,9 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.0'
+        classpath 'com.android.tools.build:gradle:4.1.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.3'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
         classpath "org.jetbrains.dokka:dokka-gradle-plugin:$versions.dokka"
     }
 }
@@ -96,7 +98,7 @@ task clean(type: Delete) {
 subprojects {
     group = "com.gyurigrell"
     def isRelease = Boolean.valueOf(project.hasProperty("release") ? project.property("release") as String : "false")
-    version = "0.4.6" + (isRelease ? "" : "-SNAPSHOT")
+    version = "0.9.0" + (isRelease ? "" : "-SNAPSHOT")
 
     tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) {
         kotlinOptions {
