@@ -7,7 +7,6 @@
 
 package com.gyurigrell.rxreactor3
 
-import com.gyurigrell.rxreactor3.ReactorWithEffects.MutationWithEffect
 import com.jakewharton.rxrelay3.PublishRelay
 import io.reactivex.rxjava3.core.Observable
 
@@ -26,7 +25,7 @@ import io.reactivex.rxjava3.core.Observable
  * @param Effect the type of the effect that is emitted for side-effects that don't modify state
  * @property initialState the initial state of the reactor, from which the {@see currentState} will be initialized.
  */
-abstract class ReactorWithEffects<Action, Mutation : MutationWithEffect<Effect>, State, Effect>(
+abstract class ReactorWithEffects<Action, Mutation, State, Effect>(
     initialState: State
 ) : Reactor<Action, Mutation, State>(initialState) {
     /**
@@ -35,20 +34,6 @@ abstract class ReactorWithEffects<Action, Mutation : MutationWithEffect<Effect>,
     val effect: Observable<Effect> by lazy { transformEffect(effectRelay) }
 
     private val effectRelay: PublishRelay<Effect> = PublishRelay.create()
-
-    /**
-     * Checks to see if the mutation has an effect set. If it does, emits it via [ReactorWithEffects.effectRelay] and
-     * swallows the [Mutation], otherwise lets the [Mutation] pass through.
-     */
-    override fun transformMutation(mutation: Observable<Mutation>): Observable<Mutation> = mutation.flatMap { m ->
-        // If its a mutation for triggering an effect, emit it as an Effect and prevent State changes
-        val effect: Effect? = m.effect
-        if (effect != null) {
-            effectRelay.accept(effect)
-            return@flatMap Observable.empty<Mutation>()
-        }
-        Observable.just(m)
-    }
 
     /**
      * Override to modify the effect observable
@@ -69,17 +54,5 @@ abstract class ReactorWithEffects<Action, Mutation : MutationWithEffect<Effect>,
      */
     protected fun emitEffect(vararg effect: Effect) {
         Observable.fromIterable(effect.asIterable()).subscribe(effectRelay).also { subscriptions.add(it) }
-    }
-
-    /**
-     * The interface that needs to be applied to the [Mutation] sealed class defined in this [ReactorWithEffects]. It
-     * applies a field named [effect] which defaults to `null`, meaning that mutation doesn't emit effects. Generally
-     * there should only be a single mutation that has an override where it provides an effect.
-     * @param Effect this is just the [Effect] type defined in the reactor.
-     */
-    @Deprecated("Prefer calling `emitEffect()` function instead")
-    interface MutationWithEffect<Effect> {
-        val effect: Effect?
-            get() = null
     }
 }

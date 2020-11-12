@@ -30,12 +30,11 @@ class LoginReactor(
         object PopulateAutoComplete : Action()
     }
 
-    sealed class Mutation : MutationWithEffect<Effect> {
+    sealed class Mutation {
         data class SetUsername(val username: String) : Mutation()
         data class SetPassword(val password: String) : Mutation()
         data class SetBusy(val busy: Boolean) : Mutation()
         data class SetAutoCompleteEmails(val emails: List<String>) : Mutation()
-        data class EmitEffect(override val effect: Effect) : Mutation()
     }
 
     sealed class Effect {
@@ -81,7 +80,6 @@ class LoginReactor(
                 isUsernameValid = mutation.username.isNotBlank()
             )
 
-
         is Mutation.SetPassword ->
             state.copy(
                 password = mutation.password,
@@ -93,9 +91,6 @@ class LoginReactor(
 
         is Mutation.SetAutoCompleteEmails ->
             state.copy(autoCompleteEmails = mutation.emails)
-
-        else ->
-            state
     }
 
     private fun loadEmails(): Observable<Mutation> =
@@ -107,18 +102,18 @@ class LoginReactor(
     private fun login(): Observable<Mutation> =
         Observable.just(DUMMY_CREDENTIALS.contains("${currentState.username}:${currentState.password}"))
             .delay(3, TimeUnit.SECONDS)
-            .flatMap { success ->
-                val triggerEffect = if (success) {
-                    Mutation.EmitEffect(Effect.LoggedIn(Account("test", "test")))
+            .flatMap<Mutation> { success ->
+                if (success) {
+                    emitEffect(Effect.LoggedIn(Account("test", "test")))
                 } else {
-                    Mutation.EmitEffect(Effect.ShowError("Some error message"))
+                    emitEffect(Effect.ShowError("Some error message"))
                 }
-                Observable.just(Mutation.SetBusy(false), triggerEffect)
+                Observable.just(Mutation.SetBusy(false))
             }
             .startWith(Mutation.SetBusy(true))
 
     companion object {
-        private val DUMMY_CREDENTIALS = arrayOf("foo@example.com:hello", "bar@example.com:world")
+        private val DUMMY_CREDENTIALS = arrayOf("joe@example.com:hello", "kamala@example.com:world")
     }
 }
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<issues format="5" by="lint 4.1.0" client="gradle" variant="all" version="4.1.0">
+<issues format="5" by="lint 4.1.1" client="gradle" variant="all" version="4.1.1">
 
     <issue
         id="AllowBackup"
@@ -10,28 +10,6 @@
             file="src/main/AndroidManifest.xml"
             line="9"
             column="6"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.error_invalid_email` appears to be unused"
-        errorLine1="    &lt;string name=&quot;error_invalid_email&quot;>This email address is invalid&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="16"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UnusedResources"
-        message="The resource `R.string.error_invalid_password` appears to be unused"
-        errorLine1="    &lt;string name=&quot;error_invalid_password&quot;>This password is too short&lt;/string>"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="src/main/res/values/strings.xml"
-            line="17"
-            column="13"/>
     </issue>
 
     <issue
