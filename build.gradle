@@ -96,13 +96,28 @@ task clean(type: Delete) {
 }
 
 subprojects {
+    apply plugin: "maven-publish"
+
     group = "com.gyurigrell"
     def isRelease = Boolean.valueOf(project.hasProperty("release") ? project.property("release") as String : "false")
-    version = "0.9.5" + (isRelease ? "" : "-SNAPSHOT")
+    version = "0.9.6" + (isRelease ? "" : "-SNAPSHOT")
 
     tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) {
         kotlinOptions {
             jvmTarget = "1.8"
+        }
+    }
+
+    publishing {
+        repositories {
+            maven {
+                name = "GitHubPackages"
+                url = uri("https://maven.pkg.github.com/ggrell/RxReactor")
+                credentials {
+                    username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+                    password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
+                }
+            }
         }
     }
 }
