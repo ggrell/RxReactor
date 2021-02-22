@@ -34,7 +34,7 @@ buildscript {
         ],
 
         support: [
-            activity   : "androidx.activity:activity-ktx:1.1.0",
+            activity   : "androidx.activity:activity-ktx:1.2.0",
             annotations: "androidx.annotation:annotation:1.1.0",
             appcompat  : "androidx.appcompat:appcompat:1.2.0",
             core       : "androidx.core:core-ktx:1.3.2",
