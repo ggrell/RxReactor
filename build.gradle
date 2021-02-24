@@ -1,9 +1,6 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext.siteUrl = "https://github.com/ggrell/RxReactor"
-    ext.gitUrl = "https://github.com/ggrell/RxReactor.git"
-
     ext.buildConfig = [
         minSdk    : 15,
         compileSdk: 29,
@@ -74,6 +71,7 @@ buildscript {
     repositories {
         google()
         jcenter()
+        mavenCentral()
     }
 
     dependencies {
@@ -88,6 +86,7 @@ allprojects {
     repositories {
         google()
         jcenter()
+        mavenCentral()
     }
 }
 
@@ -97,6 +96,7 @@ task clean(type: Delete) {
 
 subprojects {
     apply plugin: "maven-publish"
+    apply plugin: "signing"
 
     group = "com.gyurigrell"
     def isRelease = Boolean.valueOf(project.hasProperty("release") ? project.property("release") as String : "false")
@@ -114,8 +114,24 @@ subprojects {
                 name = "GitHubPackages"
                 url = uri("https://maven.pkg.github.com/ggrell/RxReactor")
                 credentials {
-                    username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
-                    password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
+                    username = project.findProperty("gpr.username")
+                    password = project.findProperty("gpr.key")
+                }
+            }
+            maven {
+                name = "MavenCentralSnapshots"
+                url = uri("https://oss.sonatype.org/content/repositories/snapshots")
+                credentials {
+                    username = project.findProperty("ossrh.username")
+                    password = project.findProperty("ossrh.password")
+                }
+            }
+            maven {
+                name = "MavenCentralReleases"
+                url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2")
+                credentials {
+                    username = project.findProperty("ossrh.username")
+                    password = project.findProperty("ossrh.password")
                 }
             }
         }

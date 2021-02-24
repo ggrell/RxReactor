@@ -46,27 +46,27 @@ publishing {
             pom {
                 name = "RxReactor (RxJava 3)"
                 description = "A Kotlin framework for a reactive and unidirectional RxJava 3 application architecture"
-                url = siteUrl
+                url = POM_URL
 
                 licenses {
                     license {
-                        name = 'BSD 3-Clause License'
-                        url = 'https://github.com/ggrell/RxReactor/blob/master/LICENSE'
+                        name = POM_LICENSE_NAME
+                        url = POM_LICENSE_URL
                     }
                 }
 
                 developers {
                     developer {
-                        id = 'ggrell'
-                        name = 'Gyuri Grell'
-                        email = 'ggrell@pobox.com'
+                        id = POM_DEVELOPER_ID
+                        name = POM_DEVELOPER_NAME
+                        email = POM_DEVELOPER_EMAIL
                     }
                 }
 
                 scm {
-                    connection = gitUrl
-                    developerConnection = gitUrl
-                    url = siteUrl
+                    connection = POM_SCM_CONNECTION
+                    developerConnection = POM_SCM_CONNECTION
+                    url = POM_SCM_URL
                 }
             }
         }
