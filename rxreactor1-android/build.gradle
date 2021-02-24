@@ -63,7 +63,7 @@ jacoco {
 afterEvaluate {
     publishing {
         publications {
-            rxreactor1Android(MavenPublication) {
+            RxReactor1Android(MavenPublication) {
                 groupId = project.group
                 artifactId = archivesBaseName
 

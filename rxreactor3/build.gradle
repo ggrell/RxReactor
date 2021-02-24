@@ -35,7 +35,7 @@ task javadocJar(type: Jar, dependsOn: dokkaJavadoc) {
 
 publishing {
     publications {
-        rxreactor3(MavenPublication) {
+        RxReactor3(MavenPublication) {
             groupId = project.group
             artifactId = archivesBaseName
 
