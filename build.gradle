@@ -9,7 +9,7 @@ buildscript {
 
     ext.versions = [
         kotlin          : '1.4.30',
-        dokka           : '1.4.20',
+        dokka           : '1.4.20-dev-65',
         jacoco          : '0.8.5',
     ]
 
