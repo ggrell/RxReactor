@@ -31,6 +31,40 @@ class SimpleReactorTests {
                 )
     }
 
+    @Test
+    fun `state replay current state`() {
+        // Arrange
+        val reactor = CounterReactor()
+        val states = TestObserver.create<Int>()
+        reactor.state.subscribe(states) // state: 0
+
+        // Act
+        reactor.action.accept(Unit) // state: 1
+        reactor.action.accept(Unit) // state: 2
+
+        // Assert
+        states.assertValues(0, 1, 2)
+    }
+
+    @Test
+    fun `stream ignores error from mutate`() {
+        // Arrange
+        val reactor = CounterReactor()
+        val states = TestObserver.create<Int>()
+        reactor.state.subscribe(states)
+        reactor.stateForTriggerError = 2
+
+        // Act
+        reactor.action.accept(Unit)
+        reactor.action.accept(Unit)
+        reactor.action.accept(Unit)
+        reactor.action.accept(Unit)
+        reactor.action.accept(Unit)
+
+        // Assert
+        states.assertValues(0, 1, 2, 3, 4, 5)
+    }
+
     class TestReactor : SimpleReactor<List<String>, List<String>>(initialState = ArrayList()) {
         // 1. ["action"] + ["transformedAction"]
         override fun transformAction(action: Observable<List<String>>): Observable<List<String>> =
@@ -50,5 +84,28 @@ class SimpleReactorTests {
         // 5. ["action", "transformedAction", "mutation", "transformedMutation"] + ["transformedState"]
         override fun transformState(state: Observable<List<String>>): Observable<List<String>> =
                 state.map { it + "transformedState" }
+    }
+
+    class CounterReactor : SimpleReactor<Unit, Int>(initialState = 0) {
+        var stateForTriggerError: Int? = null
+        var stateForTriggerCompleted: Int? = null
+
+        override fun mutate(action: Unit): Observable<Unit> = when (currentState) {
+            stateForTriggerError -> {
+                val results = arrayOf(Observable.just(action), Observable.error(ReactorTests.TestError()))
+                Observable.concat(results.asIterable())
+            }
+            stateForTriggerCompleted -> {
+                val results = arrayOf(Observable.just(action), Observable.empty())
+                Observable.concat(results.asIterable())
+            }
+            else -> {
+                Observable.just(action)
+            }
+        }
+
+        override fun reduce(state: Int, mutation: Unit): Int {
+            return state + 1
+        }
     }
 }
