@@ -94,7 +94,6 @@ abstract class Reactor<Action: Any, Mutation: Any, State: Any>(
         val transformedMutation = transformMutation(mutation)
         val state = transformedMutation
             .scan(initialState) { state, mutate -> reduce(state, mutate) }
-//            .scan(initialState) { state, mutate -> reduce(state, mutate) }
             .onErrorResumeNext { _: Throwable -> Observable.empty() }
             .startWith(initialState)
         val transformedState = transformState(state)
