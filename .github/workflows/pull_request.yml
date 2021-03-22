@@ -25,10 +25,8 @@ jobs:
       uses: actions/cache@v1.2.0
       with:
         path: |
-          ~/.m2
           ~/.gradle/caches/
           ~/.gradle/wrapper/
-          ~/.android/build-cache
         key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
         restore-keys: |
           ${{ runner.os }}-gradle-
@@ -64,3 +62,5 @@ jobs:
       with:
         name: test-reports
         path: '**/build/reports/tests/'
+    - name: Trigger Codecov
+      run: bash <(curl -s https://codecov.io/bash)
