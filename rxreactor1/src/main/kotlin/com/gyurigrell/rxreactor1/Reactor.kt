@@ -25,7 +25,7 @@ import rx.subscriptions.CompositeSubscription
  * @property initialState the initial state of the reactor, from which the {@see currentState} will be initialized.
  * @constructor Creates a reactor with an initial state
  */
-abstract class Reactor<Action, Mutation, State>(
+abstract class Reactor<Action: Any, Mutation: Any, State: Any>(
     val initialState: State
 ) {
     /**

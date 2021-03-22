@@ -14,7 +14,7 @@ import io.reactivex.rxjava3.core.Observable
 /**
  * Specialized implementation of [Reactor] that ensures [state] Observables emits on [AndroidSchedulers.mainThread]
  */
-class AndroidReactor<Action, Mutation, State>(
+class AndroidReactor<Action: Any, Mutation: Any, State: Any>(
     initialState: State
 ) : Reactor<Action, Mutation, State>(initialState) {
     override fun transformState(state: Observable<State>): Observable<State> = 
