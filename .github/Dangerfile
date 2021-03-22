@@ -1,0 +1,15 @@
+github.dismiss_out_of_range_messages
+
+detekt_dir = "**/detekt.xml"
+Dir[detekt_dir].each do |file_name|
+    kotlin_detekt.report_file = file_name
+    kotlin_detekt.skip_gradle_task = true
+    kotlin_detekt.detekt
+end
+
+junit_output_dir = "**/test-results/**/*.xml"
+Dir[junit_output_dir].each do |file_name|
+  junit.parse(file_name)
+  junit.show_skipped_tests = true
+  junit.report
+end

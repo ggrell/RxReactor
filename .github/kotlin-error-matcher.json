@@ -1,0 +1,17 @@
+{
+  "problemMatcher": [
+    {
+      "owner": "kotlin-error",
+      "pattern": [
+        {
+          "regexp": "^e:\\s+(\\S+):\\s+\\((\\d+),\\s+(\\d+)\\):\\s+(.+)$",
+          "file": 1,
+          "line": 2,
+          "column": 3,
+          "message": 4
+        }
+      ],
+      "severity": "error"
+    }
+  ]
+}

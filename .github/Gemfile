@@ -1,0 +1,6 @@
+source "https://rubygems.org"
+
+gem "oga"
+gem "danger"
+gem "danger-junit"
+gem "danger-kotlin_detekt"
