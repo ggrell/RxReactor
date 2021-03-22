@@ -80,8 +80,8 @@ abstract class Reactor<Action, Mutation, State>(
         mutation.doOnEach { println("transformMutation: ${it.value}") }
 
     /**
-     * Override to apply transformation to state observable. This is a good place to apply an observeOn to switch to main
-     * scheduler
+     * Override to apply transformation to state observable. This is a good place to apply an observeOn to switch
+     * to main scheduler
      */
     open fun transformState(state: Observable<State>): Observable<State> = //state
         state.doOnEach { println("transformState: ${it.value}") }

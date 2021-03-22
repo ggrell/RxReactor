@@ -18,7 +18,9 @@ import io.reactivex.rxjava3.core.Observable
 class AndroidReactorWithEffect<Action, Mutation, State, Effect>(
     initialState: State
 ) : ReactorWithEffects<Action, Mutation, State, Effect>(initialState) {
-    override fun transformEffect(effect: Observable<Effect>): Observable<Effect> = effect.observeOn(AndroidSchedulers.mainThread())
+    override fun transformEffect(effect: Observable<Effect>): Observable<Effect> = 
+        effect.observeOn(AndroidSchedulers.mainThread())
 
-    override fun transformState(state: Observable<State>): Observable<State> = state.observeOn(AndroidSchedulers.mainThread())
+    override fun transformState(state: Observable<State>): Observable<State> = 
+        state.observeOn(AndroidSchedulers.mainThread())
 }

@@ -75,8 +75,8 @@ abstract class Reactor<Action, Mutation, State>(
     open fun transformMutation(mutation: Observable<Mutation>): Observable<Mutation> = mutation
 
     /**
-     * Override to apply transformation to state observable. This is a good place to apply an observeOn to switch to main
-     * scheduler
+     * Override to apply transformation to state observable. This is a good place to apply an observeOn to switch
+     * to main scheduler
      */
     open fun transformState(state: Observable<State>): Observable<State> = state
 

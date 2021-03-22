@@ -14,6 +14,9 @@ import rx.android.schedulers.AndroidSchedulers
 /**
  * Specialized implementation of [Reactor] that ensures [state] Observables emits on [AndroidSchedulers.mainThread]
  */
-abstract class AndroidReactor<Action, Mutation, State>(initialState: State): Reactor<Action, Mutation, State>(initialState) {
-    override fun transformState(state: Observable<State>): Observable<State> = state.observeOn(AndroidSchedulers.mainThread())
+abstract class AndroidReactor<Action, Mutation, State>(
+    initialState: State
+): Reactor<Action, Mutation, State>(initialState) {
+    override fun transformState(state: Observable<State>): Observable<State> = 
+        state.observeOn(AndroidSchedulers.mainThread())
 }

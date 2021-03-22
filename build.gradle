@@ -8,9 +8,10 @@ buildscript {
     ]
 
     ext.versions = [
-        kotlin          : '1.4.31',
-        dokka           : '1.4.20',
-        jacoco          : '0.8.5',
+        kotlin          : "1.4.31",
+        dokka           : "1.4.20",
+        jacoco          : "0.8.5",
+        detekt          : "1.16.0",
     ]
 
     ext.deps = [
@@ -77,9 +78,14 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:4.1.3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
-        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.3'
         classpath "org.jetbrains.dokka:dokka-gradle-plugin:$versions.dokka"
+        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.3'
     }
+}
+
+plugins {
+    id "io.gitlab.arturbosch.detekt" version "1.16.0"
+    id "com.github.kt3k.coveralls" version "2.8.4"
 }
 
 allprojects {
@@ -97,6 +103,7 @@ task clean(type: Delete) {
 subprojects {
     apply plugin: "maven-publish"
     apply plugin: "signing"
+    apply plugin: 'io.gitlab.arturbosch.detekt'
 
     group = "com.gyurigrell"
     def isRelease = Boolean.valueOf(project.hasProperty("release") ? project.property("release") as String : "false")
@@ -105,6 +112,25 @@ subprojects {
     tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) {
         kotlinOptions {
             jvmTarget = "1.8"
+        }
+    }
+
+    detekt {
+        config = files("${rootProject.projectDir}/detekt.yml")
+        baseline = file("${rootProject.projectDir}/detekt-baseline.xml")
+        buildUponDefaultConfig = true
+        reports {
+            xml {
+                enabled = true
+                destination = file("build/reports/detekt/detekt.xml")
+            }
+            html {
+                enabled = true
+                destination = file("build/reports/detekt/detekt.html")
+            }
+            txt {
+                enabled = false
+            }
         }
     }
 
