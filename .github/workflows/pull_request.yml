@@ -4,6 +4,12 @@ on: pull_request
 
 jobs:
   unit-test:
+    env:
+      CI_NAME: "jenkins"
+      CI_BUILD_NUMBER: "$GITHUB_RUN_ID"
+      CI_BUILD_URL: "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+      CI_BRANCH: ""
+      CI_PULL_REQUEST: "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/pull/" + ${{ github.event.pull_request.number }}
     name: Build and run checks
     runs-on: ubuntu-latest
     steps:
@@ -19,17 +25,21 @@ jobs:
       uses: actions/cache@v1.2.0
       with:
         path: |
-          ~/.gradle/caches
-          ~/.gradle/wrapper
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
-        restore-keys: ${{ runner.os }}-gradle-
+          ~/.m2
+          ~/.gradle/caches/
+          ~/.gradle/wrapper/
+          ~/.android/build-cache
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
     - name: Cache gems
       if: always()
       uses: actions/cache@v1.2.0
       with:
         path: vendor/bundle
         key: ${{ runner.os }}-gems-${{ hashFiles('.github/Gemfile') }}
-        restore-keys: ${{ runner.os }}-gems-
+        restore-keys: |
+          ${{ runner.os }}-gems-
     - name: Gradle - build, test, coverage
       run: |
         echo "::add-matcher::.github/gradle-java-matcher.json"
