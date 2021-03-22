@@ -2,7 +2,7 @@ NOTE: This is ![stability-WIP](https://img.shields.io/badge/stability-WIP-orange
  
 # RxReactor
 [![Build Status](https://travis-ci.org/ggrell/RxReactor.svg?branch=master)](https://travis-ci.org/ggrell/RxReactor) 
-[![Coverage Status](https://coveralls.io/repos/github/ggrell/RxReactor/badge.svg?branch=master)](https://coveralls.io/github/ggrell/RxReactor?branch=master) 
+[![Coverage](https://codecov.io/gh/ggrell/RxReactor/branch/main/graph/badge.svg?token=8JHGJPU2M8)](https://codecov.io/gh/ggrell/RxReactor)
 [![Release](https://jitpack.io/v/ggrell/RxReactor.svg)](https://jitpack.io/#ggrell/RxReactor) [![Javadocs](https://img.shields.io/badge/documentation-Javadocs-brightgreen)](https://jitpack.io/com/github/ggrell/RxReactor/rxreactor1/master-SNAPSHOT/javadoc/)
 
 RxReactor is a framework for a reactive and unidirectional RxJava-based application architecture. 
