@@ -1,9 +1,15 @@
-name: Pull Request
+name: Pull Request Build
 
 on: pull_request
 
 jobs:
   unit-test:
+    env:
+      CI_NAME: "jenkins"
+      CI_BUILD_NUMBER: ${{ github.run_number }}
+      CI_BUILD_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      CI_BRANCH: ${{ github.head_ref }}
+      CI_PULL_REQUEST: https://github.com/${{ github.repository }}/pull/${{ github.event.pull_request.number }}
     name: Build and run checks
     runs-on: ubuntu-latest
     steps:
@@ -11,7 +17,7 @@ jobs:
     - uses: actions/setup-java@v1
       with:
         java-version: 1.8
-    - uses: actions/setup-ruby@v1
+    - uses: ruby/setup-ruby@v1
       with:
         ruby-version: '2.6'
     - name: Cache Gradle
@@ -19,23 +25,25 @@ jobs:
       uses: actions/cache@v1.2.0
       with:
         path: |
-          ~/.gradle/caches
-          ~/.gradle/wrapper
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
-        restore-keys: ${{ runner.os }}-gradle-
+          ~/.gradle/caches/
+          ~/.gradle/wrapper/
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
     - name: Cache gems
       if: always()
       uses: actions/cache@v1.2.0
       with:
         path: vendor/bundle
         key: ${{ runner.os }}-gems-${{ hashFiles('.github/Gemfile') }}
-        restore-keys: ${{ runner.os }}-gems-
+        restore-keys: |
+          ${{ runner.os }}-gems-
     - name: Gradle - build, test, coverage
       run: |
         echo "::add-matcher::.github/gradle-java-matcher.json"
         echo "::add-matcher::.github/kotlin-error-matcher.json"
         echo "::add-matcher::.github/kotlin-warning-matcher.json"
-        ./gradlew assemble check jacocoTestReport coveralls
+        ./gradlew assemble check jacocoTestReport coveralls --no-daemon
       env:
         COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
     - name: Run Danger
@@ -54,3 +62,5 @@ jobs:
       with:
         name: test-reports
         path: '**/build/reports/tests/'
+    - name: Trigger Codecov
+      run: bash <(curl -s https://codecov.io/bash)
