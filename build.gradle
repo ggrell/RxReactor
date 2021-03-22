@@ -107,7 +107,7 @@ subprojects {
 
     group = "com.gyurigrell"
     def isRelease = Boolean.valueOf(project.hasProperty("release") ? project.property("release") as String : "false")
-    version = "0.9.6" + (isRelease ? "" : "-SNAPSHOT")
+    version = "0.9.7" + (isRelease ? "" : "-SNAPSHOT")
 
     tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) {
         kotlinOptions {
