@@ -9,7 +9,7 @@ jobs:
       CI_BUILD_NUMBER: $GITHUB_RUN_ID
       CI_BUILD_URL: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID
       CI_BRANCH: "branch"
-      CI_PULL_REQUEST: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/pull/${{ github.event.pull_request.number }}
+      CI_PULL_REQUEST: ${{ env.GITHUB_SERVER_URL }}/${{ env.GITHUB_REPOSITORY}}/pull/${{ github.event.pull_request.number }}
     name: Build and run checks
     runs-on: ubuntu-latest
     steps:
