@@ -15,7 +15,7 @@ class SimpleReactorTests {
     @Test
     fun `each method is invoked`() {
         // Arrange
-        val reactor = ReactorTests.TestReactor()
+        val reactor = TestReactor()
         val states = TestObserver.create<List<String>>()
         reactor.state.subscribe(states)
 
