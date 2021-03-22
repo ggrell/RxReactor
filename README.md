@@ -45,15 +45,29 @@ compile 'com.github.ggrell.RxReactor:rxreactor3:master-SNAPSHOT'
 
 For RxJava 1:
 ```groovy
-compile 'com.github.ggrell.RxReactor:rxreactor1:master'
+compile 'com.github.ggrell.RxReactor:rxreactor1:$version'
 ```
+For RxJava 1 on Android (optional):
+```groovy
+compile 'com.github.ggrell.RxReactor:rxreactor1-android:$version'
+```
+
 or for RxJava 2:
 ```groovy
-compile 'com.github.ggrell.RxReactor:rxreactor2:master'
+compile 'com.github.ggrell.RxReactor:rxreactor2:$version'
 ```
+For RxJava 2 on Android (optional):
+```groovy
+compile 'com.github.ggrell.RxReactor:rxreactor2-android:$version'
+```
+
 or for RxJava 3:
 ```groovy
-compile 'com.github.ggrell.RxReactor:rxreactor3:master'
+compile 'com.github.ggrell.RxReactor:rxreactor3:$version'
+```
+For RxJava 3 on Android (optional):
+```groovy
+compile 'com.github.ggrell.RxReactor:rxreactor3-android:$version'
 ```
 
 ## Demo Projects
