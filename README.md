@@ -15,7 +15,16 @@ TODO: Usage stuff
 
 ## Download
 
-Snapshots and releases available courtesy [JitPack.io](https://jitpack.io):
+Snapshots and releases currently available courtesy [JitPack.io](https://jitpack.io):
+```groovy
+subprojects {
+    repositiories {
+        ...
+        maven { url "https://jitpack.io" }
+    }
+}
+```
+Snapshots and releases will soon be released directly to Maven Central.
 
 **Snapshot**
 
