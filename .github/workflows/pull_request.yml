@@ -4,12 +4,6 @@ on: pull_request
 
 jobs:
   unit-test:
-    env:
-      CI_NAME: "jenkins"
-      CI_BUILD_NUMBER: ${{ github.run_number }}
-      CI_BUILD_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
-      CI_BRANCH: ${{ github.head_ref }}
-      CI_PULL_REQUEST: https://github.com/${{ github.repository }}/pull/${{ github.event.pull_request.number }}
     name: Build and run checks
     runs-on: ubuntu-latest
     steps:
@@ -44,8 +38,6 @@ jobs:
         echo "::add-matcher::.github/kotlin-error-matcher.json"
         echo "::add-matcher::.github/kotlin-warning-matcher.json"
         ./gradlew check jacocoTestReport --no-daemon
-      env:
-        COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
     - name: Run Danger
       if: always()
       uses: MeilCli/danger-action@v5
