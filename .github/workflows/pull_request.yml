@@ -7,9 +7,9 @@ jobs:
     env:
       CI_NAME: "jenkins"
       CI_BUILD_NUMBER: $GITHUB_RUN_ID
-      CI_BUILD_URL: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID
+      CI_BUILD_URL: ${{ github.server }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
       CI_BRANCH: "branch"
-      CI_PULL_REQUEST: ${{ github.server.url }}/${{ github.repository }}/pull/${{ github.event.pull_request.number }}
+      CI_PULL_REQUEST: ${{ github.server }}/${{ github.repository }}/pull/${{ github.event.pull_request.number }}
     name: Build and run checks
     runs-on: ubuntu-latest
     steps:
