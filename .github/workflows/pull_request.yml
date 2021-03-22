@@ -43,7 +43,7 @@ jobs:
         echo "::add-matcher::.github/gradle-java-matcher.json"
         echo "::add-matcher::.github/kotlin-error-matcher.json"
         echo "::add-matcher::.github/kotlin-warning-matcher.json"
-        ./gradlew assemble check jacocoTestReport coveralls --no-daemon
+        ./gradlew check jacocoTestReport --no-daemon
       env:
         COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
     - name: Run Danger

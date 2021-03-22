@@ -36,5 +36,5 @@ before_install:
 
 install: travis_wait 20 ./gradlew clean assemble
 
-script: travis_wait 20 ./gradlew lint test jacocoTestReport coveralls
+script: travis_wait 20 ./gradlew check jacocoTestReport --no-daemon
 
