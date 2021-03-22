@@ -1,4 +1,4 @@
-name: Pull Request
+name: Pull Request Build
 
 on: pull_request
 
@@ -6,7 +6,7 @@ jobs:
   unit-test:
     env:
       CI_NAME: "jenkins"
-      CI_BUILD_NUMBER: ${{ github.run_id }}
+      CI_BUILD_NUMBER: ${{ github.run_number }}
       CI_BUILD_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
       CI_BRANCH: ${{ github.head_ref }}
       CI_PULL_REQUEST: https://github.com/${{ github.repository }}/pull/${{ github.event.pull_request.number }}
