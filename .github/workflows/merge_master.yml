@@ -1,15 +1,12 @@
-name: Pull Request Build
+name: Master Build
 
-on: pull_request
+on: 
+  push:
+    branches:
+      - main
 
 jobs:
   unit-test:
-    env:
-      CI_NAME: "jenkins"
-      CI_BUILD_NUMBER: ${{ github.run_number }}
-      CI_BUILD_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
-      CI_BRANCH: ${{ github.head_ref }}
-      CI_PULL_REQUEST: https://github.com/${{ github.repository }}/pull/${{ github.event.pull_request.number }}
     name: Build and run checks
     runs-on: ubuntu-latest
     steps:
@@ -30,32 +27,12 @@ jobs:
         key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
         restore-keys: |
           ${{ runner.os }}-gradle-
-    - name: Cache gems
-      if: always()
-      uses: actions/cache@v1.2.0
-      with:
-        path: vendor/bundle
-        key: ${{ runner.os }}-gems-${{ hashFiles('.github/Gemfile') }}
-        restore-keys: |
-          ${{ runner.os }}-gems-
     - name: Gradle - build, test, coverage
       run: |
         echo "::add-matcher::.github/gradle-java-matcher.json"
         echo "::add-matcher::.github/kotlin-error-matcher.json"
         echo "::add-matcher::.github/kotlin-warning-matcher.json"
         ./gradlew check jacocoTestReport --no-daemon
-      env:
-        COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
-    - name: Run Danger
-      if: always()
-      uses: MeilCli/danger-action@v5
-      with:
-        plugins_file: '.github/Gemfile'
-        install_path: 'vendor/bundle'
-        danger_file: '.github/Dangerfile'
-        danger_id: 'danger-pr'
-      env:
-        DANGER_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Upload test reports
       if: always()
       uses: actions/upload-artifact@v2
