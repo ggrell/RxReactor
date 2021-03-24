@@ -3,7 +3,7 @@ NOTE: This is ![stability-WIP](https://img.shields.io/badge/stability-WIP-orange
 # RxReactor
 [![Master Build](https://github.com/ggrell/RxReactor/actions/workflows/merge_master.yml/badge.svg)](https://github.com/ggrell/RxReactor/actions/workflows/merge_master.yml)
 [![Coverage](https://codecov.io/gh/ggrell/RxReactor/branch/main/graph/badge.svg?token=8JHGJPU2M8)](https://codecov.io/gh/ggrell/RxReactor)
-[![Release](https://jitpack.io/v/ggrell/RxReactor.svg)](https://jitpack.io/#ggrell/RxReactor) [![Javadocs](https://img.shields.io/badge/documentation-Javadocs-brightgreen)](https://jitpack.io/com/github/ggrell/RxReactor/rxreactor1/master-SNAPSHOT/javadoc/)
+[![Release](https://jitpack.io/v/ggrell/RxReactor.svg)](https://jitpack.io/#ggrell/RxReactor) [![Javadocs](https://img.shields.io/badge/documentation-Javadocs-brightgreen)](https://jitpack.io/com/github/ggrell/RxReactor/rxreactor1/main-SNAPSHOT/javadoc/)
 
 RxReactor is a framework for a reactive and unidirectional RxJava-based application architecture. 
 This repository introduces the basic concept of RxReactor and describes how to build an application 
@@ -30,15 +30,18 @@ Snapshots and releases will soon be released directly to Maven Central.
 
 For RxJava 1:
 ```groovy
-compile 'com.github.ggrell.RxReactor:rxreactor1:master-SNAPSHOT'
+compile 'com.github.ggrell.RxReactor:rxreactor1:main-SNAPSHOT'
+compile 'com.github.ggrell.RxReactor:rxreactor1-android:main-SNAPSHOT' // Optional
 ```
 or for RxJava 2:
 ```groovy
-compile 'com.github.ggrell.RxReactor:rxreactor2:master-SNAPSHOT'
+compile 'com.github.ggrell.RxReactor:rxreactor2:main-SNAPSHOT'
+compile 'com.github.ggrell.RxReactor:rxreactor2-android:main-SNAPSHOT' // Optional
 ```
 or for RxJava 3:
 ```groovy
-compile 'com.github.ggrell.RxReactor:rxreactor3:master-SNAPSHOT'
+compile 'com.github.ggrell.RxReactor:rxreactor3:main-SNAPSHOT'
+compile 'com.github.ggrell.RxReactor:rxreactor3-android:main-SNAPSHOT' // Optional
 ```
 
 **Release**
@@ -46,28 +49,19 @@ compile 'com.github.ggrell.RxReactor:rxreactor3:master-SNAPSHOT'
 For RxJava 1:
 ```groovy
 compile 'com.github.ggrell.RxReactor:rxreactor1:$version'
-```
-For RxJava 1 on Android (optional):
-```groovy
-compile 'com.github.ggrell.RxReactor:rxreactor1-android:$version'
+compile 'com.github.ggrell.RxReactor:rxreactor1-android:$version' // Optional
 ```
 
 or for RxJava 2:
 ```groovy
 compile 'com.github.ggrell.RxReactor:rxreactor2:$version'
-```
-For RxJava 2 on Android (optional):
-```groovy
-compile 'com.github.ggrell.RxReactor:rxreactor2-android:$version'
+compile 'com.github.ggrell.RxReactor:rxreactor2-android:$version' // Optional
 ```
 
 or for RxJava 3:
 ```groovy
 compile 'com.github.ggrell.RxReactor:rxreactor3:$version'
-```
-For RxJava 3 on Android (optional):
-```groovy
-compile 'com.github.ggrell.RxReactor:rxreactor3-android:$version'
+compile 'com.github.ggrell.RxReactor:rxreactor3-android:$version' // Optional
 ```
 
 ## Demo Projects
