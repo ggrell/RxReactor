@@ -34,12 +34,6 @@ jobs:
         echo "::add-matcher::.github/gradle-java-matcher.json"
         echo "::add-matcher::.github/kotlin-error-matcher.json"
         echo "::add-matcher::.github/kotlin-warning-matcher.json"
-        ./gradlew assembleRelease javadocJar sourcesJar publishAllPublicationsToMavenCentralSnapshotsRepository --no-daemon -Possrh.username=${{ secrets.OSSRH_USERNAME }} -Possrh.password="${{ secrets.OSSRH_PASSWORD }}"
-    - name: Upload test reports
-      if: always()
-      uses: actions/upload-artifact@v2
-      with:
-        name: test-reports
-        path: '**/build/reports/tests/'
+        ./gradlew assembleRelease check jacocoTestReport javadocJar sourcesJar publishAllPublicationsToMavenCentralSnapshotsRepository --no-daemon -Possrh.username=${{ secrets.OSSRH_USERNAME }} -Possrh.password="${{ secrets.OSSRH_PASSWORD }}"
     - name: Trigger Codecov
       run: bash <(curl -s https://codecov.io/bash)
