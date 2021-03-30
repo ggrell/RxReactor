@@ -8,7 +8,7 @@ buildscript {
     ]
 
     ext.versions = [
-        kotlin          : "1.4.31",
+        kotlin          : "1.4.32",
         jacoco          : "0.8.5",
         detekt          : "1.16.0",
     ]

@@ -1,4 +1,4 @@
-name: Master Build
+name: Master Snapshot Build
 
 on: 
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   unit-test:
-    name: Build and run checks
+    name: Build, run checks, release SNAPSHOT to Maven Central
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
