@@ -24,11 +24,11 @@ class SimpleReactorTests {
 
         // Assert
         states
-                .assertNoErrors()
-                .assertValues(
-                        mutableListOf("transformedState"),
-                        mutableListOf("action", "transformedAction", "mutation", "transformedMutation", "transformedState")
-                )
+            .assertNoErrors()
+            .assertValues(
+                mutableListOf("transformedState"),
+                mutableListOf("action", "transformedAction", "mutation", "transformedMutation", "transformedState")
+            )
     }
 
     @Test
