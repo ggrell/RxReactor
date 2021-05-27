@@ -41,11 +41,11 @@ dependencies {
     implementation project(path: ':rxreactor2')
     implementation project(path: ':rxreactor2-android')
     implementation deps.kotlin.stdlib.jdk
-    implementation deps.support.appcompat
+    implementation 'androidx.appcompat:appcompat:1.3.0'
     implementation deps.support.design
     implementation deps.support.viewModel
-    implementation deps.support.fragment
-    implementation deps.support.activity
+    implementation 'androidx.fragment:fragment-ktx:1.3.4'
+    implementation 'androidx.activity:activity-ktx:1.2.3'
 
     implementation deps.rx2.java
     implementation deps.rx2.android
