@@ -14,6 +14,42 @@ TODO: Usage stuff
 ## Download
 
 Snapshots and releases currently available courtesy [JitPack.io](https://jitpack.io):
+Snapshots and releases will soon be released directly to Maven Central.
+
+**Snapshot**
+
+Add this repository to have access to Maven Central snapshots:
+```groovy
+subprojects {
+    repositiories {
+        ...
+        maven {
+            url 'https://oss.sonatype.org/content/repositories/snapshots/'
+            mavenContent { snapshotsOnly() }
+        }
+    }
+}
+```
+
+For RxJava 1:
+```groovy
+compile 'com.ggrell.RxReactor:rxreactor1:0.9.6-SNAPSHOT'
+compile 'com.ggrell.RxReactor:rxreactor1-android:0.9.6-SNAPSHOT' // Optional
+```
+or for RxJava 2:
+```groovy
+compile 'com.ggrell.RxReactor:rxreactor2:0.9.6-SNAPSHOT'
+compile 'com.ggrell.RxReactor:rxreactor2-android:0.9.6-SNAPSHOT' // Optional
+```
+or for RxJava 3:
+```groovy
+compile 'com.ggrell.RxReactor:rxreactor3:0.9.6-SNAPSHOT'
+compile 'com.ggrell.RxReactor:rxreactor3-android:0.9.6-SNAPSHOT' // Optional
+```
+
+**Release**
+
+For now, releases come from JitPack.io, but will soon be published via Maven Central
 ```groovy
 subprojects {
     repositiories {
@@ -22,27 +58,6 @@ subprojects {
     }
 }
 ```
-Snapshots and releases will soon be released directly to Maven Central.
-
-**Snapshot**
-
-For RxJava 1:
-```groovy
-compile 'com.github.ggrell.RxReactor:rxreactor1:main-SNAPSHOT'
-compile 'com.github.ggrell.RxReactor:rxreactor1-android:main-SNAPSHOT' // Optional
-```
-or for RxJava 2:
-```groovy
-compile 'com.github.ggrell.RxReactor:rxreactor2:main-SNAPSHOT'
-compile 'com.github.ggrell.RxReactor:rxreactor2-android:main-SNAPSHOT' // Optional
-```
-or for RxJava 3:
-```groovy
-compile 'com.github.ggrell.RxReactor:rxreactor3:main-SNAPSHOT'
-compile 'com.github.ggrell.RxReactor:rxreactor3-android:main-SNAPSHOT' // Optional
-```
-
-**Release**
 
 For RxJava 1:
 ```groovy
