@@ -22,8 +22,8 @@ import rx.subscriptions.CompositeSubscription
  * @param Mutation the type of the mutation. This type is only used internally in the reactor to map an action to  0..n
  * mutations.
  * @param State the type of the state that the reactor holds and modifies.
- * @property initialState the initial state of the reactor, from which the {@see currentState} will be initialized.
- * @constructor Creates a reactor with an initial state
+ * @property initialState the initial state of the reactor, from which the [currentState] will be initialized.
+ * @constructor Creates an instance of the reactor with the provided [initialState]
  */
 abstract class Reactor<Action: Any, Mutation: Any, State: Any>(
     val initialState: State

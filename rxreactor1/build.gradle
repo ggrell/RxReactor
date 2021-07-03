@@ -4,6 +4,17 @@ apply plugin: 'jacoco'
 apply plugin: 'org.jetbrains.dokka'
 apply plugin: 'maven-publish'
 
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8
+    }
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
 dependencies {
     implementation deps.kotlin.stdlib.jdk
     implementation deps.rx1.java
@@ -21,6 +32,8 @@ jacocoTestReport {
         xml.enabled = true
     }
 }
+
+dokkaJavadoc.dokkaSourceSets.configureEach { includeNonPublic.set(false) }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
     classifier "sources"
