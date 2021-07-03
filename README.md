@@ -22,7 +22,6 @@ Add this repository to have access to Maven Central snapshots:
 ```groovy
 subprojects {
     repositiories {
-        ...
         maven {
             url 'https://oss.sonatype.org/content/repositories/snapshots/'
             mavenContent { snapshotsOnly() }
@@ -33,18 +32,18 @@ subprojects {
 
 For RxJava 1:
 ```groovy
-compile 'com.ggrell.RxReactor:rxreactor1:0.9.6-SNAPSHOT'
-compile 'com.ggrell.RxReactor:rxreactor1-android:0.9.6-SNAPSHOT' // Optional
+compile 'com.gyurigrell.RxReactor:rxreactor1:0.9.7-SNAPSHOT'
+compile 'com.gyurigrell.RxReactor:rxreactor1-android:0.9.7-SNAPSHOT' // Optional
 ```
 or for RxJava 2:
 ```groovy
-compile 'com.ggrell.RxReactor:rxreactor2:0.9.6-SNAPSHOT'
-compile 'com.ggrell.RxReactor:rxreactor2-android:0.9.6-SNAPSHOT' // Optional
+compile 'com.gyurigrell.RxReactor:rxreactor2:0.9.7-SNAPSHOT'
+compile 'com.gyurigrell.RxReactor:rxreactor2-android:0.9.7-SNAPSHOT' // Optional
 ```
 or for RxJava 3:
 ```groovy
-compile 'com.ggrell.RxReactor:rxreactor3:0.9.6-SNAPSHOT'
-compile 'com.ggrell.RxReactor:rxreactor3-android:0.9.6-SNAPSHOT' // Optional
+compile 'com.gyurigrell.RxReactor:rxreactor3:0.9.7-SNAPSHOT'
+compile 'com.gyurigrell.RxReactor:rxreactor3-android:0.9.7-SNAPSHOT' // Optional
 ```
 
 **Release**
@@ -53,7 +52,6 @@ For now, releases come from JitPack.io, but will soon be published via Maven Cen
 ```groovy
 subprojects {
     repositiories {
-        ...
         maven { url "https://jitpack.io" }
     }
 }
