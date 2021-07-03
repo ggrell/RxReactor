@@ -45,11 +45,11 @@ dependencies {
 
     implementation deps.kotlin.stdlib.common
 
-    implementation 'androidx.appcompat:appcompat:1.3.0'
-    implementation deps.support.design
-    implementation deps.support.viewModel
-    implementation 'androidx.fragment:fragment-ktx:1.3.5'
-    implementation 'androidx.activity:activity-ktx:1.2.3'
+    implementation deps.androidx.appcompat
+    implementation deps.androidx.design
+    implementation deps.androidx.viewModel
+    implementation deps.androidx.fragment
+    implementation deps.androidx.activity
 
     implementation deps.rx2.java
     implementation deps.rx2.android
@@ -63,6 +63,6 @@ dependencies {
 
     testImplementation deps.junit
 
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 }
