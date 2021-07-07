@@ -3,7 +3,6 @@
   <ManuallySuppressedIssues/>
   <CurrentIssues>
     <ID>MagicNumber:LoginReactor.kt$LoginReactor$3</ID>
-    <ID>NewLineAtEndOfFile:LoginReactorProvider.kt$com.gyurigrell.rxreactor2.sample.LoginReactorProvider.kt</ID>
     <ID>TooGenericExceptionCaught:ContactServiceImpl.kt$ContactServiceImpl$e: Throwable</ID>
   </CurrentIssues>
 </SmellBaseline>

@@ -10,7 +10,6 @@ package com.gyurigrell.rxreactor2
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.functions.BiFunction
 
 /**
  * A Reactor is an UI-independent layer which manages the state of a view. The foremost role of a
@@ -26,7 +25,7 @@ import io.reactivex.functions.BiFunction
  * @property initialState the initial state of the reactor, from which the [currentState] will be initialized.
  * @constructor Creates an instance of the reactor with the provided [initialState]
  */
-abstract class Reactor<Action: Any, Mutation: Any, State: Any>(
+abstract class Reactor<Action : Any, Mutation : Any, State : Any>(
     val initialState: State
 ) {
     /**

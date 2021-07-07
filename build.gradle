@@ -8,20 +8,20 @@ buildscript {
     ]
 
     ext.versions = [
-        kotlin          : "1.5.20",
-        jacoco          : "0.8.5",
-        detekt          : "1.16.0",
+        kotlin: "1.5.20",
+        jacoco: "0.8.5",
+        detekt: "1.17.1",
     ]
 
     ext.deps = [
-        junit  : 'junit:junit:4.13.2',
+        junit   : 'junit:junit:4.13.2',
 
-        kotlin : [
-            stdlib    : [
+        kotlin  : [
+            stdlib: [
                 common: "org.jetbrains.kotlin:kotlin-stdlib-common:${versions.kotlin}",
                 jdk   : "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions.kotlin}",
             ],
-            test      : [
+            test  : [
                 common     : "org.jetbrains.kotlin:kotlin-test-common:${versions.kotlin}",
                 annotations: "org.jetbrains.kotlin:kotlin-test-annotations-common:${versions.kotlin}",
                 jvm        : "org.jetbrains.kotlin:kotlin-test:${versions.kotlin}",
@@ -40,14 +40,14 @@ buildscript {
             viewModel  : 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1',
         ],
 
-        rx1    : [
+        rx1     : [
             java   : 'io.reactivex:rxjava:1.3.8',
             kotlin : 'io.reactivex:rxkotlin:1.0.0',
             android: 'io.reactivex:rxandroid:1.2.1',
             relay  : 'com.jakewharton.rxrelay:rxrelay:1.2.0'
         ],
 
-        rx2    : [
+        rx2     : [
             java            : 'io.reactivex.rxjava2:rxjava:2.2.21',
             kotlin          : 'io.reactivex.rxjava2:rxkotlin:2.4.0',
             android         : 'io.reactivex.rxjava2:rxandroid:2.1.1',
@@ -57,7 +57,7 @@ buildscript {
             bindingDesign   : 'com.jakewharton.rxbinding3:rxbinding-design-kotlin:3.1.0'
         ],
 
-        rx3    : [
+        rx3     : [
             java            : 'io.reactivex.rxjava3:rxjava:3.0.13',
             kotlin          : 'io.reactivex.rxjava3:rxkotlin:3.0.1',
             android         : 'io.reactivex.rxjava3:rxandroid:3.0.0',
@@ -105,6 +105,7 @@ subprojects {
     version = "0.9.7" + (isRelease ? "" : "-SNAPSHOT")
 
     detekt {
+        toolVersion = versions.detekt
         config = files("${rootProject.projectDir}/detekt.yml")
         baseline = file("${rootProject.projectDir}/detekt-baseline.xml")
         buildUponDefaultConfig = true
@@ -121,6 +122,10 @@ subprojects {
                 enabled = false
             }
         }
+    }
+
+    dependencies {
+        detektPlugins "io.gitlab.arturbosch.detekt:detekt-formatting:$versions.detekt"
     }
 
     publishing {

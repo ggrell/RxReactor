@@ -16,7 +16,7 @@ import rx.Observable
  * @param State the type of the state that the reactor holds and modifies.
  * @property initialState the initial state of the reactor, from which the {@see currentState} will be initialized.
  */
-abstract class SimpleReactor<Action: Any, State: Any>(
+abstract class SimpleReactor<Action : Any, State : Any>(
     initialState: State
 ) : Reactor<Action, Action, State>(initialState) {
     override fun mutate(action: Action): Observable<Action> = Observable.just(action)

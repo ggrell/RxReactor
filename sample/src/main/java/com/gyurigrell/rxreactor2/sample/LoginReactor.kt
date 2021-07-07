@@ -116,4 +116,3 @@ class LoginReactor(
         private val DUMMY_CREDENTIALS = arrayOf("joe@example.com:hello", "kamala@example.com:world")
     }
 }
-

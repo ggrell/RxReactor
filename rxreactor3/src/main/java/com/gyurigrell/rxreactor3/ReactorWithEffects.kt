@@ -24,7 +24,7 @@ import io.reactivex.rxjava3.core.Observable
  * @param Effect the type of the effect that is emitted for side-effects that don't modify state
  * @property initialState the initial state of the reactor, from which the {@see currentState} will be initialized.
  */
-abstract class ReactorWithEffects<Action: Any, Mutation: Any, State: Any, Effect: Any>(
+abstract class ReactorWithEffects<Action : Any, Mutation : Any, State : Any, Effect : Any>(
     initialState: State
 ) : Reactor<Action, Mutation, State>(initialState) {
     /**

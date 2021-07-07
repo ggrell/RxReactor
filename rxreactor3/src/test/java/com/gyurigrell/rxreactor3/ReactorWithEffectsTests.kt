@@ -5,6 +5,8 @@
  * https://opensource.org/licenses/BSD-3-Clause
  */
 
+@file:Suppress("NoWildcardImports")
+
 package com.gyurigrell.rxreactor3
 
 import com.gyurigrell.rxreactor3.ReactorWithEffectsTests.TestReactor.*

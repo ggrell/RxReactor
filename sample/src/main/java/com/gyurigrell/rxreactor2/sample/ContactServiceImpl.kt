@@ -15,14 +15,17 @@ import io.reactivex.Scheduler
 
 class ContactServiceImpl(
     private val context: Activity,
-    private val scheduler: Scheduler) : ContactService {
+    private val scheduler: Scheduler
+) : ContactService {
     override fun loadEmails(): Observable<List<String>> {
         return Observable.create<List<String>> { emitter ->
-            val cursor = context.contentResolver.query(ProfileQuery.URI,
-                                                       ProfileQuery.PROJECTION,
-                                                       ProfileQuery.SELECTION,
-                                                       ProfileQuery.SELECTION_ARGS,
-                                                       ProfileQuery.SORT_ORDER)
+            val cursor = context.contentResolver.query(
+                ProfileQuery.URI,
+                ProfileQuery.PROJECTION,
+                ProfileQuery.SELECTION,
+                ProfileQuery.SELECTION_ARGS,
+                ProfileQuery.SORT_ORDER
+            )
             if (cursor == null) {
                 emitter.onNext(listOf())
                 emitter.onComplete()
@@ -40,16 +43,18 @@ class ContactServiceImpl(
             } finally {
                 cursor.close()
             }
-
         }.subscribeOn(scheduler)
     }
 
     object ProfileQuery {
-        val URI: Uri = Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI,
-                                            ContactsContract.Contacts.Data.CONTENT_DIRECTORY)
+        val URI: Uri = Uri.withAppendedPath(
+            ContactsContract.Profile.CONTENT_URI,
+            ContactsContract.Contacts.Data.CONTENT_DIRECTORY
+        )
         val PROJECTION = arrayOf(
             ContactsContract.CommonDataKinds.Email.ADDRESS,
-            ContactsContract.CommonDataKinds.Email.IS_PRIMARY)
+            ContactsContract.CommonDataKinds.Email.IS_PRIMARY
+        )
         const val ADDRESS = 0
 
         const val SELECTION = ContactsContract.Contacts.Data.MIMETYPE + " = ?"

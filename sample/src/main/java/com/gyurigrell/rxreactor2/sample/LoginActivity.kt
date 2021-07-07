@@ -82,8 +82,7 @@ class LoginActivity : AppCompatActivity() {
     /**
      * Callback received when a permissions request has been completed.
      */
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>,
-                                            grantResults: IntArray) {
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQUEST_READ_CONTACTS) {
             if (grantResults.size == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -93,10 +92,12 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun addEmailsToAutoComplete(emailAddressCollection: List<String>) {
-        //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
-        val adapter = ArrayAdapter(this@LoginActivity,
+        // Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
+        val adapter = ArrayAdapter(
+            this@LoginActivity,
             android.R.layout.simple_dropdown_item_1line,
-            emailAddressCollection)
+            emailAddressCollection
+        )
 
         binding.email.setAdapter(adapter)
     }
