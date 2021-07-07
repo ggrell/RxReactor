@@ -73,6 +73,7 @@ class LoginActivity : AppCompatActivity() {
         if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
             Snackbar.make(binding.email, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
                 .setAction(android.R.string.ok) { requestPermissions(arrayOf(READ_CONTACTS), REQUEST_READ_CONTACTS) }
+                .show()
         } else {
             requestPermissions(arrayOf(READ_CONTACTS), REQUEST_READ_CONTACTS)
         }
