@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  unit-test:
+  build:
     name: Build, run checks, release SNAPSHOT to Maven Central
     runs-on: ubuntu-latest
     steps:
