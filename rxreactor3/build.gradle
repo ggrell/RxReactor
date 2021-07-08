@@ -29,7 +29,7 @@ jacoco {
 
 jacocoTestReport {
     reports {
-        xml.enabled = true
+        xml.required = true
     }
 }
 
@@ -83,4 +83,17 @@ publishing {
             }
         }
     }
+}
+
+signing {
+    def signingKeyId = findProperty("signing.keyId")
+    def signingKey = findProperty("signing.key")
+    def signingPassword = findProperty("signing.password")
+    useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
+
+    sign publishing.publications.RxReactor3
+}
+
+tasks.withType(Sign) {
+    onlyIf { project.hasProperty("signing.keyId") }
 }
