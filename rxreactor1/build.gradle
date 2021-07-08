@@ -86,14 +86,14 @@ publishing {
 }
 
 signing {
-    def signingKeyId = project.findProperty("signing.keyId")
-    def signingKey = project.findProperty("signing.key")
-    def signingPassword = project.findProperty("signing.password")
+    def signingKeyId = project.findProperty("signingKeyId")
+    def signingKey = project.findProperty("signingKey")
+    def signingPassword = project.findProperty("signingPassword")
     useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
 
     sign publishing.publications.RxReactor1
 }
 
 tasks.withType(Sign) {
-    onlyIf { project.findProperty("signing.keyId") }
+    onlyIf { project.findProperty("signingKeyId") }
 }
