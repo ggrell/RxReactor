@@ -13,7 +13,16 @@ TODO: Usage stuff
 
 ## Download
 
-**Snapshot**
+Releases are published to Maven Central, and individual archives are also available in the 
+[Releases](https://github.com/ggrell/RxReactor/releases) for the project.
+
+```groovy
+subprojects {
+    repositiories {
+        mavenCentral()
+    }
+}
+```
 
 Add this repository to have access to Maven Central snapshots:
 ```groovy
@@ -23,17 +32,6 @@ subprojects {
             url 'https://oss.sonatype.org/content/repositories/snapshots/'
             mavenContent { snapshotsOnly() }
         }
-    }
-}
-```
-
-**Release**
-
-Releases are published to Maven Central
-```groovy
-subprojects {
-    repositiories {
-        mavenCentral()
     }
 }
 ```
@@ -52,35 +50,6 @@ or for RxJava 3:
 ```groovy
 compile 'com.gyurigrell.rxreactor:rxreactor3:1.0.0' // Add -SNAPSHOT for snapshot versions
 compile 'com.gyurigrell.rxreactor:rxreactor3-android:1.0.0' // Optional, add -SNAPSHOT for snapshot versions
-```
-
-**Release**
-
-Releases are published to Maven Central
-```groovy
-subprojects {
-    repositiories {
-        mavenCentral()
-    }
-}
-```
-
-For RxJava 1:
-```groovy
-compile 'com.gyurigrell.rxreactor:rxreactor1:$version'
-compile 'com.github.ggrell.RxReactor:rxreactor1-android:$version' // Optional
-```
-
-or for RxJava 2:
-```groovy
-compile 'com.github.ggrell.RxReactor:rxreactor2:$version'
-compile 'com.github.ggrell.RxReactor:rxreactor2-android:$version' // Optional
-```
-
-or for RxJava 3:
-```groovy
-compile 'com.github.ggrell.RxReactor:rxreactor3:$version'
-compile 'com.github.ggrell.RxReactor:rxreactor3-android:$version' // Optional
 ```
 
 ## Demo Projects
