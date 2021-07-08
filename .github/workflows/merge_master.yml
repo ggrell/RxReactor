@@ -29,11 +29,17 @@ jobs:
         key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
         restore-keys: |
           ${{ runner.os }}-gradle-
-    - name: Gradle - build, test, coverage
+    - name: Assemble release
       run: |
         echo "::add-matcher::.github/gradle-java-matcher.json"
         echo "::add-matcher::.github/kotlin-error-matcher.json"
         echo "::add-matcher::.github/kotlin-warning-matcher.json"
-        ./gradlew assembleRelease check jacocoTestReport javadocJar sourcesJar publishAllPublicationsToMavenCentralSnapshotsRepository --no-daemon -Possrh.username=${{ secrets.OSSRH_USERNAME }} -Possrh.password="${{ secrets.OSSRH_PASSWORD }}"
-    - name: Trigger Codecov
+        ./gradlew assembleRelease
+    - name: Run all checks and create coverage report
+      run: |
+        ./gradlew check jacocoTestReport
+    - name: Upload coverage to Codecov
       run: bash <(curl -s https://codecov.io/bash)
+    - name: Publish to Maven Central Snapshots repo
+      run: |
+        ./gradlew publishAllPublicationsToMavenCentralSnapshotsRepository --no-daemon -Possrh.username=${{ secrets.OSSRH_USERNAME }} -Possrh.password="${{ secrets.OSSRH_PASSWORD }}"
