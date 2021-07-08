@@ -123,6 +123,6 @@ afterEvaluate {
     }
 
     tasks.withType(Sign) {
-        onlyIf { project.hasProperty("signingKeyId") }
+        onlyIf { project.hasProperty("signingKey") }
     }
 }

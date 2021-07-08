@@ -95,5 +95,5 @@ signing {
 }
 
 tasks.withType(Sign) {
-    onlyIf { project.findProperty("signingKeyId") }
+    onlyIf { project.hasProperty("signingKey") }
 }
