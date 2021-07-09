@@ -42,13 +42,12 @@ jobs:
       - name: Create JavaDoc and sources jars
         run: ./gradlew javadocJar sourcesJar -Prelease=true
       - name: Publish to Maven Central Releases repo
-        run: |
-          echo ${{ secrets.MAVEN_CENTRAL_KEY }} | awk 'NR == 1 { print "signingKey=" } 1' ORS='\\n' >> gradle.properties
-          ./gradlew publishAllPublicationsToMavenCentralReleasesRepository -Prelease=true -Possrh.username=${{ secrets.OSSRH_USERNAME }} -Possrh.password="${{ secrets.OSSRH_PASSWORD }}"
         env:
           ORG_GRADLE_PROJECT_signingKeyId: ${{ secrets.MAVEN_CENTRAL_KEY_ID }}
-          ORG_GRADLE_PROJECT_signingKey: ${{ secrets.MAVEN_CENTRAL_KEY }}
           ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingKey: ${{ secrets.MAVEN_CENTRAL_KEY }}
+        run: |
+          ./gradlew publishAllPublicationsToMavenCentralReleasesRepository -Prelease=true -Possrh.username=${{ secrets.OSSRH_USERNAME }} -Possrh.password="${{ secrets.OSSRH_PASSWORD }}"
       - name: Add artifacts to Release
         uses: softprops/action-gh-release@v1
         with:
