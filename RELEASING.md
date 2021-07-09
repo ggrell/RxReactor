@@ -5,8 +5,8 @@
 1. Update the version in the main `gradle.properties`.
 1. Commit the changes and create a tag:
    ```
-   git commit -am "Releasing v1.0.0."
-   git tag v1.0.0
+   git commit -am "Releasing version 1.0.0."
+   git tag 1.0.0
    ```
 1. Create the release on GitHub:
    1. Go to the [Releases](https://github.com/square/anvil/releases) page for the GitHub project.
@@ -17,7 +17,7 @@
    1. If this is a pre-release version, check the pre-release box.
    1. Hit "Publish release".
    1. Wait for the GitHub Action job to complete; it will attach the artifacts to the release.
-1. Close and release the staging repository at [Sonatype](https://oss.sonatype.org).
+1. Close and release the staging repository at [Sonatype](https://oss.sonatype.org/#stagingRepositories).
 1. Update the version in `gradle.properties`
 1. Commit the change:
    ```
