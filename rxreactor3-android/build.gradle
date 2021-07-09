@@ -119,10 +119,10 @@ afterEvaluate {
         def signingPassword = findProperty("signingPassword")
         useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
 
-        sign publishing.publications.RxReactor3Android
+        sign publishing.publications
     }
 
     tasks.withType(Sign) {
-        onlyIf { project.hasProperty("signingKey") }
+        onlyIf { findProperty("signingKey") != null }
     }
 }

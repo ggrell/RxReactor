@@ -91,7 +91,7 @@ signing {
     def signingPassword = findProperty("signingPassword")
     useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
 
-    sign publishing.publications.RxReactor1
+    sign publishing.publications
 }
 
 tasks.withType(Sign) {

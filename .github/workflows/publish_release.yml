@@ -37,9 +37,6 @@ jobs:
       - name: Run all checks and create coverage report
         run: |
           ./gradlew check jacocoTestReport
-      - name: Run all checks and create coverage report
-        run: |
-          ./gradlew check jacocoTestReport
       - name: Upload coverage to Codecov
         run: bash <(curl -s https://codecov.io/bash)
       - name: Create JavaDoc and sources jars
@@ -50,6 +47,7 @@ jobs:
           ./gradlew publishAllPublicationsToMavenCentralReleasesRepository -Prelease=true -Possrh.username=${{ secrets.OSSRH_USERNAME }} -Possrh.password="${{ secrets.OSSRH_PASSWORD }}"
         env:
           ORG_GRADLE_PROJECT_signingKeyId: ${{ secrets.MAVEN_CENTRAL_KEY_ID }}
+          ORG_GRADLE_PROJECT_signingKey: ${{ secrets.MAVEN_CENTRAL_KEY }}
           ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
       - name: Add artifacts to Release
         uses: softprops/action-gh-release@v1
