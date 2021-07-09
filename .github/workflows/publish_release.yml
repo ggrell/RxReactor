@@ -33,14 +33,14 @@ jobs:
           echo "::add-matcher::.github/gradle-java-matcher.json"
           echo "::add-matcher::.github/kotlin-error-matcher.json"
           echo "::add-matcher::.github/kotlin-warning-matcher.json"
-          ./gradlew assembleRelease
+          ./gradlew assembleRelease -Prelease=true
       - name: Run all checks and create coverage report
         run: |
-          ./gradlew check jacocoTestReport
+          ./gradlew check jacocoTestReport -Prelease=true
       - name: Upload coverage to Codecov
         run: bash <(curl -s https://codecov.io/bash)
       - name: Create JavaDoc and sources jars
-        run: ./gradlew javadocJar sourcesJar
+        run: ./gradlew javadocJar sourcesJar -Prelease=true
       - name: Publish to Maven Central Releases repo
         run: |
           echo ${{ secrets.MAVEN_CENTRAL_KEY }} | awk 'NR == 1 { print "signingKey=" } 1' ORS='\\n' >> gradle.properties
