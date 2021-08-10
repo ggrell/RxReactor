@@ -61,7 +61,7 @@ buildscript {
             java            : 'io.reactivex.rxjava3:rxjava:3.0.13',
             kotlin          : 'io.reactivex.rxjava3:rxkotlin:3.0.1',
             android         : 'io.reactivex.rxjava3:rxandroid:3.0.0',
-            relay           : 'com.jakewharton.rxrelay3:rxrelay:3.0.0',
+            relay           : 'com.jakewharton.rxrelay3:rxrelay:3.0.1',
             binding         : 'com.jakewharton.rxbinding4:rxbinding-core:4.0.0',
             bindingAppcompat: 'com.jakewharton.rxbinding4:rxbinding-appcompat:4.0.0',
             bindingDesign   : 'com.jakewharton.rxbinding4:rxbinding-design-kotlin:4.0.0'
