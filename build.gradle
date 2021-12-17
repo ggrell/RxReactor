@@ -3,8 +3,8 @@
 buildscript {
     ext.buildConfig = [
         minSdk    : 15,
-        compileSdk: 30,
-        targetSdk : 30
+        compileSdk: 31,
+        targetSdk : 31
     ]
 
     ext.versions = [
