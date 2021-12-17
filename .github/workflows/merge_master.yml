@@ -34,7 +34,7 @@ jobs:
         echo "::add-matcher::.github/gradle-java-matcher.json"
         echo "::add-matcher::.github/kotlin-error-matcher.json"
         echo "::add-matcher::.github/kotlin-warning-matcher.json"
-        ./gradlew clean assembleRelease
+        ./gradlew clean assembleRelease -Dorg.gradle.daemon=false
     - name: Run all checks and create coverage report
       run: |
         ./gradlew check jacocoTestReport
