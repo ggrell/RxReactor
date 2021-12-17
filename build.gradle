@@ -122,6 +122,9 @@ subprojects {
 
             html.required.set(true)
             html.outputLocation.set(file("build/reports/detekt/detekt.html"))
+
+            sarif.required.set(false)
+            txt.required.set(false)
         }
     }
 
