@@ -10,7 +10,7 @@ buildscript {
     ext.versions = [
         kotlin: "1.6.10",
         jacoco: "0.8.5",
-        detekt: "1.18.1",
+        detekt: "1.19.0",
     ]
 
     ext.deps = [
