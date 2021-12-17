@@ -109,23 +109,20 @@ subprojects {
         config = files("${rootProject.projectDir}/detekt.yml")
         baseline = file("${rootProject.projectDir}/detekt-baseline.xml")
         buildUponDefaultConfig = true
-        reports {
-            xml {
-                enabled = true
-                destination = file("build/reports/detekt/detekt.xml")
-            }
-            html {
-                enabled = true
-                destination = file("build/reports/detekt/detekt.html")
-            }
-            txt {
-                enabled = false
-            }
-        }
     }
 
     dependencies {
         detektPlugins "io.gitlab.arturbosch.detekt:detekt-formatting:$versions.detekt"
+    }
+
+    tasks.named("detekt").configure {
+        reports {
+            xml.required.set(true)
+            xml.outputLocation.set(file("build/reports/detekt/detekt.xml"))
+
+            html.required.set(true)
+            html.outputLocation.set(file("build/reports/detekt/detekt.html"))
+        }
     }
 
     publishing {
