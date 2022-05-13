@@ -4,21 +4,9 @@ apply plugin: 'jacoco'
 apply plugin: 'org.jetbrains.dokka'
 apply plugin: 'maven-publish'
 
-compileKotlin {
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8
-    }
-}
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
-}
-
 dependencies {
-    implementation deps.kotlin.stdlib.jdk
-    implementation deps.rx2.java
-    implementation deps.rx2.relay
+    api deps.rx2.java
+    api deps.rx2.relay
 
     testImplementation deps.junit
 }

@@ -29,15 +29,6 @@ android {
         }
     }
 
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8
-    }
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-
     lintOptions {
         abortOnError false
         baseline file("lint-baseline.xml")
@@ -46,7 +37,6 @@ android {
 
 dependencies {
     implementation project(path: ':rxreactor3')
-    implementation deps.kotlin.stdlib.jdk
     implementation deps.rx3.android
 
     testImplementation deps.junit

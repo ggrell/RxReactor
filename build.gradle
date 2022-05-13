@@ -4,13 +4,12 @@ buildscript {
     ext.buildConfig = [
         minSdk    : 15,
         compileSdk: 31,
-        targetSdk : 31
+        targetSdk : 30
     ]
 
     ext.versions = [
-        kotlin: "1.6.10",
         jacoco: "0.8.5",
-        detekt: "1.19.0",
+        detekt: "1.20.0",
     ]
 
     ext.deps = [
@@ -75,13 +74,13 @@ buildscript {
 
     dependencies {
         classpath 'com.android.tools.build:gradle:7.0.4'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
     }
 }
 
 plugins {
     id "io.gitlab.arturbosch.detekt" version "1.19.0"
-    id "org.jetbrains.dokka" version "1.6.0"
+    id "org.jetbrains.dokka" version "1.6.21"
+    id "org.jetbrains.kotlin.jvm" version "1.6.21"
 }
 
 allprojects {
@@ -89,10 +88,6 @@ allprojects {
         google()
         mavenCentral()
     }
-}
-
-task clean(type: Delete) {
-    delete rootProject.buildDir
 }
 
 subprojects {
@@ -125,6 +120,33 @@ subprojects {
 
             sarif.required.set(false)
             txt.required.set(false)
+        }
+    }
+
+    afterEvaluate { project ->
+        if (project.hasProperty("android")) {
+            android {
+                compileOptions {
+                    sourceCompatibility JavaVersion.VERSION_1_8
+                    targetCompatibility JavaVersion.VERSION_1_8
+                }
+
+                kotlinOptions {
+                    jvmTarget = JavaVersion.VERSION_1_8
+                    useIR = true
+                }
+            }
+        }
+    }
+
+    tasks.withType(JavaCompile) {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) {
+        kotlinOptions {
+            jvmTarget = JavaVersion.VERSION_1_8
         }
     }
 

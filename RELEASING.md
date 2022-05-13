@@ -9,7 +9,7 @@
    git tag 1.0.0
    ```
 1. Create the release on GitHub:
-   1. Go to the [Releases](https://github.com/square/anvil/releases) page for the GitHub project.
+   1. Go to the [Releases](https://github.com/ggrell/RxReactor/releases) page for the GitHub project.
    1. Click "Draft a new release".
    1. Enter the tag name you just pushed.
    1. Title the release with the same name as the tag.
