@@ -2,4 +2,6 @@
 
 ## 1.0.0 (2021-07-07)
 
-* Initial release.
+* Initial release. Compiled with Kotlin 1.5.20
+
+
