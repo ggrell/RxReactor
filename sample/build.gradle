@@ -40,26 +40,18 @@ android {
 }
 
 dependencies {
-    implementation project(path: ':rxreactor2')
     implementation project(path: ':rxreactor2-android')
 
     implementation deps.kotlin.stdlib.common
 
     implementation deps.androidx.appcompat
     implementation deps.androidx.design
-    implementation deps.androidx.viewModel
-    implementation deps.androidx.fragment
     implementation deps.androidx.activity
 
     implementation deps.rx2.java
-    implementation deps.rx2.android
     implementation deps.rx2.kotlin
 
     implementation deps.rx2.binding
-    implementation deps.rx2.bindingAppcompat
-//    implementation deps.rx2.bindingDesign
-
-    implementation deps.rx2.relay
 
     testImplementation deps.junit
 

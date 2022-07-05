@@ -4,7 +4,7 @@ apply plugin: 'jacoco'
 apply plugin: 'org.jetbrains.dokka'
 apply plugin: 'maven-publish'
 apply from: "$rootDir/gradle/library-artifacts.gradle"
-apply from: "$rootDir/gradle/jacoco-android.gradle"
+//apply from: "$rootDir/gradle/jacoco-android.gradle"
 
 android {
     compileSdkVersion buildConfig.compileSdk
@@ -37,10 +37,12 @@ android {
 }
 
 dependencies {
-    implementation project(path: ':rxreactor1')
+    api project(path: ':rxreactor1')
+
+    api deps.rx1.java
     implementation deps.rx1.android
 
-    testImplementation deps.junit
+//    testImplementation deps.junit
 }
 
 tasks.withType(Test) {
