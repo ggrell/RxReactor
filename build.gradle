@@ -31,7 +31,7 @@ buildscript {
 
         androidx: [
             activity   : "androidx.activity:activity-ktx:1.5.0",
-            fragment   : "androidx.fragment:fragment-ktx:1.5.0",
+            fragment   : "androidx.fragment:fragment-ktx:1.5.3",
             annotations: "androidx.annotation:annotation:1.4.0",
             appcompat  : "androidx.appcompat:appcompat:1.4.2",
             core       : "androidx.core:core-ktx:1.8.0",
