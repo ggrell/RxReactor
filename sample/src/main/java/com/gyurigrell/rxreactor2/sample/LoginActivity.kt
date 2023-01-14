@@ -43,7 +43,7 @@ class LoginActivity : AppCompatActivity() {
 
         // Settings the initial state in the factory is optional and only needed if the state needs
         // to survive the app getting killed in the background.
-        reactorProvider.initialState = savedInstanceState?.getSerializable(VIEW_STATE_KEY) as? LoginReactor.State
+        reactorProvider.initialState = savedInstanceState?.getParcelable(VIEW_STATE_KEY)
         reactor = reactorProvider.reactor
         bind(reactor)
 
@@ -55,7 +55,7 @@ class LoginActivity : AppCompatActivity() {
         // The following is optional and only needed if something in your state needs to survive
         // the app getting killed in the background. Be aware that there are strict limits on the
         // size of what can go into the view state
-        outState.putSerializable(VIEW_STATE_KEY, reactor.currentState)
+        outState.putParcelable(VIEW_STATE_KEY, reactor.currentState)
     }
 
     private fun populateAutoComplete() {

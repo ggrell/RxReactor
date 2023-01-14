@@ -3,7 +3,7 @@
 buildscript {
     ext.buildConfig = [
         minSdk    : 15,
-        compileSdk: 31,
+        compileSdk: 33,
         targetSdk : 30
     ]
 
@@ -30,13 +30,13 @@ buildscript {
         ],
 
         androidx: [
-            activity   : "androidx.activity:activity-ktx:1.5.0",
-            fragment   : "androidx.fragment:fragment-ktx:1.5.0",
+            activity   : "androidx.activity:activity-ktx:1.6.1",
+            fragment   : "androidx.fragment:fragment-ktx:1.5.5",
             annotations: "androidx.annotation:annotation:1.4.0",
-            appcompat  : "androidx.appcompat:appcompat:1.4.2",
+            appcompat  : "androidx.appcompat:appcompat:1.6.0",
             core       : "androidx.core:core-ktx:1.8.0",
-            design     : "com.google.android.material:material:1.6.1",
-            viewModel  : 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.0',
+            design     : "com.google.android.material:material:1.7.0",
+            viewModel  : 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1',
         ],
 
         rx1     : [
@@ -73,14 +73,14 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.2.1'
+        classpath 'com.android.tools.build:gradle:7.2.2'
     }
 }
 
 plugins {
-    id "io.gitlab.arturbosch.detekt" version "1.20.0"
-    id "org.jetbrains.dokka" version "1.6.21"
-    id "org.jetbrains.kotlin.jvm" version "1.6.21"
+    id "io.gitlab.arturbosch.detekt" version "1.22.0"
+    id "org.jetbrains.dokka" version "1.7.20"
+    id "org.jetbrains.kotlin.jvm" version "1.7.20"
     id 'com.autonomousapps.dependency-analysis' version "1.17.0" // Usage: ./gradlew buildHealth
 }
 
@@ -134,7 +134,6 @@ subprojects {
 
                 kotlinOptions {
                     jvmTarget = JavaVersion.VERSION_1_8
-                    useIR = true
                 }
             }
         }

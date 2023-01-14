@@ -8,9 +8,10 @@
 package com.gyurigrell.rxreactor2.sample
 
 import android.accounts.Account
+import android.os.Parcelable
 import com.gyurigrell.rxreactor2.android.AndroidReactorWithEffects
 import io.reactivex.Observable
-import java.io.Serializable
+import kotlinx.parcelize.Parcelize
 import java.util.concurrent.TimeUnit
 
 /**
@@ -42,6 +43,7 @@ class LoginReactor(
         data class LoggedIn(val account: Account) : Effect()
     }
 
+    @Parcelize
     data class State(
         val username: String = "",
         val password: String = "",
@@ -51,7 +53,7 @@ class LoginReactor(
         val isBusy: Boolean = false,
 //            val account: Account? = null,
         val autoCompleteEmails: List<String>? = null
-    ) : Serializable {
+    ) : Parcelable {
         val loginEnabled: Boolean
             get() = (isUsernameValid && username.isNotEmpty()) && (isPasswordValid && password.isNotEmpty())
     }
