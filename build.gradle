@@ -9,6 +9,7 @@ buildscript {
 
     ext.versions = [
         jacoco: "0.8.5",
+        detekt: "1.22.0", // NOTE: Also update in plugins section on line 81
     ]
 
     ext.deps = [
