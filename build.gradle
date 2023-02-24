@@ -32,10 +32,10 @@ buildscript {
         androidx: [
             activity   : "androidx.activity:activity-ktx:1.6.1",
             fragment   : "androidx.fragment:fragment-ktx:1.5.5",
-            annotations: "androidx.annotation:annotation:1.4.0",
-            appcompat  : "androidx.appcompat:appcompat:1.6.0",
-            core       : "androidx.core:core-ktx:1.8.0",
-            design     : "com.google.android.material:material:1.7.0",
+            annotations: "androidx.annotation:annotation:1.6.0",
+            appcompat  : "androidx.appcompat:appcompat:1.6.1",
+            core       : "androidx.core:core-ktx:1.9.0",
+            design     : "com.google.android.material:material:1.8.0",
             viewModel  : 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1',
         ],
 
@@ -57,9 +57,9 @@ buildscript {
         ],
 
         rx3     : [
-            java            : 'io.reactivex.rxjava3:rxjava:3.0.13',
+            java            : 'io.reactivex.rxjava3:rxjava:3.1.6',
             kotlin          : 'io.reactivex.rxjava3:rxkotlin:3.0.1',
-            android         : 'io.reactivex.rxjava3:rxandroid:3.0.0',
+            android         : 'io.reactivex.rxjava3:rxandroid:3.0.2',
             relay           : 'com.jakewharton.rxrelay3:rxrelay:3.0.1',
             binding         : 'com.jakewharton.rxbinding4:rxbinding-core:4.0.0',
             bindingAppcompat: 'com.jakewharton.rxbinding4:rxbinding-appcompat:4.0.0',
@@ -81,7 +81,7 @@ plugins {
     id "io.gitlab.arturbosch.detekt" version "1.22.0"
     id "org.jetbrains.dokka" version "1.7.20"
     id "org.jetbrains.kotlin.jvm" version "1.7.20"
-    id 'com.autonomousapps.dependency-analysis' version "1.17.0" // Usage: ./gradlew buildHealth
+    id 'com.autonomousapps.dependency-analysis' version "1.19.0" // Usage: ./gradlew buildHealth
 }
 
 allprojects {
@@ -139,14 +139,18 @@ subprojects {
         }
     }
 
-    tasks.withType(JavaCompile) {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+    tasks.withType(JavaCompile).tap {
+        configureEach {
+            sourceCompatibility = JavaVersion.VERSION_1_8
+            targetCompatibility = JavaVersion.VERSION_1_8
+        }
     }
 
-    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) {
-        kotlinOptions {
-            jvmTarget = JavaVersion.VERSION_1_8
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).tap {
+        configureEach {
+            kotlinOptions {
+                jvmTarget = JavaVersion.VERSION_1_8
+            }
         }
     }
 
