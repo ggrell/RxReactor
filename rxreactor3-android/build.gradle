@@ -7,13 +7,12 @@ apply from: "$rootDir/gradle/library-artifacts.gradle"
 //apply from: "$rootDir/gradle/jacoco-android.gradle"
 
 android {
+    namespace 'com.gyurigrell.rxreactor3'
     compileSdkVersion buildConfig.compileSdk
 
     defaultConfig {
         minSdkVersion buildConfig.minSdk
         targetSdkVersion buildConfig.targetSdk
-        versionCode 1
-        versionName "1.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -29,9 +28,9 @@ android {
         }
     }
 
-    lintOptions {
+    lint {
         abortOnError false
-        baseline file("lint-baseline.xml")
+        baseline file('lint-baseline.xml')
     }
 }
 

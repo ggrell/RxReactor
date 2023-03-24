@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-parcelize'
 
 android {
+    namespace 'com.gyurigrell.rxreactor2.sample'
     compileSdkVersion buildConfig.compileSdk
 
     defaultConfig {
@@ -31,11 +32,11 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    lintOptions {
+    lint {
         abortOnError false
         htmlReport false
-        disable "LintBaseline", "ObsoleteLintCustomCheck"
-        baseline file("lint-baseline.xml")
+        disable 'LintBaseline', 'ObsoleteLintCustomCheck'
+        baseline file('lint-baseline.xml')
     }
 }
 

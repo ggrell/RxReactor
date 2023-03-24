@@ -10,10 +10,9 @@ android {
     compileSdkVersion buildConfig.compileSdk
 
     defaultConfig {
+        namespace 'com.gyurigrell.rxreactor1.android'
         minSdkVersion buildConfig.minSdk
         targetSdkVersion buildConfig.targetSdk
-        versionCode 1
-        versionName "1.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -30,9 +29,9 @@ android {
         }
     }
 
-    lintOptions {
+    lint {
         abortOnError false
-        baseline file("lint-baseline.xml")
+        baseline file('lint-baseline.xml')
     }
 }
 
