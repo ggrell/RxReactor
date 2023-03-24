@@ -10,7 +10,6 @@
 package com.gyurigrell.rxreactor1
 
 import com.gyurigrell.rxreactor1.ReactorWithEffectsTests.TestReactor.*
-
 import org.junit.Test
 import rx.Observable
 import rx.observers.TestSubscriber

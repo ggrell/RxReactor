@@ -25,8 +25,14 @@ class SimpleReactorTests {
         // Assert
         states.assertNoErrors()
         states.assertValues(
-                arrayListOf("transformedState"),
-                arrayListOf("action", "transformedAction", "mutation", "transformedMutation", "transformedState")
+            arrayListOf("transformedState"),
+            arrayListOf(
+                "action",
+                "transformedAction",
+                "mutation",
+                "transformedMutation",
+                "transformedState"
+            )
         )
     }
 
@@ -48,22 +54,23 @@ class SimpleReactorTests {
     class TestReactor : SimpleReactor<List<String>, List<String>>(initialState = ArrayList()) {
         // 1. ["action"] + ["transformedAction"]
         override fun transformAction(action: Observable<List<String>>): Observable<List<String>> =
-                action.map { it + "transformedAction" }
+            action.map { it + "transformedAction" }
 
         // 2. ["action", "transformedAction"] + ["mutation"]
         override fun mutate(action: List<String>): Observable<List<String>> =
-                Observable.just(action + "mutation")
+            Observable.just(action + "mutation")
 
         // 3. ["action", "transformedAction", "mutation"] + ["transformedMutation"]
         override fun transformMutation(mutation: Observable<List<String>>): Observable<List<String>> =
-                mutation.map { it + "transformedMutation" }
+            mutation.map { it + "transformedMutation" }
 
         // 4. [] + ["action", "transformedAction", "mutation", "transformedMutation"]
-        override fun reduce(state: List<String>, mutation: List<String>): List<String> = state + mutation
+        override fun reduce(state: List<String>, mutation: List<String>): List<String> =
+            state + mutation
 
         // 5. ["action", "transformedAction", "mutation", "transformedMutation"] + ["transformedState"]
         override fun transformState(state: Observable<List<String>>): Observable<List<String>> =
-                state.map { it + "transformedState" }
+            state.map { it + "transformedState" }
     }
 
     class CounterReactor : SimpleReactor<Unit, Int>(initialState = 0) {

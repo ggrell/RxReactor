@@ -12,7 +12,6 @@ package com.gyurigrell.rxreactor3
 import com.gyurigrell.rxreactor3.ReactorWithEffectsTests.TestReactor.*
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.observers.TestObserver
-
 import org.junit.Test
 
 /**
