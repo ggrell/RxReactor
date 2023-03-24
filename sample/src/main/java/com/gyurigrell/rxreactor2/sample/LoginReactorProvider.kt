@@ -13,9 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 class LoginReactorProvider private constructor(private val contactService: ContactService) : ViewModel() {
     var initialState: LoginReactor.State? = null
     val reactor: LoginReactor
-        get() = LoginReactor(
-            contactService, initialState ?: LoginReactor.State()
-        )
+        get() = LoginReactor(contactService, initialState ?: LoginReactor.State())
 
     override fun onCleared() {
         reactor.clearSubscriptions()
