@@ -37,10 +37,10 @@ android {
 dependencies {
     api project(path: ':rxreactor2')
 
-    api deps.rx2.java
-    implementation deps.rx2.android
+    api libs.rx2.java
+    implementation libs.rx2.android
 
-//    testImplementation deps.junit
+//    testImplementation libs.junit
 }
 
 tasks.withType(Test) {
@@ -48,7 +48,7 @@ tasks.withType(Test) {
 }
 
 jacoco {
-    toolVersion = versions.jacoco
+    toolVersion = libs.versions.jacoco
 }
 
 dokkaJavadoc.configure {
@@ -61,45 +61,45 @@ dokkaJavadoc.configure {
 }
 
 afterEvaluate {
-    publishing {
-        publications {
-            RxReactor2Android(MavenPublication) {
-                groupId = project.group
-                artifactId = archivesBaseName
-
-                from components.release
-                artifact sourcesJar
-                artifact javadocJar
-
-                pom {
-                    name = "RxReactor (RxJava 2) for Android"
-                    description = "A Kotlin framework for a reactive and unidirectional RxJava 2 application architecture"
-                    url = POM_URL
-
-                    licenses {
-                        license {
-                            name = POM_LICENSE_NAME
-                            url = POM_LICENSE_URL
-                        }
-                    }
-
-                    developers {
-                        developer {
-                            id = POM_DEVELOPER_ID
-                            name = POM_DEVELOPER_NAME
-                            email = POM_DEVELOPER_EMAIL
-                        }
-                    }
-
-                    scm {
-                        connection = POM_SCM_CONNECTION
-                        developerConnection = POM_SCM_CONNECTION
-                        url = POM_SCM_URL
-                    }
-                }
-            }
-        }
-    }
+//    publishing {
+//        publications {
+//            RxReactor2Android(MavenPublication) {
+//                groupId = project.group
+//                artifactId = archivesBaseName
+//
+//                from components.release
+//                artifact sourcesJar
+//                artifact javadocJar
+//
+//                pom {
+//                    name = "RxReactor (RxJava 2) for Android"
+//                    description = "A Kotlin framework for a reactive and unidirectional RxJava 2 application architecture"
+//                    url = POM_URL
+//
+//                    licenses {
+//                        license {
+//                            name = POM_LICENSE_NAME
+//                            url = POM_LICENSE_URL
+//                        }
+//                    }
+//
+//                    developers {
+//                        developer {
+//                            id = POM_DEVELOPER_ID
+//                            name = POM_DEVELOPER_NAME
+//                            email = POM_DEVELOPER_EMAIL
+//                        }
+//                    }
+//
+//                    scm {
+//                        connection = POM_SCM_CONNECTION
+//                        developerConnection = POM_SCM_CONNECTION
+//                        url = POM_SCM_URL
+//                    }
+//                }
+//            }
+//        }
+//    }
 
     signing {
         def signingKeyId = findProperty("signingKeyId")

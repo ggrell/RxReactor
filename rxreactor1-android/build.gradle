@@ -33,15 +33,22 @@ android {
         abortOnError false
         baseline file('lint-baseline.xml')
     }
+
+//    publishing {
+//        singleVariant('release') {
+//            withSourcesJar()
+//            withJavadocs()
+//        }
+//    }
 }
 
 dependencies {
     api project(path: ':rxreactor1')
 
-    api deps.rx1.java
-    implementation deps.rx1.android
+    api libs.rx1.java
+    implementation libs.rx1.android
 
-//    testImplementation deps.junit
+//    testImplementation libs.junit
 }
 
 tasks.withType(Test) {
@@ -49,7 +56,7 @@ tasks.withType(Test) {
 }
 
 jacoco {
-    toolVersion = versions.jacoco
+    toolVersion = libs.versions.jacoco
 }
 
 dokkaJavadoc.configure {
@@ -62,45 +69,45 @@ dokkaJavadoc.configure {
 }
 
 afterEvaluate {
-    publishing {
-        publications {
-            RxReactor1Android(MavenPublication) {
-                groupId = project.group
-                artifactId = archivesBaseName
-
-                from components.release
-                artifact sourcesJar
-                artifact javadocJar
-
-                pom {
-                    name = "RxReactor (RxJava 1) for Android"
-                    description = "A Kotlin framework for a reactive and unidirectional RxJava 1 application architecture"
-                    url = POM_URL
-
-                    licenses {
-                        license {
-                            name = POM_LICENSE_NAME
-                            url = POM_LICENSE_URL
-                        }
-                    }
-
-                    developers {
-                        developer {
-                            id = POM_DEVELOPER_ID
-                            name = POM_DEVELOPER_NAME
-                            email = POM_DEVELOPER_EMAIL
-                        }
-                    }
-
-                    scm {
-                        connection = POM_SCM_CONNECTION
-                        developerConnection = POM_SCM_CONNECTION
-                        url = POM_SCM_URL
-                    }
-                }
-            }
-        }
-    }
+//    publishing {
+//        publications {
+//            RxReactor1Android(MavenPublication) {
+//                groupId = project.group
+//                artifactId = archivesBaseName
+//
+//                from components.release
+//                artifact sourcesJar
+//                artifact javadocJar
+//
+//                pom {
+//                    name = "RxReactor (RxJava 1) for Android"
+//                    description = "A Kotlin framework for a reactive and unidirectional RxJava 1 application architecture"
+//                    url = POM_URL
+//
+//                    licenses {
+//                        license {
+//                            name = POM_LICENSE_NAME
+//                            url = POM_LICENSE_URL
+//                        }
+//                    }
+//
+//                    developers {
+//                        developer {
+//                            id = POM_DEVELOPER_ID
+//                            name = POM_DEVELOPER_NAME
+//                            email = POM_DEVELOPER_EMAIL
+//                        }
+//                    }
+//
+//                    scm {
+//                        connection = POM_SCM_CONNECTION
+//                        developerConnection = POM_SCM_CONNECTION
+//                        url = POM_SCM_URL
+//                    }
+//                }
+//            }
+//        }
+//    }
 
     signing {
         def signingKeyId = findProperty("signingKeyId")

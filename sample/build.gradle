@@ -43,19 +43,19 @@ android {
 dependencies {
     implementation project(path: ':rxreactor2-android')
 
-    implementation deps.kotlin.stdlib.common
+//    implementation deps.kotlin.stdlib.common
 
-    implementation deps.androidx.appcompat
-    implementation deps.androidx.design
-    implementation deps.androidx.activity
+    implementation libs.androidx.appcompat
+    implementation libs.androidx.design
+    implementation libs.androidx.activity
 
-    implementation deps.rx2.java
-    implementation deps.rx2.kotlin
+    implementation libs.rx2.java
+    implementation libs.rx2.kotlin
 
-    implementation deps.rx2.binding
+    implementation libs.rx2.binding
 
-    testImplementation deps.junit
+    testImplementation libs.junit
 
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    androidTestImplementation libs.androidx.junit
+    androidTestImplementation libs.androidx.espresso.core
 }

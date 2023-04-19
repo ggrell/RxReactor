@@ -5,14 +5,14 @@ apply plugin: 'org.jetbrains.dokka'
 apply plugin: 'maven-publish'
 
 dependencies {
-    api deps.rx1.java
-    api deps.rx1.relay
+    api libs.rx1.java
+    api libs.rx1.relay
 
-    testImplementation deps.junit
+    testImplementation libs.junit
 }
 
 jacoco {
-    toolVersion = versions.jacoco
+    toolVersion = libs.versions.jacoco
 }
 
 jacocoTestReport {
@@ -23,55 +23,57 @@ jacocoTestReport {
 
 dokkaJavadoc.dokkaSourceSets.configureEach { includeNonPublic.set(false) }
 
-task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier "sources"
-    from sourceSets.main.allSource
-}
+//tasks.register('sourcesJar', Jar) {
+//    dependsOn classes
+//    classifier "sources"
+//    from sourceSets.main.allSource
+//}
+//
+//tasks.register('javadocJar', Jar) {
+//    dependsOn dokkaJavadoc
+//    classifier "javadoc"
+//    from dokkaJavadoc.outputDirectory
+//}
 
-task javadocJar(type: Jar, dependsOn: dokkaJavadoc) {
-    classifier "javadoc"
-    from dokkaJavadoc.outputDirectory
-}
-
-publishing {
-    publications {
-        RxReactor1(MavenPublication) {
-            groupId = project.group
-            artifactId = archivesBaseName
-
-            from components.java
-            artifact sourcesJar
-            artifact javadocJar
-
-            pom {
-                name = "RxReactor (RxJava 1)"
-                description = "A Kotlin framework for a reactive and unidirectional RxJava 1 application architecture"
-                url = POM_URL
-
-                licenses {
-                    license {
-                        name = POM_LICENSE_NAME
-                        url = POM_LICENSE_URL
-                    }
-                }
-
-                developers {
-                    developer {
-                        id = POM_DEVELOPER_ID
-                        name = POM_DEVELOPER_NAME
-                        email = POM_DEVELOPER_EMAIL
-                    }
-                }
-
-                scm {
-                    connection = POM_SCM_CONNECTION
-                    developerConnection = POM_SCM_CONNECTION
-                    url = POM_SCM_URL
-                }
-            }
-        }
-    }
-}
+//publishing {
+//    publications {
+//        RxReactor1(MavenPublication) {
+//            groupId = project.group
+//            artifactId = archivesBaseName
+//
+//            from components.java
+//            artifact sourcesJar
+//            artifact javadocJar
+//
+//            pom {
+//                name = "RxReactor (RxJava 1)"
+//                description = "A Kotlin framework for a reactive and unidirectional RxJava 1 application architecture"
+//                url = POM_URL
+//
+//                licenses {
+//                    license {
+//                        name = POM_LICENSE_NAME
+//                        url = POM_LICENSE_URL
+//                    }
+//                }
+//
+//                developers {
+//                    developer {
+//                        id = POM_DEVELOPER_ID
+//                        name = POM_DEVELOPER_NAME
+//                        email = POM_DEVELOPER_EMAIL
+//                    }
+//                }
+//
+//                scm {
+//                    connection = POM_SCM_CONNECTION
+//                    developerConnection = POM_SCM_CONNECTION
+//                    url = POM_SCM_URL
+//                }
+//            }
+//        }
+//    }
+//}
 
 signing {
     def signingKeyId = findProperty("signingKeyId")
