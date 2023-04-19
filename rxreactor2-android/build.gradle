@@ -43,7 +43,7 @@ dependencies {
 //    testImplementation libs.junit
 }
 
-tasks.withType(Test) {
+tasks.withType(Test).configureEach {
     jacoco.includeNoLocationClasses = true
 }
 
@@ -110,7 +110,7 @@ afterEvaluate {
         sign publishing.publications
     }
 
-    tasks.withType(Sign) {
+    tasks.withType(Sign).configureEach {
         onlyIf { findProperty("signingKey") != null }
     }
 }

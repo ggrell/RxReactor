@@ -1,6 +1,6 @@
 [versions]
 espresso-core = "3.5.1"
-agp = "7.4.2"
+agp = "8.0.0"
 jacoco = "0.8.5"
 detekt = "1.22.0"
 junit = "1.1.5"
