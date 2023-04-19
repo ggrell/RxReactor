@@ -33,13 +33,6 @@ android {
         abortOnError false
         baseline file('lint-baseline.xml')
     }
-
-//    publishing {
-//        singleVariant('release') {
-//            withSourcesJar()
-//            withJavadocs()
-//        }
-//    }
 }
 
 dependencies {

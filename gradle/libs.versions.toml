@@ -1,32 +1,35 @@
 [versions]
-espresso-core = "3.5.1"
 agp = "8.0.0"
-jacoco = "0.8.5"
+
+kotlin = "1.8.10"
 detekt = "1.22.0"
+
+espresso-core = "3.5.1"
+jacoco = "0.8.5"
 junit = "1.1.5"
 
 [plugins]
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 dokka = { id = "org.jetbrains.dokka", version = "1.8.10" }
-kotlin = { id = "org.jetbrains.kotlin.jvm", version = "1.8.10" }
+kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 
 [libraries]
 agp = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 
 # RxReactor dependencies
-rx1-java = { module = "io.reactivex:rxjava", version = "1.3.8"  }
-rx1-kotlin = { module = "io.reactivex:rxkotlin", version = "1.0.0"  }
-rx1-android = { module = "io.reactivex:rxandroid", version = "1.2.1"  }
+rx1-java = { module = "io.reactivex:rxjava", version = "1.3.8" }
+rx1-kotlin = { module = "io.reactivex:rxkotlin", version = "1.0.0" }
+rx1-android = { module = "io.reactivex:rxandroid", version = "1.2.1" }
 rx1-relay = { module = "com.jakewharton.rxrelay:rxrelay", version = "1.2.0" }
 
-rx2-java = { module = "io.reactivex.rxjava2:rxjava", version = "2.2.21"  }
-rx2-kotlin = { module = "io.reactivex.rxjava2:rxkotlin", version = "2.4.0"  }
-rx2-android = { module = "io.reactivex.rxjava2:rxandroid", version = "2.1.1"  }
+rx2-java = { module = "io.reactivex.rxjava2:rxjava", version = "2.2.21" }
+rx2-kotlin = { module = "io.reactivex.rxjava2:rxkotlin", version = "2.4.0" }
+rx2-android = { module = "io.reactivex.rxjava2:rxandroid", version = "2.1.1" }
 rx2-relay = { module = "com.jakewharton.rxrelay2:rxrelay", version = "2.1.1" }
 
-rx3-java = { module = "io.reactivex.rxjava3:rxjava", version = "3.1.6"  }
-rx3-kotlin = { module = "io.reactivex.rxjava3:rxkotlin", version = "3.0.1"  }
-rx3-android = { module = "io.reactivex.rxjava3:rxandroid", version = "3.0.2"  }
+rx3-java = { module = "io.reactivex.rxjava3:rxjava", version = "3.1.6" }
+rx3-kotlin = { module = "io.reactivex.rxjava3:rxkotlin", version = "3.0.1" }
+rx3-android = { module = "io.reactivex.rxjava3:rxandroid", version = "3.0.2" }
 rx3-relay = { module = "com.jakewharton.rxrelay3:rxrelay", version = "3.0.1" }
 
 # Testing dependencies
