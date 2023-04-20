@@ -33,6 +33,13 @@ android {
         abortOnError false
         baseline file('lint-baseline.xml')
     }
+
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+            withJavadocJar()
+        }
+    }
 }
 
 dependencies {
@@ -47,10 +54,6 @@ dependencies {
 tasks.withType(Test).configureEach {
     jacoco.includeNoLocationClasses = true
 }
-
-//jacoco {
-//    toolVersion = libs.versions.jacoco
-//}
 
 dokkaJavadoc.configure {
     dokkaSourceSets {
@@ -69,8 +72,6 @@ afterEvaluate {
                 artifactId = archivesBaseName
 
                 from components.release
-                artifact releaseSourcesJar
-                artifact javadocJar
 
                 pom {
                     name = "RxReactor (RxJava 1) for Android"

@@ -28,9 +28,17 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
     lint {
         abortOnError false
         baseline file('lint-baseline.xml')
+    }
+
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+            withJavadocJar()
+        }
     }
 }
 
@@ -64,8 +72,6 @@ afterEvaluate {
                 artifactId = archivesBaseName
 
                 from components.release
-                artifact releaseSourcesJar
-                artifact javadocJar
 
                 pom {
                     name = "RxReactor (RxJava 2) for Android"
