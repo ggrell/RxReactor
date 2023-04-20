@@ -1,8 +1,8 @@
 [versions]
 agp = "8.0.0"
 
-kotlin = "1.8.10"
-detekt = "1.22.0"
+kotlin = "1.8.20"
+detekt = "1.23.0-RC1"
 
 espresso-core = "3.5.1"
 jacoco = "0.8.5"
