@@ -11,10 +11,6 @@ dependencies {
     testImplementation libs.junit
 }
 
-jacoco {
-    toolVersion = libs.versions.jacoco
-}
-
 jacocoTestReport {
     reports {
         xml.required = true

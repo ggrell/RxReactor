@@ -11,9 +11,9 @@ dependencies {
     testImplementation libs.junit
 }
 
-jacoco {
-    toolVersion = libs.versions.jacoco
-}
+//jacoco {
+//    toolVersion = libs.versions.jacoco
+//}
 
 jacocoTestReport {
     reports {

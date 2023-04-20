@@ -6,7 +6,7 @@ detekt = "1.23.0-RC1"
 dokka = "1.8.10"
 
 espresso-core = "3.5.1"
-jacoco = "0.8.5"
+jacoco = "0.8.9"
 junit = "1.1.5"
 
 [plugins]
