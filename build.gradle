@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
@@ -40,14 +42,13 @@ subprojects {
     version = project.property("VERSION") + (isRelease ? "" : "-SNAPSHOT")
 
     detekt {
-        toolVersion = libs.versions.detekt
         config = files("${rootProject.projectDir}/config/detekt/detekt.yml")
         baseline = file("${rootProject.projectDir}/config/detekt/detekt-baseline.xml")
         buildUponDefaultConfig = true
     }
 
     dependencies {
-        detektPlugins "io.gitlab.arturbosch.detekt:detekt-formatting:$libs.versions.detekt"
+        detektPlugins libs.detekt.formatting
     }
 
     tasks.named("detekt").configure {
@@ -87,8 +88,8 @@ subprojects {
 
     tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).tap {
         configureEach {
-            kotlinOptions {
-                jvmTarget = JavaVersion.VERSION_1_8
+            compilerOptions {
+                jvmTarget.set(JvmTarget.JVM_1_8)
             }
         }
     }
