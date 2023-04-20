@@ -38,19 +38,19 @@ android {
 dependencies {
     api project(path: ':rxreactor1')
 
-    api deps.rx1.java
-    implementation deps.rx1.android
+    api libs.rx1.java
+    implementation libs.rx1.android
 
-//    testImplementation deps.junit
+//    testImplementation libs.junit
 }
 
-tasks.withType(Test) {
+tasks.withType(Test).configureEach {
     jacoco.includeNoLocationClasses = true
 }
 
-jacoco {
-    toolVersion = versions.jacoco
-}
+//jacoco {
+//    toolVersion = libs.versions.jacoco
+//}
 
 dokkaJavadoc.configure {
     dokkaSourceSets {
@@ -69,7 +69,7 @@ afterEvaluate {
                 artifactId = archivesBaseName
 
                 from components.release
-                artifact sourcesJar
+                artifact releaseSourcesJar
                 artifact javadocJar
 
                 pom {
@@ -111,7 +111,7 @@ afterEvaluate {
         sign publishing.publications
     }
 
-    tasks.withType(Sign) {
+    tasks.withType(Sign).configureEach {
         onlyIf { findProperty("signingKey") != null }
     }
 }

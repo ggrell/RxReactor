@@ -5,14 +5,10 @@ apply plugin: 'org.jetbrains.dokka'
 apply plugin: 'maven-publish'
 
 dependencies {
-    api deps.rx1.java
-    api deps.rx1.relay
+    api libs.rx1.java
+    api libs.rx1.relay
 
-    testImplementation deps.junit
-}
-
-jacoco {
-    toolVersion = versions.jacoco
+    testImplementation libs.junit
 }
 
 jacocoTestReport {
@@ -23,13 +19,9 @@ jacocoTestReport {
 
 dokkaJavadoc.dokkaSourceSets.configureEach { includeNonPublic.set(false) }
 
-task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier "sources"
-    from sourceSets.main.allSource
-}
-
-task javadocJar(type: Jar, dependsOn: dokkaJavadoc) {
-    classifier "javadoc"
+tasks.register('javadocJar', Jar) {
+    dependsOn dokkaJavadoc
+    archiveClassifier = "javadoc"
     from dokkaJavadoc.outputDirectory
 }
 
@@ -40,7 +32,7 @@ publishing {
             artifactId = archivesBaseName
 
             from components.java
-            artifact sourcesJar
+            artifact kotlinSourcesJar
             artifact javadocJar
 
             pom {
@@ -82,6 +74,6 @@ signing {
     sign publishing.publications
 }
 
-tasks.withType(Sign) {
+tasks.withType(Sign).configureEach {
     onlyIf { findProperty("signingKey") != null }
 }

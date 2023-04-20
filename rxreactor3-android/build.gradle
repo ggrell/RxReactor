@@ -37,18 +37,14 @@ android {
 dependencies {
     api project(path: ':rxreactor3')
 
-    api deps.rx3.java
-    implementation deps.rx3.android
+    api libs.rx3.java
+    implementation libs.rx3.android
 
-//    testImplementation deps.junit
+//    testImplementation libs.junit
 }
 
-tasks.withType(Test) {
+tasks.withType(Test).configureEach {
     jacoco.includeNoLocationClasses = true
-}
-
-jacoco {
-    toolVersion = versions.jacoco
 }
 
 dokkaJavadoc.configure {
@@ -68,7 +64,7 @@ afterEvaluate {
                 artifactId = archivesBaseName
 
                 from components.release
-                artifact sourcesJar
+                artifact releaseSourcesJar
                 artifact javadocJar
 
                 pom {
@@ -110,7 +106,7 @@ afterEvaluate {
         sign publishing.publications
     }
 
-    tasks.withType(Sign) {
+    tasks.withType(Sign).configureEach {
         onlyIf { findProperty("signingKey") != null }
     }
 }
