@@ -10,6 +10,10 @@ package com.gyurigrell.rxreactor2.sample
 import android.accounts.Account
 import android.os.Parcelable
 import com.gyurigrell.rxreactor2.android.AndroidReactorWithEffects
+import com.gyurigrell.rxreactor2.sample.LoginReactor.Action
+import com.gyurigrell.rxreactor2.sample.LoginReactor.Effect
+import com.gyurigrell.rxreactor2.sample.LoginReactor.Mutation
+import com.gyurigrell.rxreactor2.sample.LoginReactor.State
 import io.reactivex.Observable
 import kotlinx.parcelize.Parcelize
 import java.util.concurrent.TimeUnit
@@ -20,8 +24,9 @@ import java.util.concurrent.TimeUnit
 class LoginReactor(
     private val contactService: ContactService,
     initialState: State = State()
-) : AndroidReactorWithEffects<LoginReactor.Action, LoginReactor.Mutation, LoginReactor.State,
-    LoginReactor.Effect>(initialState) {
+) : AndroidReactorWithEffects<Action, Mutation, State, Effect>(
+    initialState
+) {
 
     sealed class Action {
         object EnterScreen : Action()

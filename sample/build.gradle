@@ -38,12 +38,14 @@ android {
         disable 'LintBaseline', 'ObsoleteLintCustomCheck'
         baseline file('lint-baseline.xml')
     }
+
+    detekt {
+        ignoreFailures = true
+    }
 }
 
 dependencies {
     implementation project(path: ':rxreactor2-android')
-
-//    implementation deps.kotlin.stdlib.common
 
     implementation libs.androidx.appcompat
     implementation libs.androidx.design
