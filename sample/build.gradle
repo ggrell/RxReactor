@@ -1,6 +1,8 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-parcelize'
+plugins {
+    id "com.android.application"
+    id "kotlin-android"
+    id "kotlin-parcelize"
+}
 
 android {
     namespace 'com.gyurigrell.rxreactor2.sample'
@@ -53,7 +55,6 @@ dependencies {
 
     implementation libs.rx2.java
     implementation libs.rx2.kotlin
-
     implementation libs.rx2.binding
 
     testImplementation libs.junit

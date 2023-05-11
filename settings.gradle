@@ -1,2 +1,15 @@
-include ':sample', ':rxreactor2', ':rxreactor1', ':rxreactor1-android', ':rxreactor2-android', ':rxreactor3',
-    ':rxreactor3-android'
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
+}
+
+include ':sample'
+include ':rxreactor1'
+include ':rxreactor1-android'
+include ':rxreactor2'
+include ':rxreactor2-android'
+include ':rxreactor3'
+include ':rxreactor3-android'

@@ -8,21 +8,14 @@ buildscript {
         compileSdk: 33,
         targetSdk : 30
     ]
-
-    repositories {
-        google()
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath libs.agp
-    }
 }
 
 plugins {
+    alias libs.plugins.android.application apply false
     alias libs.plugins.kotlin
     alias libs.plugins.detekt
     alias libs.plugins.dokka
+    alias libs.plugins.dependencyAnalysis // Usage: ./gradlew buildHealth
 }
 
 allprojects {
