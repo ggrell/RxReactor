@@ -1,8 +1,9 @@
-apply plugin: 'java-library'
-apply plugin: 'kotlin'
-apply plugin: 'jacoco'
-apply plugin: 'org.jetbrains.dokka'
-apply plugin: 'maven-publish'
+plugins {
+    id "kotlin"
+    id "jacoco"
+    id "org.jetbrains.dokka"
+    id "maven-publish"
+}
 
 dependencies {
     api libs.rx3.java
