@@ -9,6 +9,8 @@ jobs:
   build:
     name: Build, run checks, release SNAPSHOT to Maven Central
     runs-on: ubuntu-latest
+    env:
+      BUNDLE_GEMFILE: ${{ github.workspace }}/.github/Gemfile
     steps:
     - uses: actions/checkout@v2
       with:
