@@ -42,7 +42,7 @@ junit = { module = "junit:junit", version = "4.13.2" }
 # Sample app dependencies
 rx2-binding = { module = "com.jakewharton.rxbinding3:rxbinding-core", version = "3.1.0" }
 
-androidx-activity = { module = "androidx.activity:activity-ktx", version = "1.7.1" }
+androidx-activity = { module = "androidx.activity:activity-ktx", version = "1.7.2" }
 androidx-fragment = { module = "androidx.fragment:fragment-ktx", version = "1.5.7" }
 androidx-annotations = { module = "androidx.annotation:annotation", version = "1.6.0" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version = "1.6.1" }
