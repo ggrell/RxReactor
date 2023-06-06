@@ -3,7 +3,7 @@ agp = "8.0.1"
 
 kotlin = "1.8.21"
 detekt = "1.23.0-RC3"
-dokka = "1.8.10"
+dokka = "1.8.20"
 
 espresso-core = "3.5.1"
 jacoco = "0.8.9"
