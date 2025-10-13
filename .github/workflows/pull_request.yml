@@ -47,7 +47,7 @@ jobs:
         ./gradlew check jacocoTestReport --no-daemon -Dorg.gradle.daemon=false
     - name: Run Danger
       if: always()
-      uses: MeilCli/danger-action@v5
+      uses: MeilCli/danger-action@v6
       with:
         plugins_file: '.github/Gemfile'
         install_path: 'vendor/bundle'
