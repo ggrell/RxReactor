@@ -19,7 +19,7 @@ jobs:
         cache: 'gradle'
     - uses: ruby/setup-ruby@v1
       with:
-        ruby-version: '2.6'
+        ruby-version: head
         bundler-cache: true
 #    - name: Cache Gradle
 #      if: always()
