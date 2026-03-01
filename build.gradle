@@ -99,7 +99,7 @@ subprojects {
             }
             maven {
                 name = "MavenCentralSnapshots"
-                url = uri("https://oss.sonatype.org/content/repositories/snapshots")
+                url = uri("https://ossrh-staging-api.central.sonatype.com/content/repositories/snapshots")
                 credentials {
                     username = project.findProperty("ossrh.username")
                     password = project.findProperty("ossrh.password")
@@ -107,7 +107,7 @@ subprojects {
             }
             maven {
                 name = "MavenCentralReleases"
-                url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2")
+                url = uri("https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2")
                 credentials {
                     username = project.findProperty("ossrh.username")
                     password = project.findProperty("ossrh.password")
