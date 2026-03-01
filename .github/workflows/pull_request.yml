@@ -19,7 +19,7 @@ jobs:
         cache: 'gradle'
     - uses: ruby/setup-ruby@v1
       with:
-        ruby-version: head
+        ruby-version: 3.2
         bundler-cache: true
 #    - name: Cache Gradle
 #      if: always()
@@ -50,7 +50,7 @@ jobs:
       uses: MeilCli/danger-action@v6
       with:
         plugins_file: '.github/Gemfile'
-#        install_path: 'vendor/bundle'
+        install_path: 'vendor/bundle'
         danger_file: '.github/Dangerfile'
         danger_id: 'danger-pr'
       env:
