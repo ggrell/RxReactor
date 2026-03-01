@@ -18,7 +18,7 @@ Releases are published to Maven Central, and individual archives are also availa
 
 ```groovy
 subprojects {
-    repositiories {
+    repositories {
         mavenCentral()
     }
 }
@@ -27,7 +27,7 @@ subprojects {
 Add this repository to have access to Maven Central snapshots:
 ```groovy
 subprojects {
-    repositiories {
+    repositories {
         maven {
             url 'https://oss.sonatype.org/content/repositories/snapshots/'
             mavenContent { snapshotsOnly() }
