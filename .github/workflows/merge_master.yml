@@ -20,6 +20,13 @@ jobs:
         distribution: 'zulu'
         java-version: 17
         cache: 'gradle'
+    - name: Cache Gradle wrapper distributions
+      uses: actions/cache@v4
+      with:
+        path: ~/.gradle/wrapper/dists
+        key: ${{ runner.os }}-gradle-wrapper-dists-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-wrapper-dists-
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: '2.6'
