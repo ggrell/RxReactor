@@ -22,7 +22,7 @@ jobs:
         cache: 'gradle'
     - uses: ruby/setup-ruby@v1
       with:
-        ruby-version: '2.6'
+        ruby-version: 3.2
         bundler-cache: true
 #    - name: Cache Gradle
 #      if: always()
@@ -44,6 +44,8 @@ jobs:
       run: |
         ./gradlew check jacocoTestReport
     - name: Upload coverage to Codecov
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       run: bash <(curl -s https://codecov.io/bash)
     - name: Publish to Maven Central Snapshots repo
       run: |
