@@ -19,6 +19,30 @@ jobs:
           distribution: 'zulu'
           java-version: 17
           cache: 'gradle'
+          cache-dependency-path: |
+            gradle/libs.versions.toml
+            gradle.properties
+            settings.gradle
+            build.gradle
+            */build.gradle
+      - name: Cache Gradle wrapper distributions
+        uses: actions/cache@v4
+        with:
+          path: ~/.gradle/wrapper/dists
+          key: ${{ runner.os }}-gradle-wrapper-dists-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-wrapper-dists-
+      - name: Cache Android SDK packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            /usr/local/lib/android/sdk/build-tools/30.0.3
+            /usr/local/lib/android/sdk/platforms/android-33
+            /usr/local/lib/android/sdk/platform-tools
+            /usr/local/lib/android/sdk/licenses
+          key: ${{ runner.os }}-android-sdk-33-30.0.3-v1
+          restore-keys: |
+            ${{ runner.os }}-android-sdk-
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.2
