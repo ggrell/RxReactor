@@ -78,7 +78,7 @@ jobs:
         run: |
           ./gradlew publishAllPublicationsToMavenCentralReleasesRepository -Prelease=true -Possrh.username=${{ secrets.OSSRH_USERNAME }} -Possrh.password="${{ secrets.OSSRH_PASSWORD }}"
       - name: Add artifacts to Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           files: |
             **/rxreactor*.?ar
