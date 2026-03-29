@@ -6,6 +6,7 @@ jobs:
   unit-test:
     name: Build and run checks
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     env:
       BUNDLE_GEMFILE: ${{ github.workspace }}/.github/Gemfile
     steps:
@@ -45,30 +46,12 @@ jobs:
       with:
         ruby-version: 3.2
         bundler-cache: true
-#    - name: Cache Gradle
-#      if: always()
-#      uses: actions/cache@v1.2.0
-#      with:
-#        path: |
-#          ~/.gradle/caches/
-#          ~/.gradle/wrapper/
-#        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-#        restore-keys: |
-#          ${{ runner.os }}-gradle-
-#    - name: Cache gems
-#      if: always()
-#      uses: actions/cache@v1.2.0
-#      with:
-#        path: vendor/bundle
-#        key: ${{ runner.os }}-gems-${{ hashFiles('.github/Gemfile') }}
-#        restore-keys: |
-#          ${{ runner.os }}-gems-
     - name: Gradle - build, test, coverage
       run: |
         echo "::add-matcher::.github/gradle-java-matcher.json"
         echo "::add-matcher::.github/kotlin-error-matcher.json"
         echo "::add-matcher::.github/kotlin-warning-matcher.json"
-        ./gradlew check jacocoTestReport --no-daemon -Dorg.gradle.daemon=false
+        ./gradlew check jacocoTestReport --no-daemon
     - name: Run Danger
       if: always()
       uses: MeilCli/danger-action@v6
