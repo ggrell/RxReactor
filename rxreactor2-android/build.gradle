@@ -27,7 +27,7 @@ android {
 
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 
@@ -55,15 +55,6 @@ dependencies {
 
 tasks.withType(Test).configureEach {
     jacoco.includeNoLocationClasses = true
-}
-
-dokkaJavadoc.configure {
-    dokkaSourceSets {
-        named("main") {
-            noAndroidSdkLink.set(false)
-            includeNonPublic.set(false)
-        }
-    }
 }
 
 afterEvaluate {

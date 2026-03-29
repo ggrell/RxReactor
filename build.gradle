@@ -5,7 +5,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 buildscript {
     ext.buildConfig = [
         minSdk    : 15,
-        compileSdk: 33,
+        compileSdk: 35,
         targetSdk : 30
     ]
 }
