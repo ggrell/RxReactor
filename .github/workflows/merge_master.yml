@@ -68,9 +68,10 @@ jobs:
       run: |
         ./gradlew check jacocoTestReport
     - name: Upload coverage to Codecov
-      env:
-        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-      run: bash <(curl -s https://codecov.io/bash)
+      uses: codecov/codecov-action@v4
+      continue-on-error: true
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
     - name: Publish to Maven Central Snapshots repo
       run: |
         ./gradlew publishAllPublicationsToMavenCentralSnapshotsRepository -Possrh.username=${{ secrets.OSSRH_USERNAME }} -Possrh.password="${{ secrets.OSSRH_PASSWORD }}"
