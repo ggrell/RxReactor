@@ -71,7 +71,7 @@ afterEvaluate {
         publications {
             RxReactor3Android(MavenPublication) {
                 groupId = project.group
-                artifactId = archivesBaseName
+                artifactId = project.name
 
                 from components.release
 

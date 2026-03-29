@@ -1,7 +1,7 @@
 if (project.plugins.hasPlugin('com.android.library')) {
     android.libraryVariants.all { variant ->
         variant.outputs.all {
-            outputFileName = "${archivesBaseName}-${version}.aar"
+            outputFileName = "${project.name}-${version}.aar"
         }
     }
 }
