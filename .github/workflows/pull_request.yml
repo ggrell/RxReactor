@@ -53,7 +53,7 @@ jobs:
         echo "::add-matcher::.github/kotlin-warning-matcher.json"
         ./gradlew check jacocoTestReport --no-daemon
     - name: Run Danger
-      if: always()
+      if: always() && github.actor != 'dependabot[bot]'
       uses: MeilCli/danger-action@v6
       with:
         plugins_file: '.github/Gemfile'
