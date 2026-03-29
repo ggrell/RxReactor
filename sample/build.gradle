@@ -6,12 +6,12 @@ plugins {
 
 android {
     namespace 'com.gyurigrell.rxreactor2.sample'
-    compileSdkVersion buildConfig.compileSdk
+    compileSdk buildConfig.compileSdk
 
     defaultConfig {
         applicationId "com.gyurigrell.rxreactor.sample"
-        minSdkVersion buildConfig.targetSdk
-        targetSdkVersion buildConfig.targetSdk
+        minSdk buildConfig.targetSdk
+        targetSdk buildConfig.targetSdk
         versionCode 1
         versionName "1.0"
 

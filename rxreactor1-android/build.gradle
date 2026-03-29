@@ -10,12 +10,12 @@ apply from: "$rootDir/gradle/library-artifacts.gradle"
 //apply from: "$rootDir/gradle/jacoco-android.gradle"
 
 android {
-    compileSdkVersion buildConfig.compileSdk
+    compileSdk buildConfig.compileSdk
 
     defaultConfig {
         namespace 'com.gyurigrell.rxreactor1.android'
-        minSdkVersion buildConfig.minSdk
-        targetSdkVersion buildConfig.targetSdk
+        minSdk buildConfig.minSdk
+        targetSdk buildConfig.targetSdk
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 

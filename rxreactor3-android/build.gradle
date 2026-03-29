@@ -11,11 +11,11 @@ apply from: "$rootDir/gradle/library-artifacts.gradle"
 
 android {
     namespace 'com.gyurigrell.rxreactor3'
-    compileSdkVersion buildConfig.compileSdk
+    compileSdk buildConfig.compileSdk
 
     defaultConfig {
-        minSdkVersion buildConfig.minSdk
-        targetSdkVersion buildConfig.targetSdk
+        minSdk buildConfig.minSdk
+        targetSdk buildConfig.targetSdk
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
