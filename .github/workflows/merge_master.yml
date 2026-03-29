@@ -9,6 +9,7 @@ jobs:
   build:
     name: Build, run checks, release SNAPSHOT to Maven Central
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     env:
       BUNDLE_GEMFILE: ${{ github.workspace }}/.github/Gemfile
     steps:
@@ -48,25 +49,15 @@ jobs:
       with:
         ruby-version: 3.2
         bundler-cache: true
-#    - name: Cache Gradle
-#      if: always()
-#      uses: actions/cache@v2
-#      with:
-#        path: |
-#          ~/.gradle/caches
-#          ~/.gradle/wrapper
-#        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-#        restore-keys: |
-#          ${{ runner.os }}-gradle-
     - name: Assemble release
       run: |
         echo "::add-matcher::.github/gradle-java-matcher.json"
         echo "::add-matcher::.github/kotlin-error-matcher.json"
         echo "::add-matcher::.github/kotlin-warning-matcher.json"
-        ./gradlew clean assembleRelease -Dorg.gradle.daemon=false
+        ./gradlew clean assembleRelease --no-daemon
     - name: Run all checks and create coverage report
       run: |
-        ./gradlew check jacocoTestReport
+        ./gradlew check jacocoTestReport --no-daemon
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v4
       continue-on-error: true
