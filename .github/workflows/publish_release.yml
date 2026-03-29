@@ -67,9 +67,10 @@ jobs:
         run: |
           ./gradlew check jacocoTestReport -Prelease=true
       - name: Upload coverage to Codecov
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-        run: bash <(curl -s https://codecov.io/bash)
+        uses: codecov/codecov-action@v4
+        continue-on-error: true
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
       - name: Publish to Maven Central Releases repo
         env:
           ORG_GRADLE_PROJECT_signingKeyId: ${{ secrets.MAVEN_CENTRAL_KEY_ID }}
