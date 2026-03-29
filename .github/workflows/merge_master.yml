@@ -64,5 +64,8 @@ jobs:
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
     - name: Publish to Maven Central Snapshots repo
+      env:
+        OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+        OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
       run: |
-        ./gradlew publishAllPublicationsToMavenCentralSnapshotsRepository -Possrh.username=${{ secrets.OSSRH_USERNAME }} -Possrh.password="${{ secrets.OSSRH_PASSWORD }}"
+        ./gradlew publishAllPublicationsToMavenCentralSnapshotsRepository

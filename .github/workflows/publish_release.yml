@@ -67,8 +67,10 @@ jobs:
           ORG_GRADLE_PROJECT_signingKeyId: ${{ secrets.MAVEN_CENTRAL_KEY_ID }}
           ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
           ORG_GRADLE_PROJECT_signingKey: ${{ secrets.MAVEN_CENTRAL_KEY }}
+          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
         run: |
-          ./gradlew publishAllPublicationsToMavenCentralReleasesRepository -Prelease=true -Possrh.username=${{ secrets.OSSRH_USERNAME }} -Possrh.password="${{ secrets.OSSRH_PASSWORD }}"
+          ./gradlew publishAllPublicationsToMavenCentralReleasesRepository -Prelease=true
       - name: Add artifacts to Release
         uses: softprops/action-gh-release@v2
         with:
