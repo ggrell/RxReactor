@@ -11,7 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
-      BUNDLE_GEMFILE: ${{ github.workspace }}/.github/Gemfile
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
     - uses: actions/checkout@v4
