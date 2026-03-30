@@ -6,7 +6,7 @@ buildscript {
     ext.buildConfig = [
         minSdk    : 15,
         compileSdk: 36,
-        targetSdk : 30
+        targetSdk : 33
     ]
 }
 
@@ -15,7 +15,6 @@ plugins {
     alias libs.plugins.kotlin
     alias libs.plugins.detekt
     alias libs.plugins.dokka
-    alias libs.plugins.dependencyAnalysis // Usage: ./gradlew buildHealth
 }
 
 allprojects {

@@ -51,13 +51,12 @@ jobs:
         echo "::add-matcher::.github/gradle-java-matcher.json"
         echo "::add-matcher::.github/kotlin-error-matcher.json"
         echo "::add-matcher::.github/kotlin-warning-matcher.json"
-        ./gradlew check jacocoTestReport --no-daemon
+        ./gradlew check jacocoTestReport --no-daemon 2>&1 | tee build.log
     - name: Run Danger
       if: always() && github.actor != 'dependabot[bot]'
       uses: MeilCli/danger-action@v6
       with:
         plugins_file: '.github/Gemfile'
-        install_path: 'vendor/bundle'
         danger_file: '.github/Dangerfile'
         danger_id: 'danger-pr'
       env:
