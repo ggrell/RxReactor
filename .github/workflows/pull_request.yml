@@ -6,6 +6,7 @@ jobs:
   unit-test:
     name: Build and run checks
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     env:
       BUNDLE_GEMFILE: ${{ github.workspace }}/.github/Gemfile
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -35,47 +36,28 @@ jobs:
       uses: actions/cache@v4
       with:
         path: |
-          /usr/local/lib/android/sdk/build-tools/30.0.3
-          /usr/local/lib/android/sdk/platforms/android-33
+          /usr/local/lib/android/sdk/build-tools/36.0.0
+          /usr/local/lib/android/sdk/platforms/android-36
           /usr/local/lib/android/sdk/platform-tools
           /usr/local/lib/android/sdk/licenses
-        key: ${{ runner.os }}-android-sdk-33-30.0.3-v1
+        key: ${{ runner.os }}-android-sdk-36-36.0.0-v1
         restore-keys: |
           ${{ runner.os }}-android-sdk-
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: 3.2
         bundler-cache: true
-#    - name: Cache Gradle
-#      if: always()
-#      uses: actions/cache@v1.2.0
-#      with:
-#        path: |
-#          ~/.gradle/caches/
-#          ~/.gradle/wrapper/
-#        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-#        restore-keys: |
-#          ${{ runner.os }}-gradle-
-#    - name: Cache gems
-#      if: always()
-#      uses: actions/cache@v1.2.0
-#      with:
-#        path: vendor/bundle
-#        key: ${{ runner.os }}-gems-${{ hashFiles('.github/Gemfile') }}
-#        restore-keys: |
-#          ${{ runner.os }}-gems-
     - name: Gradle - build, test, coverage
       run: |
         echo "::add-matcher::.github/gradle-java-matcher.json"
         echo "::add-matcher::.github/kotlin-error-matcher.json"
         echo "::add-matcher::.github/kotlin-warning-matcher.json"
-        ./gradlew check jacocoTestReport --no-daemon -Dorg.gradle.daemon=false
+        ./gradlew check jacocoTestReport --no-daemon 2>&1 | tee build.log
     - name: Run Danger
-      if: always()
+      if: always() && github.actor != 'dependabot[bot]'
       uses: MeilCli/danger-action@v6
       with:
         plugins_file: '.github/Gemfile'
-        install_path: 'vendor/bundle'
         danger_file: '.github/Dangerfile'
         danger_id: 'danger-pr'
       env:
@@ -86,7 +68,7 @@ jobs:
       with:
         name: test-reports
         path: '**/build/reports/tests/'
-    - name: Trigger Codecov
-      env:
-        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-      run: bash <(curl -s https://codecov.io/bash)
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v4
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}

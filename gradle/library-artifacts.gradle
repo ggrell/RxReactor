@@ -1,7 +1,1 @@
-if (project.plugins.hasPlugin('com.android.library')) {
-    android.libraryVariants.all { variant ->
-        variant.outputs.all {
-            outputFileName = "${archivesBaseName}-${version}.aar"
-        }
-    }
-}
+// Output filename customization removed: android.libraryVariants API was removed in AGP 9.x

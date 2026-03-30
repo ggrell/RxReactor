@@ -4,7 +4,7 @@
       "owner": "kotlin-warning",
       "pattern": [
         {
-          "regexp": "^w:\\s+(\\S+):\\s+\\((\\d+),\\s+(\\d+)\\):\\s+(.+)$",
+          "regexp": "^w:\\s+(.+?):(\\d+):(\\d+)\\s+(.+)$",
           "file": 1,
           "line": 2,
           "column": 3,

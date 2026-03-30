@@ -1,6 +1,5 @@
 plugins {
     id "com.android.library"
-    id "kotlin-android"
     id "jacoco"
     id "org.jetbrains.dokka"
     id "maven-publish"
@@ -10,12 +9,12 @@ apply from: "$rootDir/gradle/library-artifacts.gradle"
 //apply from: "$rootDir/gradle/jacoco-android.gradle"
 
 android {
-    compileSdkVersion buildConfig.compileSdk
+    compileSdk buildConfig.compileSdk
 
     defaultConfig {
         namespace 'com.gyurigrell.rxreactor2.android'
-        minSdkVersion buildConfig.minSdk
-        targetSdkVersion buildConfig.targetSdk
+        minSdk buildConfig.minSdk
+        targetSdk buildConfig.targetSdk
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -23,12 +22,12 @@ android {
 
     buildTypes {
         debug {
-            testCoverageEnabled = true
+            enableUnitTestCoverage = true
         }
 
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 
@@ -58,21 +57,12 @@ tasks.withType(Test).configureEach {
     jacoco.includeNoLocationClasses = true
 }
 
-dokkaJavadoc.configure {
-    dokkaSourceSets {
-        named("main") {
-            noAndroidSdkLink.set(false)
-            includeNonPublic.set(false)
-        }
-    }
-}
-
 afterEvaluate {
     publishing {
         publications {
             RxReactor2Android(MavenPublication) {
                 groupId = project.group
-                artifactId = archivesBaseName
+                artifactId = project.name
 
                 from components.release
 

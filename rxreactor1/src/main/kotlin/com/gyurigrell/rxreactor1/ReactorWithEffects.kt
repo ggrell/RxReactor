@@ -52,6 +52,6 @@ abstract class ReactorWithEffects<Action : Any, Mutation : Any, State : Any, Eff
      * @param effect one or more Effects to be emitted
      */
     protected fun emitEffect(vararg effect: Effect) {
-        Observable.from(effect).subscribe(effectRelay).also { subscriptions.add(it) }
+        Observable.from(effect.asIterable()).subscribe(effectRelay).also { subscriptions.add(it) }
     }
 }
