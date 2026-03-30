@@ -38,6 +38,7 @@ subprojects {
         config = files("${rootProject.projectDir}/config/detekt/detekt.yml")
         baseline = file("${rootProject.projectDir}/config/detekt/detekt-baseline.xml")
         buildUponDefaultConfig = true
+        basePath = rootProject.projectDir.absolutePath
     }
 
     dependencies {
