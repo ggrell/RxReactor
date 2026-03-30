@@ -36,10 +36,10 @@ jobs:
       with:
         path: |
           /usr/local/lib/android/sdk/build-tools/36.0.0
-          /usr/local/lib/android/sdk/platforms/android-35
+          /usr/local/lib/android/sdk/platforms/android-36
           /usr/local/lib/android/sdk/platform-tools
           /usr/local/lib/android/sdk/licenses
-        key: ${{ runner.os }}-android-sdk-35-36.0.0-v1
+        key: ${{ runner.os }}-android-sdk-36-36.0.0-v1
         restore-keys: |
           ${{ runner.os }}-android-sdk-
     - uses: ruby/setup-ruby@v1
