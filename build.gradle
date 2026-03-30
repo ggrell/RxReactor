@@ -15,6 +15,7 @@ plugins {
     alias libs.plugins.kotlin
     alias libs.plugins.detekt
     alias libs.plugins.dokka
+    alias libs.plugins.dokka.javadoc.plugin apply false
 }
 
 allprojects {

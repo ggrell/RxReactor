@@ -1,7 +1,7 @@
 plugins {
     id "kotlin"
     id "jacoco"
-    id "org.jetbrains.dokka"
+    alias libs.plugins.dokka.javadoc.plugin
     id "maven-publish"
 }
 
@@ -22,12 +22,11 @@ jacocoTestReport {
     }
 }
 
-dokkaJavadoc.dokkaSourceSets.configureEach { includeNonPublic.set(false) }
-
 tasks.register('javadocJar', Jar) {
-    dependsOn dokkaJavadoc
+    def dokkaTask = tasks.named('dokkaGeneratePublicationJavadoc')
+    dependsOn dokkaTask
     archiveClassifier = "javadoc"
-    from dokkaJavadoc.outputDirectory
+    from dokkaTask.flatMap { it.outputDirectory }
 }
 
 publishing {
