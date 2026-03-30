@@ -36,4 +36,7 @@ Dir[junit_output_dir].each do |file_name|
   junit.report
 end
 
-fail "Build failed due to warnings" unless status_report[:warnings].empty?
+unless status_report[:warnings].empty?
+  markdown "### Warnings\n" + status_report[:warnings].map { |w| "- #{w}" }.join("\n")
+  fail "Build failed due to warnings"
+end
