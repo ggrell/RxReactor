@@ -1,5 +1,9 @@
 # RxReactor — Claude Notes
 
+## Working style
+
+Always confirm with the user before making any changes.
+
 ## Danger / Android Lint hybrid inline mode
 
 `danger-android_lint` does not natively support hybrid mode (inline comments
