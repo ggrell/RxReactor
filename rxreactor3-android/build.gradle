@@ -1,7 +1,6 @@
 plugins {
     id "com.android.library"
     id "jacoco"
-    id "org.jetbrains.dokka"
     id "maven-publish"
 }
 
