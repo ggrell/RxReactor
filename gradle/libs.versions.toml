@@ -14,7 +14,6 @@ detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 android-application = { id = "com.android.application", version.ref = "agp" }
-dependencyAnalysis = { id = "com.autonomousapps.dependency-analysis", version = "3.6.1" }
 
 [libraries]
 #agp = { module = "com.android.tools.build:gradle", version.ref = "agp" }

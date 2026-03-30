@@ -15,7 +15,6 @@ plugins {
     alias libs.plugins.kotlin
     alias libs.plugins.detekt
     alias libs.plugins.dokka
-    alias libs.plugins.dependencyAnalysis // Usage: ./gradlew buildHealth
 }
 
 allprojects {
