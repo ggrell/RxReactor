@@ -12,7 +12,7 @@ android {
     compileSdk buildConfig.compileSdk
 
     defaultConfig {
-        namespace 'com.gyurigrell.rxreactor1.android'
+        namespace = 'com.gyurigrell.rxreactor1.android'
         minSdk buildConfig.minSdk
         targetSdk buildConfig.targetSdk
 
@@ -32,9 +32,9 @@ android {
     }
 
     lint {
-        abortOnError false
-        xmlReport true
-        baseline file('lint-baseline.xml')
+        abortOnError = false
+        xmlReport = true
+        baseline = file('lint-baseline.xml')
     }
 
     publishing {
