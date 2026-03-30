@@ -30,9 +30,10 @@ Dir[lint_dir].each do |file_name|
 end
 
 if File.exist?('build.log')
+  workspace = ENV['GITHUB_WORKSPACE'] || Dir.pwd
   File.readlines('build.log')
     .select { |line| line.match?(/^w:\s+/) }
-    .each { |line| warn line.strip }
+    .each { |line| warn line.strip.sub("file://#{workspace}/", '').sub("#{workspace}/", '') }
 end
 
 junit_output_dir = "**/test-results/**/*.xml"
