@@ -41,12 +41,12 @@ danger(args) {
     // ── Kotlin Compiler Warnings: inline comments ─────────────────────────
     val buildLog = File("build.log")
     if (buildLog.exists()) {
-        val warningRegex = Regex("""^w:\s+(\S+):\s+\((\d+),\s*(\d+)\):\s+(.+)$""")
+        val warningRegex = Regex("""^w:\s+(.+?):(\d+):\d+\s+(.+)$""")
         val workspaceRoot = System.getenv("GITHUB_WORKSPACE").orEmpty()
 
         buildLog.forEachLine { rawLine ->
             val line = rawLine.trim()
-            warningRegex.matchEntire(line)?.destructured?.let { (filePath, lineNum, _, message) ->
+            warningRegex.matchEntire(line)?.destructured?.let { (filePath, lineNum, message) ->
                 val relPath = when {
                     workspaceRoot.isNotEmpty() && filePath.startsWith(workspaceRoot) ->
                         filePath.removePrefix("$workspaceRoot/")
