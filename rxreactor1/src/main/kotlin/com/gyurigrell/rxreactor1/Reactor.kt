@@ -88,12 +88,12 @@ abstract class Reactor<Action : Any, Mutation : Any, State : Any>(
 
     private fun createStateStream(): Observable<State> {
         val transformedAction = transformAction(action)
-        val mutation = transformedAction.flatMap { action ->
-            mutate(action).onErrorResumeNext { Observable.empty() }
+        val mutation = transformedAction.flatMap {
+            mutate(it).onErrorResumeNext { Observable.empty() }
         }
         val transformedMutation = transformMutation(mutation)
         val state = transformedMutation
-            .scan(initialState) { state, mutate -> reduce(state, mutate) }
+            .scan(initialState) { prevState, mutation -> reduce(prevState, mutation) }
             .onErrorResumeNext { Observable.empty() }
         val transformedState = transformState(state)
             .doOnNext { currentState = it }
