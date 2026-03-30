@@ -5,7 +5,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 buildscript {
     ext.buildConfig = [
         minSdk    : 15,
-        compileSdk: 33,
+        compileSdk: 36,
         targetSdk : 30
     ]
 }
@@ -65,9 +65,6 @@ subprojects {
                     targetCompatibility JavaVersion.VERSION_1_8
                 }
 
-                kotlinOptions {
-                    jvmTarget = JavaVersion.VERSION_1_8
-                }
             }
         }
     }
@@ -99,18 +96,18 @@ subprojects {
             }
             maven {
                 name = "MavenCentralSnapshots"
-                url = uri("https://ossrh-staging-api.central.sonatype.com/content/repositories/snapshots")
+                url = uri("https://central.sonatype.com/repository/maven-snapshots/")
                 credentials {
-                    username = project.findProperty("ossrh.username")
-                    password = project.findProperty("ossrh.password")
+                    username = System.getenv("OSSRH_USERNAME") ?: project.findProperty("ossrh.username")
+                    password = System.getenv("OSSRH_PASSWORD") ?: project.findProperty("ossrh.password")
                 }
             }
             maven {
                 name = "MavenCentralReleases"
                 url = uri("https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2")
                 credentials {
-                    username = project.findProperty("ossrh.username")
-                    password = project.findProperty("ossrh.password")
+                    username = System.getenv("OSSRH_USERNAME") ?: project.findProperty("ossrh.username")
+                    password = System.getenv("OSSRH_PASSWORD") ?: project.findProperty("ossrh.password")
                 }
             }
         }
