@@ -7,6 +7,13 @@ Dir[detekt_dir].each do |file_name|
     kotlin_detekt.detekt
 end
 
+lint_dir = "**/build/reports/lint-results*.xml"
+Dir[lint_dir].each do |file_name|
+  android_lint.report_file = file_name
+  android_lint.skip_gradle_task = true
+  android_lint.lint(inline_mode: true)
+end
+
 junit_output_dir = "**/test-results/**/*.xml"
 Dir[junit_output_dir].each do |file_name|
   junit.parse(file_name)
