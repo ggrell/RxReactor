@@ -33,6 +33,7 @@ android {
 
     lint {
         abortOnError false
+        xmlReport true
         baseline file('lint-baseline.xml')
     }
 

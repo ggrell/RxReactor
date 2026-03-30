@@ -36,6 +36,7 @@ android {
     lint {
         abortOnError false
         htmlReport false
+        xmlReport true
         disable 'LintBaseline', 'ObsoleteLintCustomCheck'
         baseline file('lint-baseline.xml')
     }
