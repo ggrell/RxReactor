@@ -29,6 +29,12 @@ Dir[lint_dir].each do |file_name|
   end
 end
 
+if File.exist?('build.log')
+  File.readlines('build.log')
+    .select { |line| line.match?(/^w:\s+/) }
+    .each { |line| warn line.strip }
+end
+
 junit_output_dir = "**/test-results/**/*.xml"
 Dir[junit_output_dir].each do |file_name|
   junit.parse(file_name)
