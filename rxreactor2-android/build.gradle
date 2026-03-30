@@ -1,6 +1,7 @@
 plugins {
     id "com.android.library"
     id "jacoco"
+    alias libs.plugins.dokka.javadoc.plugin
     id "maven-publish"
 }
 
@@ -38,7 +39,6 @@ android {
     publishing {
         singleVariant("release") {
             withSourcesJar()
-            withJavadocJar()
         }
     }
 }
@@ -56,6 +56,13 @@ tasks.withType(Test).configureEach {
     jacoco.includeNoLocationClasses = true
 }
 
+tasks.register('javadocJar', Jar) {
+    def dokkaTask = tasks.named('dokkaGeneratePublicationJavadoc')
+    dependsOn dokkaTask
+    archiveClassifier = "javadoc"
+    from dokkaTask.flatMap { it.outputDirectory }
+}
+
 afterEvaluate {
     publishing {
         publications {
@@ -64,6 +71,7 @@ afterEvaluate {
                 artifactId = project.name
 
                 from components.release
+                artifact javadocJar
 
                 pom {
                     name = "RxReactor (RxJava 2) for Android"
