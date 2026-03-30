@@ -12,6 +12,8 @@ jobs:
       contents: read
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+      ANDROID_SDK_ROOT: ${{ runner.temp }}/android-sdk
+      ANDROID_HOME: ${{ runner.temp }}/android-sdk
     steps:
     - uses: actions/checkout@v4
       with:
@@ -35,16 +37,22 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-gradle-wrapper-dists-
     - name: Cache Android SDK packages
+      id: android-sdk-cache
       uses: actions/cache@v4
       with:
-        path: |
-          /usr/local/lib/android/sdk/build-tools/36.0.0
-          /usr/local/lib/android/sdk/platforms/android-36
-          /usr/local/lib/android/sdk/platform-tools
-          /usr/local/lib/android/sdk/licenses
-        key: ${{ runner.os }}-android-sdk-36-36.0.0-v1
+        path: ${{ env.ANDROID_SDK_ROOT }}
+        key: ${{ runner.os }}-android-sdk-36-36.0.0-v2
         restore-keys: |
           ${{ runner.os }}-android-sdk-
+    - name: Install Android SDK packages
+      if: steps.android-sdk-cache.outputs.cache-hit != 'true'
+      run: |
+        mkdir -p "${ANDROID_SDK_ROOT}"
+        yes | /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager --sdk_root="${ANDROID_SDK_ROOT}" --licenses >/dev/null
+        /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager --sdk_root="${ANDROID_SDK_ROOT}" \
+          "platform-tools" \
+          "platforms;android-36" \
+          "build-tools;36.0.0"
     - name: Gradle - build, test, coverage
       run: |
         echo "::add-matcher::.github/gradle-java-matcher.json"
