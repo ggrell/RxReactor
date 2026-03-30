@@ -10,7 +10,7 @@ end
 require 'oga'
 require 'tempfile'
 
-IGNORED_LINT_IDS = %w[GradleDependency NewerVersionAvailable GradlePluginVersion].freeze
+IGNORED_LINT_IDS = %w[GradleDependency NewerVersionAvailable GradlePluginVersion GradleWrapper].freeze
 
 lint_dir = "**/build/reports/lint-results*.xml"
 Dir[lint_dir].each do |file_name|

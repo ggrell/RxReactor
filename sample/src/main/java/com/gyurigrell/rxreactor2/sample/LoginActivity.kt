@@ -43,7 +43,7 @@ class LoginActivity : AppCompatActivity() {
 
         // Settings the initial state in the factory is optional and only needed if the state needs
         // to survive the app getting killed in the background.
-        reactorProvider.initialState = savedInstanceState?.getParcelable(VIEW_STATE_KEY)
+        reactorProvider.initialState = savedInstanceState?.getParcelable(VIEW_STATE_KEY, LoginReactor.State::class.java)
         reactor = reactorProvider.reactor
         bind(reactor)
 
@@ -95,7 +95,7 @@ class LoginActivity : AppCompatActivity() {
     private fun addEmailsToAutoComplete(emailAddressCollection: List<String>) {
         // Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         val adapter = ArrayAdapter(
-            this@LoginActivity,
+            this,
             android.R.layout.simple_dropdown_item_1line,
             emailAddressCollection
         )
