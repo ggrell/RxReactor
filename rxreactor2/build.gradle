@@ -22,12 +22,12 @@ jacocoTestReport {
     }
 }
 
-dokkaJavadoc.dokkaSourceSets.configureEach { includeNonPublic.set(false) }
+dokkaGeneratePublicationJavadoc.dokkaSourceSets.configureEach { includeNonPublic.set(false) }
 
 tasks.register('javadocJar', Jar) {
-    dependsOn dokkaJavadoc
+    dependsOn dokkaGeneratePublicationJavadoc
     archiveClassifier = "javadoc"
-    from dokkaJavadoc.outputDirectory
+    from dokkaGeneratePublicationJavadoc.outputDirectory
 }
 
 publishing {
