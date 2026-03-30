@@ -9,7 +9,7 @@ apply from: "$rootDir/gradle/library-artifacts.gradle"
 //apply from: "$rootDir/gradle/jacoco-android.gradle"
 
 android {
-    namespace 'com.gyurigrell.rxreactor3'
+    namespace = 'com.gyurigrell.rxreactor3'
     compileSdk buildConfig.compileSdk
 
     defaultConfig {
@@ -31,9 +31,9 @@ android {
     }
 
     lint {
-        abortOnError false
-        xmlReport true
-        baseline file('lint-baseline.xml')
+        abortOnError = false
+        xmlReport = true
+        baseline = file('lint-baseline.xml')
     }
 
     publishing {
