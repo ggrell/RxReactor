@@ -30,7 +30,7 @@ publishing {
     publications {
         RxReactor3(MavenPublication) {
             groupId = project.group
-            artifactId = archivesBaseName
+            artifactId = project.name
 
             from components.java
             artifact kotlinSourcesJar
