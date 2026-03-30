@@ -7,31 +7,26 @@ for modified files + a summary comment for everything else). Calling `lint`
 twice — once with `inline_mode: true` and once with `inline_mode: false` —
 causes issues on modified files to appear twice (inline and in the table).
 
-**If hybrid mode is ever needed**, implement it manually in the Dangerfile:
-read each lint XML report directly, check each issue's file path against
-`git.modified_files + git.added_files`, and route accordingly:
+The Dangerfile already uses `oga` to preprocess the lint XML (for filtering
+ignored issue IDs). To add hybrid mode, replace the `android_lint.lint` call
+with direct Danger messaging after the XML is parsed:
 
 ```ruby
-require 'nokogiri'
+doc.xpath('//issue').each do |issue|
+  location = issue.xpath('location').first
+  next unless location
 
-Dir["**/build/reports/lint-results*.xml"].each do |report|
-  doc = Nokogiri::XML(File.read(report))
-  doc.xpath("//issue").each do |issue|
-    location = issue.at_xpath("location")
-    next unless location
+  file    = location.get('file').to_s.sub("#{Dir.pwd}/", '')
+  line    = location.get('line').to_i
+  message = "[#{issue.get('id')}] #{issue.get('message')}"
 
-    file    = location["file"].to_s.sub("#{Dir.pwd}/", "")
-    line    = location["line"].to_i
-    message = "[#{issue["id"]}] #{issue["message"]}"
-
-    if (git.modified_files + git.added_files).include?(file)
-      warn(message, file: file, line: line)   # inline comment
-    else
-      warn(message)                            # PR-level comment
-    end
+  if (git.modified_files + git.added_files).include?(file)
+    warn(message, file: file, line: line)   # inline comment on diff
+  else
+    warn(message)                            # PR-level summary comment
   end
 end
 ```
 
-The `oga` gem (already in the Gemfile) can be used instead of `nokogiri` if
-preferred — swap `Nokogiri::XML` for `Oga.parse_xml`.
+This replaces the `android_lint.lint(inline_mode: true)` call inside the
+existing `Dir[lint_dir].each` block (after the IGNORED_LINT_IDS filtering).

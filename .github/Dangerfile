@@ -7,11 +7,26 @@ Dir[detekt_dir].each do |file_name|
     kotlin_detekt.detekt
 end
 
+require 'oga'
+require 'tempfile'
+
+IGNORED_LINT_IDS = %w[GradleDependency NewerVersionAvailable GradlePluginVersion].freeze
+
 lint_dir = "**/build/reports/lint-results*.xml"
 Dir[lint_dir].each do |file_name|
-  android_lint.report_file = file_name
-  android_lint.skip_gradle_task = true
-  android_lint.lint(inline_mode: true)
+  doc = Oga.parse_xml(File.read(file_name))
+  doc.xpath('//issue').select { |i| IGNORED_LINT_IDS.include?(i.get('id')) }
+                      .each(&:remove)
+  tmp = Tempfile.new(['lint-filtered', '.xml'])
+  begin
+    tmp.write(doc.to_xml)
+    tmp.close
+    android_lint.report_file = tmp.path
+    android_lint.skip_gradle_task = true
+    android_lint.lint(inline_mode: true)
+  ensure
+    tmp.unlink
+  end
 end
 
 junit_output_dir = "**/test-results/**/*.xml"
@@ -20,3 +35,5 @@ Dir[junit_output_dir].each do |file_name|
   junit.show_skipped_tests = true
   junit.report
 end
+
+fail "Build failed due to warnings" unless status_report[:warnings].empty?
